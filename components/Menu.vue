@@ -1,13 +1,10 @@
 <script setup>
     let hide = ref(false)
-    function toggleMenu() {
-        hide.value = !hide.value
-    }
 </script>
 
 <template>
     <nav class="fixed right-0 w-1/6 float-right font-heebo font-[400] t-0 text-lg">
-        <div class="w-full" @click="toggleMenu()">
+        <div class="w-full" @click="hide = !hide">
             <i class="fa fa-bars p-6 pr-0 absolute right-4 w-1/6" />
         </div>
         <ul class="float-right mt-10">

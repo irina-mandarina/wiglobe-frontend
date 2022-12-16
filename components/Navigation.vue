@@ -2,58 +2,56 @@
     const route = useRoute()
 </script>
 <template>
-    <nav class="w-1/3 mx-auto font-heebo pt-4 pb-2 relative">
+    <nav class="w-1/3 mx-auto absolute font-heebo pt-4 pb-2 relative">
         <NuxtLink to="/" :class="{
             'active': (route !== null && route !== undefined && route.path === '/')
             }"
-            class="p-4 text-lg custom-underline">
-            Home
+            class="p-8 text-2xl navlink">
+            <i class="fa fa-home" />
         </NuxtLink>
         
         <NuxtLink to="/notifications" :class="{
             'active': (route !== null && route !== undefined && route.path === '/notifications')
             }"
-            class="p-4 text-lg custom-underline">
-            Notifications
+            class="p-8 text-2xl navlink">
+            <i class="fa fa-bell "></i>
         </NuxtLink>
 
         <NuxtLink to="/explore" :class="{
             'active': (route !== null && route !== undefined && route.path === '/explore')
             }"
-            class="p-4 text-lg custom-underline">
-            Explore
+            class="p-8 text-2xl navlink">
+            <i class="fa fa-search "></i>
         </NuxtLink>
     </nav>
 </template>
-<style>
+<style scoped>
     .active::before {
         content: "";
         position: absolute;
+        width: 15%;
+        height: 4px;
         top: 3rem;
-        left: 50%;
-        width: 50%;
-        height: 5%;
         background-color: var(--phtalo);
+        color: var(--phtalo);
         transition: all 1s;
+        transform: translateX(-20%);
     }
 
-    .custom-underline::before {
+    .active:hover::before {
+        transform: scaleX(120%);
+    }
+
+    .navlink:not(.active):hover::before {
         content: "";
+        position: absolute;
+        width: 20%;
+        height: 4px;
         top: 3rem;
-        left: 50%;
-        width: 50%;
-        height: 5%;
-        background-color: var(--khaki);
+        background-color: var(--asparagus);
+        color: var(--asparagus);
         transition: all 1s;
+        transform: translateX(-10%);
         z-index: -1;
-        transform: translateX(-100%);
-    }
-
-    .custom-underline:hover::before {
-        transform: translateX(0);
-    }
-    
-    .custom-underline:hover {
-        color: var(--brown);
     }
 </style>
