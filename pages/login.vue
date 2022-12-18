@@ -1,4 +1,5 @@
 <script setup>
+    // let userStore = useUserStore()
     let username = ref(null)
     let password = ref(null)
     let startAnimation = ref(false)
@@ -52,10 +53,10 @@
                     <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
                     <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
                 </div>
-                <p class="w-fit mx-auto p-6 hover:scale-[1.02] duration-300">I don't have an account</p>
+                <NuxtLink to="/signup" class="w-fit mx-auto p-6 hover:scale-[1.02] duration-300">I don't have an account</NuxtLink>
             </div>
         </div>
-        </div>
+    </div>
     
 </template>
 <style scoped>
@@ -97,7 +98,7 @@
     }
 
     .bg-khaki:hover {
-        background-color: var(--peach);
+        background-color: var(--fawn);
     }
 
     .social-icon:hover {
