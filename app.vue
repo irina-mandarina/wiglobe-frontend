@@ -5,15 +5,7 @@
     <Link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Droid+Serif" />
     <Link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   </Head>
-  <NuxtLayout :name="'default'">
-    <div class="">
-      <Journey />
-      <Journey />
-      <Journey />
-      <Journey />
-      <Journey />
-  </div>
-  </NuxtLayout>
+  <NuxtPage />
 </template>
 <style>
   :root {
@@ -23,6 +15,34 @@
     --fawn: #E7A977;
     --peach: #EBBE9B;
     --phtalo: #14342B;
+  }
+
+  .bg-peach {
+    background-color: var(--peach);
+  }
+
+  .bg-fawn {
+    background-color: var(--fawn);
+  }
+
+  .bg-brown {
+    background-color: var(--brown);
+  }
+
+  .bg-asparagus {
+    background-color: var(--asparagus);
+  }
+
+  .bg-pthalo {
+    background-color: var(--pthalo);
+  }
+
+  .bg-khaki {
+    background-color: var(--khaki);
+  }
+
+  .text-brown {
+    color: var(--brown);
   }
 
   .font-heebo {
