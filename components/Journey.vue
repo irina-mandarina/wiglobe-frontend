@@ -1,5 +1,11 @@
+<script setup>
+    const props = defineProps({
+        journey: Object
+    })
+</script>
+
 <template>
-    <div class="shadow-md rounded-lg w-2/3 mx-auto m-6">
+    <div class="shadow-md rounded-lg w-2/3 mx-auto m-6 overflow-hidden">
         <div class="flex">
 
             <!-- Journey picture (left) -->
@@ -14,16 +20,16 @@
                     <NuxtLink to="/profile">
                         <img class="mx-auto" src="https://picsum.photos/50"/>
                         <span class="mx-auto"> 
-                            <p class="p-1 font-heebo">First name Last name</p>
+                            <p class="p-1 font-heebo">{{ journey.usernames.firstName }} {{ journey.usernames.lastName }}</p>
                         </span>
-                        <p class="mx-auto mb-2 font-heebo">@username</p>  
+                        <p class="mx-auto mb-2 font-heebo">@{{ journey.usernames.username }}</p>  
                     </NuxtLink>
                 </div>
 
                 
 
                 <!-- Journey description -->
-                <p class="my-6 p-4">Description. Description. Description. Description. Description. Description. Description. Description. Description. Description. </p>
+                <p class="my-6 p-4">{{ journey.description }}</p>
             </div>
                
         </div>

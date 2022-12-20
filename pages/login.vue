@@ -1,14 +1,24 @@
 <script setup>
-    // let userStore = useUserStore()
+    import { useUserStore } from '~~/stores/UserStore'
+
+    let userStore = useUserStore()
     let username = ref(null)
     let password = ref(null)
     let startAnimation = ref(false)
 
     onMounted(() => {
-        setTimeout(() => {
-            startAnimation.value = true
-        }, 500)
+        startAnimation.value = true
     })
+
+    async function logIn() {
+        const success = await userStore.logIn({
+            username: username.value,
+            password: password.value
+        })
+        if (success) {
+            navigateTo('/')
+        }
+    }
 
 </script>
 
@@ -36,15 +46,15 @@
                     <label for="username">
                         <i class="fa fa-user p-6 text-xl"/>
                     </label>
-                    <input name="username" type="text" class="border rounded-full p-2 my-4 focus:outline-none"/>
+                    <input v-model="username" name="username" type="text" class="border rounded-full p-2 my-4 focus:outline-none"/>
                 </div>
                 <div class="w-fit mx-auto">
                     <label for="password">
                         <i class="fa fa-lock p-6 text-xl"/>
                     </label>
-                    <input name="password" type="password" class="border rounded-full p-2 my-4 focus:outline-none"/>
+                    <input v-model="password" name="password" type="password" class="border rounded-full p-2 my-4 focus:outline-none"/>
                 </div>
-                <button @click="userStore.login({username, password})" class="flex mx-auto mt-2 mb-4 bg-khaki font-bold tracking-wider py-2 px-6 rounded-full mx-auto duration-300">
+                <button @click="logIn()" class="flex mx-auto mt-2 mb-4 bg-khaki font-bold tracking-wider py-2 px-6 rounded-full mx-auto duration-300">
                     Log in
                 </button>
                 <div class="w-fit mx-auto">
@@ -53,7 +63,7 @@
                     <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
                     <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
                 </div>
-                <NuxtLink to="/signup" class="w-fit mx-auto p-6 hover:scale-[1.02] duration-300">I don't have an account</NuxtLink>
+                <NuxtLink to="/signup" class="w-fit flex mx-auto p-6 hover:scale-[1.02] duration-300">I don't have an account</NuxtLink>
             </div>
         </div>
     </div>

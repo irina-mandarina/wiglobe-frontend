@@ -1,10 +1,91 @@
-// export const useUserStore = defineStore('userStore', {
-//   state: () => {
-//     return {
-//     }
-//   },
+import { login, logout, signup } from "~~/js/userRequests"
+import { defineStore } from "pinia"
 
-//   actions: {
+export const useUserStore = defineStore('userStore', {
+  state: () => {
+    return {
+      user: null
+    }
+  },
+
+  actions: {
+    async signUp(user) {
+        try {
+            const response = await signup(user)
+            if (response.status === 201) {
+                this.user = response.data
+                localStorage.setItem('username', this.user.username)
+                return true
+            }
+        }
+        catch (error) {
+            if (error.response.status === 404) {
+                console.log("? 404")
+            }
+            console.log(error)
+        }
+        return false
+    },
+
+    async logIn(user) {
+      try {
+        const response = await login(user)
+        if (response.status === 200) {
+          this.user = response.data
+          localStorage.setItem('username', this.user.username)
+          return true
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+      return false
+    },
+
+    async logOut() {
+      try {
+        const response = await logout(this.user.username) 
+        console.log(response)
+        this.user = null
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
     
-//   }
-// })
+    async getUserDetails(other) {
+      if (other === null) {
+        other = localStorage.getItem('username')
+      }
+      try {
+        const response = await getUserDetails(other) 
+        console.log(response)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    
+    async deleteAccount() {
+      try {
+        const response = await deleteAccount(this.user.username) 
+        console.log(response)
+        this.user = null
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    
+    async editBio() {
+      try {
+        const response = await editBio(this.user.username, bio) 
+        console.log(response)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+    
+  }
+})

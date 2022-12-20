@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow-md rounded-lg w-1/2">
+    <div class="shadow-md rounded-lg w-1/2 overflow-hidden">
         <!-- Destination Header -->
         <div class="w-full text-center">
             <div class="text-center w-full my-4">
