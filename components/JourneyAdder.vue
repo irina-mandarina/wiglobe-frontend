@@ -11,44 +11,116 @@
     const username = computed(() => userStore.user.username)
 
     let destination = ref(null)
+    let destinationObject = ref(null)
     let description = ref(null)
     let startDate = ref(null)
     let endDate = ref(null)
     let visibility = ref(null)
     let activity = ref(null)
+    let canBePosted = ref(false)
 </script>
 
 <template>
-    <div class="shadow-md rounded-lg w-2/3 mx-auto m-6 overflow-hidden">
-        <div class="flex">
-            <!-- User info -->
-            <div class="float-left w-1/2 text-center m-2">
-                <NuxtLink to="/profile">
-                    <img class="mx-auto" src="https://picsum.photos/50"/>
-                    <span class="mx-auto"> 
-                        <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
-                    </span>
-                    <p class="mx-auto mb-2 font-heebo"></p>  
-                </NuxtLink>
+    <div class="w-full relative">
+        <div class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden">
+            <div class="flex">
+                <!-- User info -->
+                <div class="float-left w-1/6 text-center m-2">
+                    <NuxtLink to="/profile">
+                        <img class="mx-auto" src="https://picsum.photos/50"/>
+                        <span class="mx-auto"> 
+                            <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
+                        </span>
+                        <p class="mx-auto mb-2 font-heebo">@{{ username }}</p>  
+                    </NuxtLink>
+                </div>
+                <!-- Journey info (left) -->
+                <div class="w-5/6 h-full">
+                    <div class="flex w-full">
+                        <div class="w-1/2">
+                            <p class="text-center mt-4">
+                                Journey duration: 
+                            </p>
+                            <div class="flex mx-auto justify-center">
+                                <input v-model="startDate" type="date" class="p-2 h-2/3 border-khaki border rounded-lg"/>
+                                <span class="my-2 p-2"> - </span>
+                                <input v-model="endDate"   type="date" class="p-2 h-2/3 border-khaki border rounded-lg"/>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 w-1/2">
+                            <span v-if="destinationObject === null">
+                                Select your destination:
+                                <input v-model="destination" class="mx-auto border-khaki border p-2 rounded-full" placeholder="Destination"/>    
+                            </span>
+                            <span v-if="destinationObject !== null">
+                                <MiniDestination :destination="destinationObject" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="my-4 flex">
+                        <p class="p-4">
+                            Add a description: 
+                        </p>
+                        <textarea v-model="description" class="p-4 flex border-khaki border resize-none rounded-lg w-3/4 h-full"></textarea>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Journey picture (left) -->
-            <div class="w-1/2 h-fit float-left">
-                <input v-model="destination"/>
+            <div class="flex">
+                <!-- Journey picture  -->
+                <div class="w-1/2 h-fit p-8 relative">
+                    <div class="text-center p-2 font-heebo font-bold text-lg">
+                        Add pictures from your journey
+                    </div>
+                    <input type="image" class="p-2 border-khaki border rounded-lg mx-auto flex my-6" alt="Pictures" />
+                </div>
+
+                <!-- Activity adder -->
+                <div class="w-1/2 h-fit p-8 relative">
+                    <div class="text-center p-2 font-heebo font-bold text-lg">
+                        Add activities you engaged in on your journey
+                    </div>
+
+                    <div class="mb-4">
+                        <span>Date: </span>
+                        <input type="date" class="p-2 border-khaki border rounded-lg m-2" />                    
+                    </div>
+
+                    <div class="mb-4">
+                        <span>Title: </span>
+                        <input type="text" class="p-2 border-khaki border rounded-lg m-2" />
+                    </div>
+                    
+                    <div class="mb-4">
+                        <span>Description: </span>
+                        <input type="text" class="p-2 border-khaki border rounded-lg m-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <span>Activity type</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <span>Add pictures from this activity: </span>
+                        <input type="image" class="p-2 border-khaki border rounded-lg m-2" alt="Pictures" />
+                    </div>
+                </div>    
             </div>
+            
         </div>
-        <!-- Journey picture (left) -->
-        <div class="w-1/2 h-fit float-left">
-                <img class="h-full" src="https://picsum.photos/1000"/>
-            </div>
-        <!-- Journey info (right) -->
-            <div class="w-1/2 float-right h-full">
-                
 
-                
-
-                <!-- Journey description -->
-                <p class="my-6 p-4"></p>
-            </div>
+        <button v-if="canBePosted" class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300">
+            Post journey
+        </button>
     </div>
+    
 </template>
+
+<style scoped>
+    .bg-fawn:hover {
+        background-color: var(--peach);
+    }
+</style>

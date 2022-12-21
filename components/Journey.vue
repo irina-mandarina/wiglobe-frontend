@@ -25,8 +25,8 @@
                         <p class="mx-auto mb-2 font-heebo">@{{ journey.usernames.username }}</p>  
                     </NuxtLink>
                 </div>
-
                 
+                <MiniDestination :destination="journey.destination" />
 
                 <!-- Journey description -->
                 <p class="my-6 p-4">{{ journey.description }}</p>

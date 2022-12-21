@@ -35,7 +35,8 @@
                 'visible': startAnimation
             }" class="text-center font-sans font-black text-2xl py-6 w-full header">
                 Log into your 
-                <span class="font-khaki">NAME</span>
+                <!-- worldly maybe? -->
+                <span class="font-khaki">NAME</span> 
                  account
             </h1>
             <!-- form -->

@@ -15,6 +15,11 @@
     --fawn: #E7A977;
     --peach: #EBBE9B;
     --phtalo: #14342B;
+    --dark-blue: #06032b;
+  }
+
+  body {
+    color: var(--dark-blue)
   }
 
   .bg-peach {
@@ -43,6 +48,14 @@
 
   .text-brown {
     color: var(--brown);
+  }
+
+  .border-phtalo {
+    border-color: var(--phtalo);
+  }
+  
+  .border-khaki {
+    border-color: var(--khaki);
   }
 
   .font-heebo {

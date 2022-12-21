@@ -5,7 +5,7 @@
     let hide = ref(false)
 </script>
 <template>
-    <div class="relative h-20">
+    <div class="relative h-20 z-10">
         <nav class="absolute w-full">
             <!-- nav items -->
             <div class="flex bg-white">
