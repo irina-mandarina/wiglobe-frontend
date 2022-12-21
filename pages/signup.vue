@@ -7,7 +7,7 @@
     let email = ref(null)
     let password = ref(null)
     let passwordRep = ref(null)
-    let bio = ref(null)
+    let biography = ref(null)
     let birthdate = ref(null)
     let gender = ref(null)
     let firstName = ref(null)
@@ -25,7 +25,7 @@
                 lastName: lastName.value,
                 username: username.value,
                 password: password.value,
-                bio: bio.value,
+                biography: biography.value,
                 gender: gender.value,
                 birthdate: birthdate.value,
                 email: email.value
@@ -99,7 +99,7 @@
                     <input v-model="gender" name="gender" value="OTHER"  type="radio" class="border rounded-full px-2 my-4 focus:outline-none"/>
                 </div>
                 <div class="w-fit mx-auto">
-                    <textarea v-model="bio" name="bio" type="text" class="border resize-none rounded-full p-2 my-4 focus:outline-none" placeholder="Bio"/>
+                    <textarea v-model="biography" name="biography" type="text" class="border resize-none rounded-full p-2 my-4 focus:outline-none" placeholder="Biography"/>
                 </div>
 
                 <div class="flex mx-auto w-min">

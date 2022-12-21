@@ -72,7 +72,7 @@
 </template>
 <style scoped>
     .bg-image {
-        background-image: url("https://picsum.photos/1000");
+        background-image: url("https://picsum.photos/2000");
         background-size: cover;
         width: 100%;
         height: 600px;

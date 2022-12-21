@@ -2,7 +2,7 @@
     const route = useRoute()
     console.log(route.path)
     let homeHovered = ref(false), notificationsHovered = ref(false), exploreHovered = ref(false)
-    let hide = ref(false)
+    let hide = ref(true)
 </script>
 <template>
     <div class="relative h-20 z-10">
@@ -65,13 +65,13 @@
                         </NuxtLink>
                     </li>
                     <li class="w-full border-b px-6 py-4">
-                        <NuxtLink to="/friend-requests" class="text-lg hover:text-gray-800 duration-300">
+                        <NuxtLink to="/follow-requests" class="text-lg hover:text-gray-800 duration-300">
                             <i class="fa fa-users"/>
-                            <span class="px-2"> Friend requests </span>
+                            <span class="px-2"> Follow requests </span>
                         </NuxtLink>
                     </li>
                     <li class="w-full border-b px-6 py-4 block">
-                        <NuxtLink to="/friend-requests" class="text-lg hover:text-gray-800 duration-300">
+                        <NuxtLink to="/settings" class="text-lg hover:text-gray-800 duration-300">
                             <i class="fa fa-gears"/>
                             <span class="px-2"> Settings </span>
                         </NuxtLink>

@@ -1,6 +1,10 @@
 <script setup>
     let approveText = ref(false)
     let declineText = ref(false)
+
+    const props = defineProps ({
+        followRequest: Object
+    })
 </script>
 
 <template>
@@ -9,7 +13,7 @@
         </div>
         <div class="mx-auto text-center">
             <p class="p-2 pt-4">
-                First name Last name
+                {{ followRequest.requester.firstName }} {{ followRequest }}
             </p>
             <p class="p-2 pb-4">
                 sent you a friend request 15 hours ago

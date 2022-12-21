@@ -4,11 +4,24 @@ import { defineStore } from "pinia"
 export const useUserStore = defineStore('userStore', {
   state: () => {
     return {
+      loggedUsername: computed(() => {
+        if (typeof window !== 'undefined') {
+          return localStorage.getItem('username')
+        }
+      }),
       user: null
     }
   },
 
   actions: {
+    username() {
+      if (this.loggedUsername === null || this.loggedUsername === undefined) {
+        if (typeof window !== 'undefined') {
+          this.loggedUsername = localStorage.getItem('username')
+        }
+      }
+      return this.loggedUsername
+    },
     async signUp(user) {
         try {
             const response = await signup(user)
@@ -55,7 +68,7 @@ export const useUserStore = defineStore('userStore', {
     
     async getUserDetails(other) {
       if (other === null) {
-        other = localStorage.getItem('username')
+        other = this.loggedUsername
       }
       try {
         const response = await getUserDetails(other) 
