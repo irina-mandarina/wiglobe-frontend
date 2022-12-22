@@ -1,10 +1,16 @@
+<script setup>
+    defineProps({
+        destination: Object
+    })
+</script>
+
 <template>
-    <div class="shadow-md rounded-lg w-1/2 overflow-hidden">
+    <div class="shadow-md rounded-lg overflow-hidden">
         <!-- Destination Header -->
         <div class="w-full text-center">
-            <div class="text-center w-full my-4">
+            <div class="text-center w-full">
                 <h1 class="font-bold font-heebo tracking-wider w-full py-8 text-xl text-white bg-img text-drop-shadow">
-                    Destination name
+                    {{ destination.name }}
                 </h1>
             </div>
         </div>
@@ -16,8 +22,9 @@
                 <p>7049 visits</p>
             </div>
             <div class="flex w-full justify-evenly my-4">
-                <span>Class: Mountain</span>
-                <span>Location: Spain, Eurpope</span>
+                <span>Category: {{ destination.featureClass }}</span>
+                <span>Class: {{ destination.featureCode }}</span>
+                <span>Location: {{ destination.country.countryName }}, {{ destination.country.continent }}</span>
             </div>
         </div>
     </div>

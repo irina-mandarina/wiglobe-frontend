@@ -1,4 +1,4 @@
-import { getReceivedFollowRequests } from "~~/js/followRequests"
+import { getReceivedFollowRequests, getFriends, getFollowers, getFollowing } from "~~/js/followRequests"
 import { defineStore } from "pinia"
 
 export const useFollowStore = defineStore('followStore', {
@@ -30,7 +30,27 @@ export const useFollowStore = defineStore('followStore', {
             catch (error) {
                 console.log(error)
             }
-        }
+        },
+
+        async getFollowing() {
+            try {
+                const response = await getFollowing()
+                this.receivedFollowRequests = response.data
+            }
+            catch (error) {
+                console.log(error)
+            }
+        },
+
+        async getFollowers() {
+            try {
+                const response = await getFollowers()
+                this.receivedFollowRequests = response.data
+            }
+            catch (error) {
+                console.log(error)
+            }
+        },
     }      
     
 })

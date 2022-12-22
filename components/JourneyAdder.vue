@@ -18,11 +18,22 @@
     let visibility = ref(null)
     let activity = ref(null)
     let canBePosted = ref(false)
+    let creatorOpen = ref(false)
+
 </script>
 
 <template>
     <div class="w-full relative">
-        <div class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden">
+        <div v-if="!creatorOpen" class="p-6 text-2xl mx-auto text-center rounded-full shadow-md w-1/2" @click="creatorOpen = true">
+            <span class="font-heebo font-bold text-5xl hover:text-green-700 duration-300">+</span>
+            Create a new journey
+        </div>
+        <div :class="{
+            'h-2': !creatorOpen,
+            'h-fit': creatorOpen,
+            'open': creatorOpen,
+            'visible': creatorOpen
+        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden creator">
             <div class="flex">
                 <!-- User info -->
                 <div class="float-left w-1/6 text-center m-2">
@@ -122,5 +133,23 @@
 <style scoped>
     .bg-fawn:hover {
         background-color: var(--peach);
+    }
+
+    .open {
+        transform: scaleY(100%);
+        transition: all 1s ease-in-out;
+    }
+
+    .visible {
+        opacity: 100%;
+        transition-delay: 0.5s;
+    }
+
+    .creator:not(.open) {
+        transform: scaleY(0%);
+    }
+
+    .creator:not(.visible) {
+        opacity: 0;
     }
 </style>

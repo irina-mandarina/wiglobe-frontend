@@ -13,9 +13,9 @@ import { useUserStore } from '~~/stores/UserStore'
 //     return response
 // }
 // not yet impl
-export async function getDestination() {
+export async function getDestination(id) {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/destinations",
+    const response = await axios.get("http://localhost:8080/destinations/" + id,
         {
             headers: {
                 'Content-Type': 'application/json',

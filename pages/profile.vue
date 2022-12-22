@@ -1,12 +1,17 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
     import { useJourneyStore } from '~~/stores/JourneyStore'
+    import { useFollowStore } from '~~/stores/FollowStore'
 
     const userStore = useUserStore()
     const journeyStore = useJourneyStore()
+    const followStore = useFollowStore()
 
     const user = computed(() => userStore.user)
     let journeys = computed(() => journeyStore.loggedUserJourneys)
+    const followers = computed(() => followStore.followers)
+    const following = computed(() => followStore.following)
+    const friends = computed(() => followStore.followers)
     let startAnimation = ref(false)
     let editMode = ref(false)
 
@@ -17,6 +22,15 @@
     onBeforeMount(async () => {
         if (journeyStore.loggedUserJourneys === null) {
             await journeyStore.getJourneysByLogged()
+        }
+        if (followStore.followers === null) {
+            await followStore.getFollowers()
+        }
+        if (followStore.following === null) {
+            await followStore.getFollowing()
+        }
+        if (followStore.friends === null) {
+            await followStore.getFriends()
         }
     })
 
@@ -59,59 +73,69 @@
             {{ user.biography }}
         </p>
 
-        <!-- details -->
-        <div class="flex w-full justify-evenly my-6">
-            <!-- gender and pronouns -->
-            <div class="rounded-2xl shadow-lg w-1/6 border-khaki border-2 text-center delay-[1000ms] details-box"
-                :class="{
-                    'slide-up': startAnimation
-                }">
-                <p v-if="user.gender === 'FEMALE'" class="text-center p-6">
-                    She / Her
-                    <i class="fa fa-female" />
-                </p>
-                
-                <p v-if="user.gender === 'MALE'" class="text-center p-6">
-                    He / Him
-                    <i class="fa fa-male" />
-                </p>
-            </div>
+        <div class="w-11/12 flex">
+            <!-- details -->
+            <div class="mx-auto w-1/2 justify-evenly my-6">
+                <!-- gender and pronouns -->
+                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[1000ms] details-box bg-white overflow-hidden"
+                    :class="{
+                        'slide-up': startAnimation
+                    }">
+                    <p v-if="user.gender === 'FEMALE'" class="text-center p-6">
+                        She / Her
+                        <i class="fa fa-female" />
+                    </p>
+                    
+                    <p v-if="user.gender === 'MALE'" class="text-center p-6">
+                        He / Him
+                        <i class="fa fa-male" />
+                    </p>
+                </div>
 
-            <!-- birthday and age -->
-            <div class="rounded-2xl shadow-lg w-1/6 border-khaki border-2 text-center delay-[1500ms] details-box"
-                :class="{
-                    'slide-up': startAnimation
-                }">
-                <p class="text-center p-6">
-                    Born on {{ new Date(user.birthdate).toDateString() }}
-                    <br />
-                    {{ parseInt(( new Date().getTime() - new Date(user.birthdate).getTime()) / (1000*60*60*24*365)) }} years old
-                </p>
-            </div>
+                <!-- birthday and age -->
+                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[1500ms] details-box bg-white overflow-hidden"
+                    :class="{
+                        'slide-up': startAnimation
+                    }">
+                    <p class="text-center p-6">
+                        Born on {{ new Date(user.birthdate).toDateString() }}
+                        <br />
+                        {{ parseInt(( new Date().getTime() - new Date(user.birthdate).getTime()) / (1000*60*60*24*365)) }} years old
+                    </p>
+                </div>
 
-            <!-- location -->
-            <div class="rounded-2xl shadow-lg w-1/6 border-khaki border-2 text-center delay-[2000ms] details-box"
-                :class="{
-                    'slide-up': startAnimation
-                }">
-                <p class="text-center p-6">
-                    City, Country
-                </p>
-            </div>
+                <!-- location -->
+                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[2000ms] details-box bg-white overflow-hidden"
+                    :class="{
+                        'slide-up': startAnimation
+                    }">
+                    <p class="text-center p-6">
+                        City, Country
+                    </p>
+                </div>
 
-            <!-- joined on -->
-            <div class="rounded-2xl shadow-lg w-1/6 border-khaki border-2 text-center delay-[2500ms] details-box"
-                :class="{
-                    'slide-up': startAnimation
-                }">
-                <p class="text-center p-6">
-                    Joined NAME on
-                    <br />
-                    {{ new Date(user.registrationDate).toDateString() }}
-                </p>
-            </div>
+                <!-- joined on -->
+                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[2500ms] details-box bg-white overflow-hidden"
+                    :class="{
+                        'slide-up': startAnimation
+                    }">
+                    <p class="text-center p-6">
+                        Joined NAME on
+                        <br />
+                        {{ new Date(user.registrationDate).toDateString() }}
+                    </p>
+                </div>
 
+            </div>
+             <!-- end of details -->
+
+             <!-- follow -->
+             <div class="w-1/2">
+                <div>Followers: {{ followers.length }}</div>
+                <!-- <div>Following: {{ 0 || following.length }}</div> -->
+             </div>
         </div>
+        
 
 
         <!-- journeys -->
