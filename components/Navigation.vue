@@ -1,6 +1,5 @@
 <script setup>
     const route = useRoute()
-    console.log(route.path)
     let homeHovered = ref(false), notificationsHovered = ref(false), exploreHovered = ref(false)
     let hide = ref(true)
 </script>

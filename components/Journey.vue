@@ -14,7 +14,7 @@
             </div>
 
             <!-- Journey info (right) -->
-            <div class="w-1/2 float-right h-full">
+            <div @click="navigateTo('/journeys/' + journey.id)" class="w-1/2 float-right h-full">
                  <!-- User info -->
                 <div class="w-1/2 text-center m-6">
                     <NuxtLink to="/profile">

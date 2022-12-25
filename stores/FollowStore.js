@@ -16,6 +16,7 @@ export const useFollowStore = defineStore('followStore', {
             try {
                 const response = await getFriends()
                 this.friends = response.data
+                console.log(this.friends)
             }
             catch (error) {
                 console.log(error)
@@ -26,6 +27,7 @@ export const useFollowStore = defineStore('followStore', {
             try {
                 const response = await getReceivedFollowRequests()
                 this.receivedFollowRequests = response.data
+                console.log(this.receivedFollowRequests)
             }
             catch (error) {
                 console.log(error)
@@ -35,7 +37,8 @@ export const useFollowStore = defineStore('followStore', {
         async getFollowing() {
             try {
                 const response = await getFollowing()
-                this.receivedFollowRequests = response.data
+                this.following = response.data
+                console.log(this.following)
             }
             catch (error) {
                 console.log(error)
@@ -45,7 +48,8 @@ export const useFollowStore = defineStore('followStore', {
         async getFollowers() {
             try {
                 const response = await getFollowers()
-                this.receivedFollowRequests = response.data
+                this.followers = response.data
+                console.log(this.followers)
             }
             catch (error) {
                 console.log(error)

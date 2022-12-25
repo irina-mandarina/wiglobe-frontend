@@ -20,18 +20,10 @@
     })
 
     onBeforeMount(async () => {
-        if (journeyStore.loggedUserJourneys === null) {
-            await journeyStore.getJourneysByLogged()
-        }
-        if (followStore.followers === null) {
-            await followStore.getFollowers()
-        }
-        if (followStore.following === null) {
-            await followStore.getFollowing()
-        }
-        if (followStore.friends === null) {
-            await followStore.getFriends()
-        }
+        journeyStore.getJourneysByLogged()
+        followStore.getFollowers()
+        followStore.getFollowing()
+        followStore.getFriends()
     })
 
     onMounted(() => {
@@ -69,15 +61,16 @@
         </div> 
 
         <!-- bio -->
-        <p class="text-center mx-auto text-xl text-phtalo font-droid">
+        <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
             {{ user.biography }}
         </p>
 
-        <div class="w-11/12 flex">
+        <div class="w-full flex h-max">
             <!-- details -->
-            <div class="mx-auto w-1/2 justify-evenly my-6">
+            <div class="mx-auto flex flex-wrap w-1/2 my-6 p-6">
+
                 <!-- gender and pronouns -->
-                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[1000ms] details-box bg-white overflow-hidden"
+                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1000ms] details-box bg-white overflow-hidden"
                     :class="{
                         'slide-up': startAnimation
                     }">
@@ -93,7 +86,7 @@
                 </div>
 
                 <!-- birthday and age -->
-                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[1500ms] details-box bg-white overflow-hidden"
+                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1500ms] details-box bg-white overflow-hidden"
                     :class="{
                         'slide-up': startAnimation
                     }">
@@ -105,7 +98,7 @@
                 </div>
 
                 <!-- location -->
-                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[2000ms] details-box bg-white overflow-hidden"
+                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2000ms] details-box bg-white overflow-hidden"
                     :class="{
                         'slide-up': startAnimation
                     }">
@@ -115,7 +108,7 @@
                 </div>
 
                 <!-- joined on -->
-                <div class="rounded-2xl shadow-lg w-3/4 border-khaki border-2 text-center delay-[2500ms] details-box bg-white overflow-hidden"
+                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2500ms] details-box bg-white overflow-hidden"
                     :class="{
                         'slide-up': startAnimation
                     }">
@@ -130,9 +123,15 @@
              <!-- end of details -->
 
              <!-- follow -->
-             <div class="w-1/2">
-                <div>Followers: {{ followers.length }}</div>
-                <!-- <div>Following: {{ 0 || following.length }}</div> -->
+             <div class="w-1/2 relative overflow-hidden my-6 text-lg p-6">
+                <div>Followers: {{ 0 || followers.length }}</div>
+                <div>Following: {{ 0 || following.length }}</div>
+                <div>
+                    <p>Friends</p>
+                    <div class="flex flex-wrap w-max">
+                        <UserDetails class="w-40 m-4" v-for="friend in friends" v-if="friends !== null && friends !== undefined" :user="friend" />
+                    </div>
+                </div>
              </div>
         </div>
         

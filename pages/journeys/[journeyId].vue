@@ -2,16 +2,54 @@
     import { getJourney } from '~~/js/journeyRequests'
     import { useRoute } from 'vue-router'
     import { useUserStore } from '~~/stores/UserStore'
+    import { commentJourney, getCommentsForJourney } from '~~/js/commentRequests'
     const userStore = useUserStore()
 
     let journey = ref(null)
-    onBeforeMount(async () => {
-        journey.value = await getJourney(userStore.loggedUsername, useRoute().params.journeyId)
+    let comments = ref(null)
+    
+    definePageMeta({
+        middleware: 'prepare-user-store'
     })
+    
+    onBeforeMount(async () => {
+        try {
+            const response = await getJourney(userStore.loggedUsername, useRoute().params.journeyId)
+            journey.value = response.data
+        }
+        catch (error) {
+            console.log(error)
+        }
+        getComments()
+    })
+
+    async function getComments() {
+        try {
+            const response = await getCommentsForJourney(journey.value.id)
+            comments.value = response.data
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function postComment(content) {
+        console.log('fd')
+        try {
+            const response = await commentJourney(journey.value.id, {content})
+            console.log(response.data)
+        }
+        catch (error) {
+            console.log(error)
+        }
+        getComments()
+    }
 </script>
 
 <template>
     <NuxtLayout name="default">
-        <Journey :journey="journey" />        
+        <Journey v-if="journey !== null" :journey="journey" />
+        <CommentAdder  class="mx-auto my-6" @post-comment="postComment"/>
+        <Comment v-if="comments !== null" v-for="comment in comments" :comment="comment" class="mx-40 my-6" />   
     </NuxtLayout>
 </template>
