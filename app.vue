@@ -49,6 +49,18 @@
   .text-brown {
     color: var(--brown);
   }
+  
+  .text-peach {
+    color: var(--peach);
+  }
+
+  .text-fawn {
+    color: var(--fawn);
+  }
+
+  .text-khaki {
+    color: var(--khaki);
+  }
 
   .border-phtalo {
     border-color: var(--phtalo);

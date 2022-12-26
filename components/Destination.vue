@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <div class="shadow-md rounded-lg overflow-hidden">
+    <div class="shadow-xl overflow-hidden bg-white">
         <!-- Destination Header -->
         <div class="w-full text-center">
             <div class="text-center w-full">
@@ -18,7 +18,9 @@
         <div class="w-full text-green-900 p-6 text-center relative">
             <div class="mx-auto w-full font-droid">
                 <span>* * * * *</span>
-                <p>Average rating: 4.6 (5307 reviews)</p>
+                <p v-if="destination.averageRating >= 0 && destination.reviewCount >= 0">
+                    Average rating: {{ destination.averageRating }} ({{ destination.reviewCount }} reviews)
+                </p>
                 <p>7049 visits</p>
             </div>
             <div class="flex w-full justify-evenly my-4">

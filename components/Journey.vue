@@ -9,12 +9,12 @@
         <div class="flex">
 
             <!-- Journey picture (left) -->
-            <div class="w-1/2 h-fit float-left">
+            <div class="w-1/2 h-fit float-left" @click="navigateTo('/journeys/' + journey.id)">
                 <img class="h-full" src="https://picsum.photos/1000"/>
             </div>
 
             <!-- Journey info (right) -->
-            <div @click="navigateTo('/journeys/' + journey.id)" class="w-1/2 float-right h-full">
+            <div class="w-1/2 float-right h-full">
                  <!-- User info -->
                 <div class="w-1/2 text-center m-6">
                     <NuxtLink to="/profile">
@@ -26,7 +26,7 @@
                     </NuxtLink>
                 </div>
                 
-                <MiniDestination :destination="journey.destination" />
+                <MiniDestination class="z-100" :destination="journey.destination" />
 
                 <!-- Journey description -->
                 <p class="my-6 p-4">{{ journey.description }}</p>
