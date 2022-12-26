@@ -11,6 +11,10 @@
         if (followStore.receivedFollowRequests === null) {
             followStore.getReceivedFollowRequests()
         }
+        
+        if (followStore.sentFollowRequests === null) {
+            followStore.getSentFollowRequests()
+        }
     })
 
     async function respondWith(requester, isApproved) {
@@ -45,10 +49,16 @@
         
         <div v-if="!requestTypeSent" class="mx-auto flex flex-wrap justify-evenly">
             <FollowRequest v-for="req in followStore.receivedFollowRequests" :follow-request="req" @respond-to-follow-request-with="respondWith"/>
+            <div v-if="followStore.receivedFollowRequests === null || followStore.receivedFollowRequests.length === 0" class="p-20">
+                You haven't sent any follow requests which haven't been approved yet.
+            </div>
         </div>
         <div v-if="requestTypeSent" class="mx-auto flex flex-wrap justify-evenly">
-            <FollowRequest v-for="req in followStore.receivedFollowRequests" :follow-request="req" @respond-to-follow-request-with="respondWith"/>
-        </div>    
+            <FollowRequest v-for="req in followStore.sentFollowRequests" :follow-request="req" @delete-follow-request="delete"/>
+            <div v-if="followStore.sentFollowRequests === null || followStore.sentFollowRequests.length === 0" class="p-20">
+                You don't have any follow requests.
+            </div>
+        </div>
         
     </NuxtLayout>
 </template>

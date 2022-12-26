@@ -44,9 +44,35 @@ export async function respondToFollowRequest(requesterUsername, approve) {
     return response
 }
 
+export async function unfollow(recieverUsername) {
+    const userStore = useUserStore()
+    const response = await axios.delete("http://localhost:8080/users/" + userStore.username() + "/followers/" + recieverUsername,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                username: userStore.username()
+            }
+        }
+    )
+    return response
+}
+
 export async function getReceivedFollowRequests() {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/follow-requests",
+    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/follow-requests/received",
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                username: userStore.username()
+            }
+        }
+    )
+    return response
+}
+
+export async function getSentFollowRequests() {
+    const userStore = useUserStore()
+    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/follow-requests/sent",
         {
             headers: {
                 'Content-Type': 'application/json',

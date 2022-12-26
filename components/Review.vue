@@ -24,7 +24,7 @@
         </div>
         <!-- date -->
         <div>
-            <p class="italic font-droid text-sm text-center text-khaki">{{ new Date(review.reviewedDate).toDateString() }}</p>
+            <p class="italic font-droid text-sm text-center text-khaki p-4">{{ new Date(review.reviewedDate).toDateString() }}</p>
         </div>
 
         <!-- Review star rating -->
@@ -52,10 +52,10 @@
         </div>
         <!-- Review body -->
         <div class="w-full text-center">
-            <p class="p-2 pb-8 m-4 font-droid font-oblique">
+            <p class="p-2 pb-8 m-2 font-droid">
                 {{ review.title }}
             </p>
-            <p class="p-2 pb-8 m-4 font-heebo">
+            <p class="p-2 pb-8 m-2 font-heebo">
                 {{ review.content }}    
             </p>
         </div>

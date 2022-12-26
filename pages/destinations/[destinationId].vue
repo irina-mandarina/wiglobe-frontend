@@ -8,7 +8,6 @@
     let reviews = ref(null)
 
     onBeforeMount(async() => {
-        console.log(route.params)
         try {
             const response = await getDestination(route.params.destinationId) 
             destination.value = response.data
@@ -17,15 +16,6 @@
             console.log(error)
         }
         getReviews()
-        destination.value.averageRating = 0
-        if (reviews.value === null) {
-            destination.value.reviewCount = 0
-        }
-        else {
-            for (let review in reviews.value) destination.value.averageRating += review.starRating
-            destination.value.averageRating /= reviews.value.length
-            destination.value.reviewCount = reviews.value.length    
-        }
         
     })
 
@@ -33,7 +23,15 @@
         try {
             const response = await getReviewsForDestination(destination.value.id)
             reviews.value = response.data
-            console.log(reviews.value)
+            destination.value.averageRating = 0
+            if (reviews.value === null) {
+                destination.value.reviewCount = 0
+            }
+            else {
+                for (let i = 0; i < reviews.value.length; i++) destination.value.averageRating += reviews.value[i].starRating
+                destination.value.reviewCount = reviews.value.length
+                destination.value.averageRating = destination.value.averageRating/destination.value.reviewCount
+            }
         }
         catch (error) {
             console.log(error)

@@ -12,6 +12,8 @@
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
     const friends = computed(() => followStore.followers)
+    let followersListOpen = ref(false)
+    let followingListOpen = ref(false)
     let startAnimation = ref(false)
     let editMode = ref(false)
 
@@ -30,6 +32,15 @@
         startAnimation.value = true
         console.log(startAnimation.value)
     })
+
+    async function unfollow(username) {
+        try {
+            const response = await unfollow(username)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 </script>
 
 <template>
@@ -65,7 +76,7 @@
             {{ user.biography }}
         </p>
 
-        <div class="w-full flex h-max">
+        <div class="w-full flex h-max relative">
             <!-- details -->
             <div class="mx-auto flex flex-wrap w-1/2 my-6 p-6">
 
@@ -123,9 +134,14 @@
              <!-- end of details -->
 
              <!-- follow -->
-             <div class="w-1/2 relative overflow-hidden my-6 text-lg p-6">
-                <div>Followers: {{ 0 || followers.length }}</div>
-                <div>Following: {{ 0 || following.length }}</div>
+             <div class="w-1/2 overflow-hidden my-6 text-lg p-6">
+                <div class="bg-white hover-bg-asparagus duration-300 my-2 p-4 rounded-lg" @click="followersListOpen = !followersListOpen">
+                    Followers: {{ 0 || followers.length }}
+                </div>
+                
+                <div class="bg-white hover-bg-asparagus duration-300 my-2 p-4 rounded-lg" @click="followingListOpen = !followingListOpen">
+                    Following: {{ 0 || following.length }}
+                </div>
                 <div>
                     <p>Friends</p>
                     <div class="flex flex-wrap w-max">
@@ -135,7 +151,37 @@
              </div>
         </div>
         
-
+        <div v-if="followersListOpen" class="absolute top-40 w-full overflow-hidden h-full">
+            <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
+                <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followersListOpen = false">
+                    x
+                </span>
+                <p class="font-droid text-brown"> Followers: {{ followers.length }}</p>
+                <div v-for="follower in followers" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                    <div class="p-4 float-left">@{{ follower.username }}</div>
+                    <div class="p-4 float-right">{{ follower.firstName }} {{ follower.lastName }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div v-if="followingListOpen" class="absolute top-40 w-full overflow-hidden h-full">
+            <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
+                <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followingListOpen = false">
+                    x
+                </span>
+                <p class="font-droid text-brown"> Followed by you: {{ following.length }}</p>
+                <div v-for="followed in following" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                    <div class="p-4 float-left">@{{ followed.username }}</div>
+                    <div class="p-4 float-right">{{ followed.firstName }} {{ followed.lastName }}</div>
+                    <button class="hover:bg-gray-200 bg-white p-4" @click="unfollow(followed.username)">
+                        Unfollow
+                    </button>
+                </div>
+                <div v-if="following.length === 0" class="text-center py-16">
+                    You haven't followed anyone
+                </div>
+            </div>
+        </div>
 
         <!-- journeys -->
         <div class="my-20">
@@ -183,4 +229,8 @@
         padding: 2rem;
         background-color: var(--fawn);
     } */
+
+    .hover-bg-asparagus:hover {
+        background-color: var(--khaki);
+    }
 </style>
