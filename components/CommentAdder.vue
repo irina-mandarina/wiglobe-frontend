@@ -25,13 +25,13 @@
         </div>
         <!-- Comment user -->
         <div class="p-2">
-            <NuxtLink to="/">
+            <div>
                 <img class="p-2 ml-2 float-left" src="https://picsum.photos/50"/>
                 <span class="flex mb-0">  
                     <p class="p-1 font-droid"> {{ user.firstName }} {{ user.lastName }}</p>
                 </span>
                 <p class="flex p-2 pt-0 mt-0">@{{ user.username }}</p>  
-            </NuxtLink>
+            </div>
         </div>
         <!-- Comment body -->
         <div class="w-full">

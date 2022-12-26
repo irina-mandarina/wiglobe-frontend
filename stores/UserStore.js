@@ -4,11 +4,7 @@ import { defineStore } from "pinia"
 export const useUserStore = defineStore('userStore', {
   state: () => {
     return {
-      loggedUsername: computed(() => {
-        if (typeof window !== 'undefined') {
-          return localStorage.getItem('username')
-        }
-      }),
+      loggedUsername: null,
       user: null
     }
   },

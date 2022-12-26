@@ -1,11 +1,11 @@
 <script setup>
     import { useJourneyStore } from '~~/stores/JourneyStore'
     definePageMeta ({
-        middleware: 'prepare-user-store'
+        middleware: 'authorise'
     })
     
     // definePageMeta({
-    //     middleware: 'prepare-user-store'
+    //     middleware: 'authorise'
     // })
 
     const journeyStore = useJourneyStore()

@@ -34,9 +34,9 @@
             <div class="mx-auto mt-0 m-4 px-4 py-20 profile-picture">
             </div>
             <div class="mx-auto text-center">
-                <p class="p-2 pt-4">
+                <NuxtLink :to="'profile/' + followRequest.requester.username" class="p-2 pt-4">
                     {{ followRequest.requester.firstName }} {{ followRequest.requester.lastName }}
-                </p>
+                </NuxtLink>
                 <p class="p-2 pb-4">
                     sent you a friend request {{ timeIntervalString }}
                 </p>

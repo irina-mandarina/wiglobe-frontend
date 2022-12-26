@@ -22,6 +22,10 @@
     color: var(--dark-blue)
   }
 
+  body:focus {
+    outline: none;
+  }
+
   .bg-peach {
     background-color: var(--peach);
   }

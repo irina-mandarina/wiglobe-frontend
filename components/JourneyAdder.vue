@@ -37,7 +37,7 @@
             <div class="flex">
                 <!-- User info -->
                 <div class="float-left w-1/6 text-center m-2">
-                    <NuxtLink to="/profile">
+                    <NuxtLink :to="'profile/' + username">
                         <img class="mx-auto" src="https://picsum.photos/50"/>
                         <span class="mx-auto"> 
                             <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>

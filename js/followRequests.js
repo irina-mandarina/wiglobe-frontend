@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useUserStore } from '~~/stores/UserStore'
 
-// fix this in the backend
 export async function sendFollowRequest(recieverUsername) {
     const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/users/" + recieverUsername + "/follow-requests",
@@ -83,9 +82,9 @@ export async function getSentFollowRequests() {
     return response
 }
 
-export async function getFollowers() {
+export async function getFollowers(username) {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/followers",
+    const response = await axios.get("http://localhost:8080/users/" + username + "/followers",
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -96,9 +95,9 @@ export async function getFollowers() {
     return response
 }
 
-export async function getFollowing() {
+export async function getFollowing(username) {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/following",
+    const response = await axios.get("http://localhost:8080/users/" + username + "/following",
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -109,9 +108,9 @@ export async function getFollowing() {
     return response
 }
 
-export async function getFriends() {
+export async function getFriends(username) {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/friends",
+    const response = await axios.get("http://localhost:8080/users/" + username + "/friends",
         {
             headers: {
                 'Content-Type': 'application/json',

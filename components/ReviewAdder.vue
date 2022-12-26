@@ -25,7 +25,7 @@
     <div class="shadow-md rounded-lg w-1/3 bg-white p-6 ">
         <!-- Review user -->
         <div class="w-full text-center">
-            <NuxtLink to="/">
+            <NuxtLink :to="'profile/' + user.username">
                 <img class="mx-auto" src="https://picsum.photos/50"/>
                 <span class="mx-auto"> 
                     <p class="p-1 font-heebo">{{ user.firstName }} {{ user.lastName }}</p>

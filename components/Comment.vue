@@ -14,7 +14,7 @@
         </div>
         <!-- Comment user -->
         <div class="p-2">
-            <NuxtLink to="/">
+            <NuxtLink  :to="'profile/' + comment.userNames.username">
                 <img class="p-2 ml-2 float-left" src="https://picsum.photos/50"/>
                 <span class="flex mb-0">  
                     <p class="p-1 font-droid"> {{ comment.userNames.firstName }} {{ comment.userNames.lastName }}</p>

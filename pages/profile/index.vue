@@ -12,13 +12,33 @@
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
     const friends = computed(() => followStore.followers)
+    
+    let followerCount = computed(() => {
+        if (followStore.followers === null)
+            return 0
+        else
+            return followStore.followers.length
+    })
+    let followingCount = computed(() => {
+        if (followStore.following === null)
+            return 0
+        else
+            return followStore.following.length
+    })
+    
+    let friendCount = computed(() => {
+        if (followStore.friends === null)
+            return 0
+        else
+            return followStore.friends.length
+    })
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
     let startAnimation = ref(false)
     let editMode = ref(false)
 
     definePageMeta({
-        middleware: 'prepare-user-store'
+        middleware: 'authorise'
     })
 
     onBeforeMount(async () => {
@@ -135,15 +155,17 @@
 
              <!-- follow -->
              <div class="w-1/2 overflow-hidden my-6 text-lg p-6">
-                <div class="bg-white hover-bg-asparagus duration-300 my-2 p-4 rounded-lg" @click="followersListOpen = !followersListOpen">
-                    Followers: {{ 0 || followers.length }}
+                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followersListOpen = !followersListOpen">
+                    Followers: {{ followerCount }}
                 </div>
                 
-                <div class="bg-white hover-bg-asparagus duration-300 my-2 p-4 rounded-lg" @click="followingListOpen = !followingListOpen">
-                    Following: {{ 0 || following.length }}
+                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followingListOpen = !followingListOpen">
+                    Following: {{ followingCount }}
                 </div>
-                <div>
-                    <p>Friends</p>
+                <div class="bg-white">
+                    <p class="hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg">
+                        Friends
+                    </p>
                     <div class="flex flex-wrap w-max">
                         <UserDetails class="w-40 m-4" v-for="friend in friends" v-if="friends !== null && friends !== undefined" :user="friend" />
                     </div>
@@ -156,7 +178,7 @@
                 <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followersListOpen = false">
                     x
                 </span>
-                <p class="font-droid text-brown"> Followers: {{ followers.length }}</p>
+                <p class="font-droid text-brown"> Followers: {{ followerCount }}</p>
                 <div v-for="follower in followers" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
                     <div class="p-4 float-left">@{{ follower.username }}</div>
                     <div class="p-4 float-right">{{ follower.firstName }} {{ follower.lastName }}</div>
@@ -169,7 +191,7 @@
                 <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followingListOpen = false">
                     x
                 </span>
-                <p class="font-droid text-brown"> Followed by you: {{ following.length }}</p>
+                <p class="font-droid text-brown"> Followed by you: {{ followingCount }}</p>
                 <div v-for="followed in following" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
                     <div class="p-4 float-left">@{{ followed.username }}</div>
                     <div class="p-4 float-right">{{ followed.firstName }} {{ followed.lastName }}</div>
@@ -177,7 +199,7 @@
                         Unfollow
                     </button>
                 </div>
-                <div v-if="following.length === 0" class="text-center py-16">
+                <div v-if="followingCount === 0" class="text-center py-16">
                     You haven't followed anyone
                 </div>
             </div>
@@ -230,7 +252,7 @@
         background-color: var(--fawn);
     } */
 
-    .hover-bg-asparagus:hover {
-        background-color: var(--khaki);
+    .hover-border-asparagus:hover {
+        border-bottom: 4px solid var(--khaki);
     }
 </style>

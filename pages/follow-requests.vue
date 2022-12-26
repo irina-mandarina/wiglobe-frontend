@@ -3,7 +3,7 @@
     import { useFollowStore } from '~~/stores/FollowStore'
     import { respondToFollowRequest } from '~~/js/followRequests'
     
-    const UserStore = useUserStore()
+    const userStore = useUserStore()
     const followStore = useFollowStore()
     let requestTypeSent = ref(false)
     

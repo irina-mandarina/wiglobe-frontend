@@ -9,7 +9,7 @@
     let comments = ref(null)
     
     definePageMeta({
-        middleware: 'prepare-user-store'
+        middleware: 'authorise'
     })
     
     onBeforeMount(async () => {

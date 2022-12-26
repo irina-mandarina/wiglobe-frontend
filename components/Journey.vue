@@ -17,7 +17,7 @@
             <div class="w-1/2 float-right h-full">
                  <!-- User info -->
                 <div class="w-1/2 text-center m-6">
-                    <NuxtLink to="/profile">
+                    <NuxtLink :to="'/profile/' + journey.usernames.username">
                         <img class="mx-auto" src="https://picsum.photos/50"/>
                         <span class="mx-auto"> 
                             <p class="p-1 font-heebo">{{ journey.usernames.firstName }} {{ journey.usernames.lastName }}</p>
