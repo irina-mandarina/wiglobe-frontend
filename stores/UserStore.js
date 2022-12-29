@@ -42,13 +42,12 @@ export const useUserStore = defineStore('userStore', {
         if (response.status === 200) {
           this.user = response.data
           localStorage.setItem('username', this.user.username)
-          return true
+          return 200
         }
       }
       catch (error) {
-        console.log(error)
+        return error.response.code
       }
-      return false
     },
 
     async logOut() {

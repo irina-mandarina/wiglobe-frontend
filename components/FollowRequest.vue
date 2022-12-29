@@ -82,12 +82,12 @@
     .approve:hover,
     .decline:hover {
         /* transform: scaleX(1.3); */
-        transition: all 1s ease-in-out;
+        transition: all 0.7s ease-in-out;
     }
 
     .show {
         transform: translateX(-50%);
-        transition: all 1s ease-in-out;
+        transition: all 0.7s ease-in-out;
     }
 
     .approve-icon:not(.show),
@@ -95,13 +95,13 @@
     .approve-text:not(.show),
     .decline-text:not(.show) {
         transform: translateX(20%);
-        transition: all 1s ease-in-out;
+        transition: all 0.7s ease-in-out;
     }
 
     .v-enter-active,
     .v-leave-active {
         transition: opacity 0.5s ease;
-        transition-delay: 1s;
+        transition-delay: 0.7s;
     }
 
     .v-enter-from,

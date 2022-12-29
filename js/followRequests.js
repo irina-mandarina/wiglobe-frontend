@@ -4,6 +4,7 @@ import { useUserStore } from '~~/stores/UserStore'
 export async function sendFollowRequest(recieverUsername) {
     const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/users/" + recieverUsername + "/follow-requests",
+        null,
         {
             headers: {
                 'Content-Type': 'application/json',

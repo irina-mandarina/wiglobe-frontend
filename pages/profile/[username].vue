@@ -251,7 +251,7 @@
                     x
                 </span>
                 <p class="font-droid text-brown"> Followers: {{ followerCount }}</p>
-                <div v-for="follower in followers" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                <div v-for="follower in followers" @click="navigateTo('/profile/'+follower.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
                     <div class="p-4 float-left">@{{ follower.username }}</div>
                     <div class="p-4 float-right">{{ follower.firstName }} {{ follower.lastName }}</div>
                 </div>
@@ -264,12 +264,9 @@
                     x
                 </span>
                 <p class="font-droid text-brown"> Followed by {{ user.firstName }}: {{ followingCount }}</p>
-                <div v-for="followed in following" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                <div v-for="followed in following" @click="navigateTo('/profile/'+followed.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full overflow-hidden">
                     <div class="p-4 float-left">@{{ followed.username }}</div>
                     <div class="p-4 float-right">{{ followed.firstName }} {{ followed.lastName }}</div>
-                    <button class="hover:bg-gray-200 bg-white p-4" @click="unfollow(followed.username)">
-                        Unfollow
-                    </button>
                 </div>
                 <div v-if="followingCount === 0" class="text-center py-16">
                     You haven't followed anyone

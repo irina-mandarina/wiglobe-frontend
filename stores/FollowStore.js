@@ -1,5 +1,7 @@
 import { getReceivedFollowRequests, getSentFollowRequests, getFriends, getFollowers, getFollowing } from "~~/js/followRequests"
+import { useUserStore } from "./UserStore"
 import { defineStore } from "pinia"
+const userStore = useUserStore()
 
 export const useFollowStore = defineStore('followStore', {
     state: () => {
@@ -15,7 +17,7 @@ export const useFollowStore = defineStore('followStore', {
     actions: {
         async getFriends() {
             try {
-                const response = await getFriends()
+                const response = await getFriends(userStore.username())
                 this.friends = response.data
             }
             catch (error) {
@@ -25,7 +27,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getReceivedFollowRequests() {
             try {
-                const response = await getReceivedFollowRequests()
+                const response = await getReceivedFollowRequests(userStore.username())
                 this.receivedFollowRequests = response.data
             }
             catch (error) {
@@ -35,7 +37,7 @@ export const useFollowStore = defineStore('followStore', {
         
         async getSentFollowRequests() {
             try {
-                const response = await getSentFollowRequests()
+                const response = await getSentFollowRequests(userStore.username())
                 this.sentFollowRequests = response.data
             }
             catch (error) {
@@ -45,7 +47,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowing() {
             try {
-                const response = await getFollowing()
+                const response = await getFollowing(userStore.username())
                 this.following = response.data
             }
             catch (error) {
@@ -55,7 +57,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowers() {
             try {
-                const response = await getFollowers()
+                const response = await getFollowers(userStore.username())
                 this.followers = response.data
             }
             catch (error) {

@@ -11,11 +11,11 @@
     })
 
     async function logIn() {
-        const success = await userStore.logIn({
+        const code = await userStore.logIn({
             username: username.value,
             password: password.value
         })
-        if (success) {
+        if (code === 200) {
             navigateTo('/')
         }
     }

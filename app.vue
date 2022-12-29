@@ -69,9 +69,17 @@
   .border-phtalo {
     border-color: var(--phtalo);
   }
+
+  .border-peach {
+    border-color: var(--peach);
+  }
   
   .border-khaki {
     border-color: var(--khaki);
+  }
+
+  .border-dark-blue {
+    border-color: var(--dark-blue);
   }
 
   .font-heebo {

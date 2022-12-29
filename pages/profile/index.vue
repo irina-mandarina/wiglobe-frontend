@@ -12,7 +12,7 @@
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
     const friends = computed(() => followStore.followers)
-    
+
     let followerCount = computed(() => {
         if (followStore.followers === null)
             return 0
@@ -50,7 +50,6 @@
 
     onMounted(() => {
         startAnimation.value = true
-        console.log(startAnimation.value)
     })
 
     async function unfollow(username) {
@@ -113,6 +112,11 @@
                     <p v-if="user.gender === 'MALE'" class="text-center p-6">
                         He / Him
                         <i class="fa fa-male" />
+                    </p>
+
+                    <p v-if="user.gender === 'OTHER'" class="text-center p-6">
+                        They / Them
+                        <i class="fa fa-user" />
                     </p>
                 </div>
 
@@ -179,7 +183,7 @@
                     x
                 </span>
                 <p class="font-droid text-brown"> Followers: {{ followerCount }}</p>
-                <div v-for="follower in followers" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                <div v-for="follower in followers" @click="navigateTo('/profile/'+follower.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
                     <div class="p-4 float-left">@{{ follower.username }}</div>
                     <div class="p-4 float-right">{{ follower.firstName }} {{ follower.lastName }}</div>
                 </div>
@@ -192,10 +196,10 @@
                     x
                 </span>
                 <p class="font-droid text-brown"> Followed by you: {{ followingCount }}</p>
-                <div v-for="followed in following" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
+                <div v-for="followed in following" @click="navigateTo('/profile/'+followed.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full overflow-hidden">
                     <div class="p-4 float-left">@{{ followed.username }}</div>
                     <div class="p-4 float-right">{{ followed.firstName }} {{ followed.lastName }}</div>
-                    <button class="hover:bg-gray-200 bg-white p-4" @click="unfollow(followed.username)">
+                    <button class="hover:bg-gray-200 bg-white p-4 float-right right-0" @click="unfollow(followed.username)">
                         Unfollow
                     </button>
                 </div>
