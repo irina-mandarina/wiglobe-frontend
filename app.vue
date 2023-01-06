@@ -1,3 +1,10 @@
+<!-- <script setup>
+  import GAuth from 'vue3-google-oauth2'
+  const app = createApp(app)
+
+  const gAuthOptions = { clientId: '1045612066490-onub3orv8hplavb7e873m4d8nedpej5o.apps.googleusercontent.com', scope: 'email', prompt: 'consent', fetch_basic_profile: false }
+  app.use(GAuth, gAuthOptions)
+</script> -->
 <template>
   <Head>
     <Link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Heebo" />
@@ -74,6 +81,10 @@
     border-color: var(--peach);
   }
   
+  .border-asparagus {
+    border-color: var(--asparagus);
+  }
+
   .border-khaki {
     border-color: var(--khaki);
   }

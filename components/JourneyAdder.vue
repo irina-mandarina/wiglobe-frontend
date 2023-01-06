@@ -39,7 +39,7 @@
             }">
                 <!-- User info -->
                 <div class="float-left w-1/6 text-center h-min">
-                    <NuxtLink :to="'profile/' + username">
+                    <NuxtLink :to="'/profile/' + username">
                         <img class="mx-auto" src="https://picsum.photos/50"/>
                         <span class="mx-auto"> 
                             <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
@@ -90,7 +90,7 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="image" class="p-2 border-khaki border rounded-lg mx-auto flex my-6" alt="Pictures" />
+                    <input type="file" class="p-2 border-khaki border rounded-lg mx-auto flex my-6" alt="Pictures" />
                 </div>
 
                 <!-- Activity adder -->
@@ -121,7 +121,7 @@
 
                         <div class="">
                             <span>Add pictures from this activity: </span>
-                            <input type="image" class="p-2 border-khaki border rounded-lg m-2" alt="Pictures" />
+                            <input type="file" class="p-2 border-khaki border rounded-lg m-2" alt="Pictures" />
                         </div>    
                     </div>
                     <div class="w-1/12 float-right relative">

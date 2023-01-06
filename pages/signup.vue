@@ -12,6 +12,106 @@
     let gender = ref(null)
     let firstName = ref(null)
     let lastName = ref(null)
+
+    let signUpCredentials = {
+        email: null,
+        username: null,
+        password: null,
+        biography: null,
+        birthdate: null,
+        gender: null,
+        firstName: null,
+        lastName: null
+    }
+    let emailError = computed(() => {
+        if (email.value === null) {
+            return ' '
+        }
+        else if (!(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email.value))) {
+            return 'the email you entered is not valid'
+        }
+        else if (userStore.signUpResponseCode === 404) {
+            if (email.value === signUpCredentials.email) {
+                return 'email is taken'
+            }
+            else return ''
+        }
+        else {
+            return ''
+        }
+    })
+
+    let usernameError = computed(() => {
+        if (username.value === null) {
+            return ' '
+        }
+        else if (username.value.length < 4) {
+            return 'username should be at least 4 characters'
+        }
+        else if (!(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(username.value))) {
+            return 'username contains invalid characters'
+        }
+        else if (userStore.signUpResponseCode === 404) {
+            if (username.value === signUpCredentials.username) {
+                return 'username is taken'
+            }
+            else return ''
+        }
+        else {
+            return ''
+        }
+    })
+    
+    let birthdateError = computed(() => {
+        if (birthdate.value === null) {
+            return ' '
+        }
+        else if (new Date().setFullYear(new Date().getFullYear() - 14) < new Date(birthdate.value)) {
+            return 'You should be at least 14 years old to register.'
+        }
+        else  {
+            return ''
+        }
+
+    })
+
+    let passwordError = computed(() => {
+        if (password.value === null) {
+            return ' '
+        }
+        else if (!password.value) {
+            return 'Enter a password'
+        }
+        else if (!(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/.test(password.value))) {
+            return 'Weak password'
+        }
+        else {
+            return ''
+        }
+    })
+
+    let passwordRepError = computed(() => {
+        if (passwordRep.value === null) {
+            return ' '
+        }
+        else if (passwordRep.value.length) {
+            if (password.value !== passwordRep.value && !passwordError.value.length) {
+                return 'Passwords do not match'
+            }
+        }
+        if (password.value === passwordRep.value) {
+            return ''
+        }
+    })
+    let permitSignUp = computed (() => {
+        console.log(passwordRepError.value)
+        console.log(passwordError.value)
+        console.log(usernameError.value)
+        console.log(birthdateError.value)
+        console.log(emailError.value)
+        return !(passwordError.value.length || passwordRepError.value.length || usernameError.value.length || emailError.value.length || birthdateError.value.length)
+    })
+
     let startAnimation = ref(false)
     let formOnDisplay = ref(1)
 
@@ -20,22 +120,27 @@
     })
 
     async function signUp() {
-        const success = await userStore.signUp(
-            {firstName: firstName.value,
-                lastName: lastName.value,
-                username: username.value,
-                password: password.value,
-                biography: biography.value,
-                gender: gender.value,
-                birthdate: birthdate.value,
-                email: email.value
-            }
-        )
-        if (success) {
+        if (!permitSignUp.value) {
+            return
+        }
+
+        signUpCredentials = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            username: username.value,
+            password: password.value,
+            biography: biography.value,
+            gender: gender.value,
+            birthdate: birthdate.value,
+            email: email.value
+        }
+        
+        await userStore.signUp(signUpCredentials)
+
+        if (userStore.signUpResponseCode === 201) {
             navigateTo('/')
         }
     }
-
 </script>
 
 <template>
@@ -87,6 +192,7 @@
                         Date of birth:
                     </label>
                     <input v-model="birthdate" name="birthdate" type="date" class="border rounded-full p-2 my-4 focus:outline-none"/>
+                    <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ birthdateError }}</div>
                 </div>
                 <div class="w-fit mx-auto">
                     <i class="fa fa-female p-2"/>
@@ -116,11 +222,18 @@
             <div :class="{
                 'form-disappear': formOnDisplay !== 3,
                 'form-appear': formOnDisplay === 3
-            }" class="py-6 form w-full absolute">
-                <input v-model="email"       name="email"    type="email"    class="mx-auto flex border rounded-full p-2 px-4 my-6 focus:outline-none" placeholder="email"/>
-                <input v-model="username"    name="username" type="text"     class="mx-auto flex border rounded-full p-2 px-4 my-6 focus:outline-none" placeholder="username"/>
-                <input v-model="password"    name="password" type="password" class="mx-auto flex border rounded-full p-2 px-4 my-6 focus:outline-none" placeholder="Repeat password"/>
-                <input v-model="passwordRep" name="password" type="password" class="mx-auto flex border rounded-full p-2 px-4 my-6 focus:outline-none" placeholder="password"/>
+            }" class="py-4 form w-full absolute">
+                <input v-model="email"       name="email"    type="email"    class="mx-auto flex border rounded-full p-2 px-4 mb-2 focus:outline-none" placeholder="email"/>
+                <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ emailError }}</div>
+
+                <input v-model="username"    name="username" type="text"     class="mx-auto flex border rounded-full p-2 px-4 my-2 focus:outline-none" placeholder="username"/>
+                <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ usernameError }}</div>
+
+                <input v-model="password"    name="password" type="password" class="mx-auto flex border rounded-full p-2 px-4 my-2 focus:outline-none" placeholder="Repeat password"/>
+                <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ passwordError }}</div>
+
+                <input v-model="passwordRep" name="password" type="password" class="mx-auto flex border rounded-full p-2 px-4 my-2 focus:outline-none" placeholder="password"/>
+                <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ passwordRepError }}</div>
                 <div class="flex mx-auto w-min">
                     <button @click="formOnDisplay = 2" class="mt-2 mb-4 font-bold tracking-wider py-2 px-6 rounded-full mx-auto duration-300">
                         <i class="fa fa-arrow-left hover:scale-x-150 origin-left duration-500"/>

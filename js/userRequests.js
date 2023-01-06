@@ -33,7 +33,7 @@ export async function logout() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -46,7 +46,7 @@ export async function getUserDetails(other) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -55,11 +55,11 @@ export async function getUserDetails(other) {
 
 export async function deleteAccount() {
 const userStore = useUserStore()
-    const response = await axios.delete("http://localhost:8080/users/" + userStore.username(), // fix this in the backend later
+    const response = await axios.delete("http://localhost:8080/users/" + userStore.getLocalStorageUsername(), // fix this in the backend later
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -68,12 +68,12 @@ const userStore = useUserStore()
 
 export async function editBio(bio) {
 const userStore = useUserStore()
-    const response = await axios.put("http://localhost:8080/users/" + userStore.username() + "/bio", // fix this in the backend later
+    const response = await axios.put("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/bio", // fix this in the backend later
         bio,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )

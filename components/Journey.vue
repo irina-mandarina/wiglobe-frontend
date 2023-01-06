@@ -2,10 +2,31 @@
     const props = defineProps({
         journey: Object
     })
+    let activityOnDisplayId = ref(0)
+
+    function showPreviousActivity() {
+        if (activityOnDisplayId.value === 0) {
+            activityOnDisplayId.value = props.journey.activities.length - 1
+        }
+        else {
+            activityOnDisplayId.value--
+        }
+        console.log(props.journey.activities)
+    }
+
+    function showNextActivity() {
+        if (activityOnDisplayId.value === props.journey.activities.length - 1) {
+            activityOnDisplayId.value = 0
+        }
+        else {
+            activityOnDisplayId.value++
+        }
+    }
 </script>
 
 <template>
     <div class="shadow-md rounded-lg w-2/3 mx-auto m-6 overflow-hidden">
+        
         <div class="flex">
 
             <!-- Journey picture (left) -->
@@ -30,6 +51,15 @@
 
                 <!-- Journey description -->
                 <p class="my-6 p-4">{{ journey.description }}</p>
+                <div class="flex justify-evenly" v-if="journey.activities !== null && journey.activities !== undefined && journey.activities.length !== 0">
+                    <div class="h-full float-left" @click="showPreviousActivity()">
+                        -
+                    </div>
+                    <Activity :activity="journey.activities[activityOnDisplayId]"/>
+                    <div class="h-full float-right" @click="showNextActivity()">
+                        +
+                    </div>
+                </div>
             </div>
                
         </div>

@@ -17,7 +17,7 @@ export const useFollowStore = defineStore('followStore', {
     actions: {
         async getFriends() {
             try {
-                const response = await getFriends(userStore.username())
+                const response = await getFriends(userStore.getLocalStorageUsername())
                 this.friends = response.data
             }
             catch (error) {
@@ -27,7 +27,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getReceivedFollowRequests() {
             try {
-                const response = await getReceivedFollowRequests(userStore.username())
+                const response = await getReceivedFollowRequests(userStore.getLocalStorageUsername())
                 this.receivedFollowRequests = response.data
             }
             catch (error) {
@@ -37,7 +37,7 @@ export const useFollowStore = defineStore('followStore', {
         
         async getSentFollowRequests() {
             try {
-                const response = await getSentFollowRequests(userStore.username())
+                const response = await getSentFollowRequests(userStore.getLocalStorageUsername())
                 this.sentFollowRequests = response.data
             }
             catch (error) {
@@ -47,7 +47,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowing() {
             try {
-                const response = await getFollowing(userStore.username())
+                const response = await getFollowing(userStore.getLocalStorageUsername())
                 this.following = response.data
             }
             catch (error) {
@@ -57,7 +57,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowers() {
             try {
-                const response = await getFollowers(userStore.username())
+                const response = await getFollowers(userStore.getLocalStorageUsername())
                 this.followers = response.data
             }
             catch (error) {

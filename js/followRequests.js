@@ -8,7 +8,7 @@ export async function sendFollowRequest(recieverUsername) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -21,7 +21,7 @@ export async function deleteFollowRequest(recieverUsername) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -30,11 +30,11 @@ export async function deleteFollowRequest(recieverUsername) {
 
 export async function respondToFollowRequest(requesterUsername, approve) {
     const userStore = useUserStore()
-    const response = await axios.delete("http://localhost:8080/users/" + userStore.username() + "/follow-requests/" + requesterUsername,
+    const response = await axios.delete("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/" + requesterUsername,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             },
             params: {
                 response: approve
@@ -46,11 +46,11 @@ export async function respondToFollowRequest(requesterUsername, approve) {
 
 export async function unfollow(recieverUsername) {
     const userStore = useUserStore()
-    const response = await axios.delete("http://localhost:8080/users/" + userStore.username() + "/followers/" + recieverUsername,
+    const response = await axios.delete("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/followers/" + recieverUsername,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -59,11 +59,11 @@ export async function unfollow(recieverUsername) {
 
 export async function getReceivedFollowRequests() {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/follow-requests/received",
+    const response = await axios.get("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/received",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -72,11 +72,11 @@ export async function getReceivedFollowRequests() {
 
 export async function getSentFollowRequests() {
     const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.username() + "/follow-requests/sent",
+    const response = await axios.get("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/sent",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -89,7 +89,7 @@ export async function getFollowers(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -102,7 +102,7 @@ export async function getFollowing(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -115,7 +115,7 @@ export async function getFriends(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )

@@ -52,7 +52,7 @@
             <Transition>
                 <ul v-if="!hide" class="float-right bg-white rounded-lg">
                     <li class="w-full border-b px-6 py-4">
-                        <NuxtLink to="/profile" class="text-lg hover:text-gray-800 duration-300">
+                        <NuxtLink to="/profile/me" class="text-lg hover:text-gray-800 duration-300">
                             <i class="fa fa-user"/>
                             <span class="px-2"> Profile </span>
                         </NuxtLink>

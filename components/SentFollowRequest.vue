@@ -35,7 +35,7 @@
                 <p class="p-2 pb-4">
                     You sent
                 </p>
-                <NuxtLink :to="'profile/' + followRequest.receiver.username" class="p-2 pt-4">
+                <NuxtLink :to="'/profile/' + followRequest.receiver.username" class="p-2 pt-4">
                     {{ followRequest.receiver.firstName }} {{ followRequest.receiver.lastName }}
                 </NuxtLink>
                 <p class="p-2 pb-4">

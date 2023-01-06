@@ -8,7 +8,7 @@ export async function createJourney(username, journey) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -21,7 +21,7 @@ export async function deleteJourney(username, journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -36,7 +36,7 @@ export async function editJourney(username, journey) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -49,7 +49,7 @@ export async function getJourney(username, journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -62,7 +62,7 @@ export async function getJourneyRecommendations(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -75,7 +75,7 @@ export async function getJourneysByUser(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.username()
+                username: userStore.getLocalStorageUsername()
             }
         }
     )

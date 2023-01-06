@@ -12,10 +12,9 @@
     "@pinia/nuxt": "^0.4.2"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.2.1",
-    "@fortawesome/vue-fontawesome": "^3.0.2",
     "@pinia/nuxt": "^0.4.6",
     "axios": "^1.2.1",
-    "nuxt": "^3.0.0"
+    "nuxt": "^3.0.0",
+    "vue3-google-oauth2": "^1.0.6"
   }
 }

@@ -5,12 +5,15 @@ export const useUserStore = defineStore('userStore', {
   state: () => {
     return {
       loggedUsername: null,
-      user: null
+      logInResponseCode: null,
+      signUpResponseCode: null,
+      user: null,
+      password: null
     }
   },
 
   actions: {
-    username() {
+    getLocalStorageUsername() {
       if (this.loggedUsername === null || this.loggedUsername === undefined) {
         if (typeof window !== 'undefined') {
           this.loggedUsername = localStorage.getItem('username')
@@ -18,22 +21,26 @@ export const useUserStore = defineStore('userStore', {
       }
       return this.loggedUsername
     },
+    // DELETE THIS ASAP
+    getLocalStoragePassword() {
+        if (typeof window !== 'undefined') {
+          this.password = localStorage.getItem('password')
+        }
+        console.log(this.password)
+      return this.password
+    },
     async signUp(user) {
         try {
             const response = await signup(user)
-            if (response.status === 201) {
-                this.user = response.data
-                localStorage.setItem('username', this.user.username)
-                return true
-            }
+            this.user = response.data
+            localStorage.setItem('username', this.user.username)
+            this.signUpResponseCode = 201
         }
         catch (error) {
-            if (error.response.status === 404) {
-                console.log("? 404")
-            }
-            console.log(error)
+          this.signUpResponseCode = error.response.status
+          console.log(error)
+          console.log(error.response.headers)
         }
-        return false
     },
 
     async logIn(user) {
@@ -42,11 +49,12 @@ export const useUserStore = defineStore('userStore', {
         if (response.status === 200) {
           this.user = response.data
           localStorage.setItem('username', this.user.username)
-          return 200
+          localStorage.setItem('password', user.password)
+          this.logInResponseCode = 200
         }
       }
       catch (error) {
-        return error.response.code
+        this.logInResponseCode = error.response.status
       }
     },
 
