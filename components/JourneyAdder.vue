@@ -24,7 +24,7 @@
 
     onBeforeMount(async () => {
         try {
-            activityTypes.value = await getAllActivityTypes()
+            activityTypes.value = (await getAllActivityTypes()).data
         }
         catch(error) {
             console.log(error)
@@ -132,9 +132,9 @@
                             <input type="text" class="p-1 rounded-lg m-2 bg-khaki border-b-2 border-dark-blue focus:outline-none duration-300" />
                         </div>
 
-                        <div class="mb-2">
+                        <div class="mb-2 flex">
                             <span>Activity type</span>
-                            <ActivityType v-for="activity in activityTypes" :activity-type="activity" />
+                            <ActivityTypes class="mx-2" :activity-types="activityTypes" />
                         </div>
 
                         <div class="">

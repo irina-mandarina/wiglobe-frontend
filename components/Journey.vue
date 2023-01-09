@@ -3,24 +3,31 @@
         journey: Object
     })
     let activityOnDisplayId = ref(0)
+    let activityChange = ref(false)
 
     function showPreviousActivity() {
-        if (activityOnDisplayId.value === 0) {
-            activityOnDisplayId.value = props.journey.activities.length - 1
-        }
-        else {
-            activityOnDisplayId.value--
-        }
-        console.log(props.journey.activities)
+        activityChange.value = true
+        setTimeout(() => {
+            if (activityOnDisplayId.value === 0) {
+                activityOnDisplayId.value = props.journey.activities.length - 1
+            }
+            else {
+                activityOnDisplayId.value--
+            }
+        }, 500)
     }
 
     function showNextActivity() {
-        if (activityOnDisplayId.value === props.journey.activities.length - 1) {
-            activityOnDisplayId.value = 0
-        }
-        else {
-            activityOnDisplayId.value++
-        }
+        activityChange.value = true
+        setTimeout(() => {
+            if (activityOnDisplayId.value === props.journey.activities.length - 1) {
+                activityOnDisplayId.value = 0
+            }
+            else {
+                activityOnDisplayId.value++
+            }
+                activityChange.value = false
+        }, 500)
     }
 </script>
 
@@ -64,11 +71,13 @@
                 <!-- activities -->
                 <div class="flex h-max justify-evenly p-4" v-if="journey.activities && journey.activities !== undefined && journey.activities.length !== 0">
                     <div class="h-full float-left bg-rose-500 overflow-hidden" @click="showPreviousActivity()">
-                        <i class="fa fa-chevron-left p-96 " />
+                        <i class="fa fa-chevron-left text-2xl h-full" />
                     </div>
-                    <Activity :activity="journey.activities[activityOnDisplayId]"/>
+                    <Activity class="activity" :activity="journey.activities[activityOnDisplayId]" :class="{
+                        'animate-activity': activityChange
+                    }" />
                     <div class="h-full float-right bg-gray-200 overflow-hidden" @click="showNextActivity()">
-                        <i class="fa fa-chevron-right p-96" />
+                        <i class="fa fa-chevron-right text-2xl h-full" />
                     </div>
                 </div>
             </div>
@@ -84,5 +93,14 @@
 
     .first-letter-font-droid::first-letter {
         font-family: Droid;
+    }
+
+    .activity:not(.animate-activity) {
+        opacity: 1;
+    }
+
+    .animate-activity {
+        opacity: 0;
+        transition: opacity 500ms ease-in-out;
     }
 </style>
