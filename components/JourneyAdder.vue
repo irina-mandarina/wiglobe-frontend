@@ -1,14 +1,16 @@
 <script setup>
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
+    import { getAllActivityTypes } from '~~/js/activityRequests'
 
     const journeyStore = useJourneyStore();
     const userStore = useUserStore();
-
     
     const firstName = computed(() => userStore.user.firstName)
     const lastName = computed(() => userStore.user.lastName)
     const username = computed(() => userStore.user.username)
+
+    const activityTypes = ref(null)
 
     let destination = ref(null)
     let destinationObject = ref(null)
@@ -20,23 +22,38 @@
     let canBePosted = ref(false)
     let creatorOpen = ref(false)
 
+    onBeforeMount(async () => {
+        try {
+            activityTypes.value = await getAllActivityTypes()
+        }
+        catch(error) {
+            console.log(error)
+        }
+    })
+
 </script>
 
 <template>
     <div class="w-full relative">
-        <div v-if="!creatorOpen" class="p-6 text-2xl mx-auto text-center rounded-full shadow-md w-1/2" @click="creatorOpen = true">
-            <span class="font-heebo font-bold text-5xl hover:text-green-700 duration-300">+</span>
+        <div v-if="!creatorOpen" class="p-6 text-2xl mx-auto bg-gray-100 text-center rounded-lg shadow-md w-1/4" @click="creatorOpen = true">
+            <span class="font-heebo font-bold text-4xl hover:text-green-700 duration-300">
+                +
+            </span>
             Create a new journey
         </div>
         <div :class="{
             'h-2': !creatorOpen,
             'h-fit': creatorOpen,
             'open': creatorOpen
-        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden p-6 creator-container bg-khaki">
+        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden p-6 creator-container bg-khaki relative">
 
             <div class="flex creator" :class="{
                 'visible': creatorOpen
             }">
+
+                <span class="absolute right-6" @click="creatorOpen = false">
+                    x
+                </span>
                 <!-- User info -->
                 <div class="float-left w-1/6 text-center h-min">
                     <NuxtLink :to="'/profile/' + username">
@@ -117,6 +134,7 @@
 
                         <div class="mb-2">
                             <span>Activity type</span>
+                            <ActivityType v-for="activity in activityTypes" :activity-type="activity" />
                         </div>
 
                         <div class="">

@@ -19,7 +19,7 @@ export async function getDestination(id) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )

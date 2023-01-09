@@ -7,7 +7,7 @@ export async function getCommentsForJourney(journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -21,7 +21,7 @@ export async function commentJourney(journeyId, comment) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -35,7 +35,7 @@ export async function editComment(journeyId, comment) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -48,7 +48,7 @@ export async function deleteComment(journeyId, commentId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
@@ -61,7 +61,7 @@ export async function getComments(journeyId, commentId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.loggedUsername
+                username: userStore.getLocalStorageUsername()
             }
         }
     )
