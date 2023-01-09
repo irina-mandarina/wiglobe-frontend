@@ -1,6 +1,7 @@
 <!-- <script setup>
   import GAuth from 'vue3-google-oauth2'
-  const app = createApp(app)
+  import { createApp } from 'vue'
+  const app = createApp(App)
 
   const gAuthOptions = { clientId: '1045612066490-onub3orv8hplavb7e873m4d8nedpej5o.apps.googleusercontent.com', scope: 'email', prompt: 'consent', fetch_basic_profile: false }
   app.use(GAuth, gAuthOptions)

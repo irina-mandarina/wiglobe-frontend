@@ -1,10 +1,14 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
+    import { GoogleSignInButton } from "vue3-google-signin"
+    import { decodeCredential } from "vue3-google-signin"
+import { login } from '~~/js/userRequests';
 
     let userStore = useUserStore()
     let startAnimation = ref(false)
     let username = ref(null)
     let password = ref(null)
+
     // set log in credentials. these are set when the username and password ref are ready to be used to send a request.
     // this object is also used to update error messages
     let logInCredentials = {
@@ -63,6 +67,29 @@
         startAnimation.value = true
     })
 
+    const handleLoginSuccess = async (response) => {
+        const { credential } = response;
+        let userData = decodeCredential(response.credential);
+        console.log("Access Token", credential);
+        console.log(userData)
+        
+        logInCredentials = {
+            email: userData.email,
+            password: password.value
+        }
+
+        await userStore.logIn(logInCredentials)
+        
+        if (userStore.logInResponseCode === 200) {
+            navigateTo('/')
+        }
+    };
+
+    // handle an error event
+    const handleLoginError = () => {
+    console.error("Login failed");
+    };
+
     async function logIn() {
         if (!permitLogIn.value) {
             return
@@ -80,6 +107,26 @@
         }
     }
 </script>
+<!-- <script setup lang="ts">
+    import {
+    GoogleSignInButton,
+    type CredentialResponse,
+    } from "vue3-google-signin";
+    import { decodeCredential } from "vue3-google-signin"; 
+
+    // handle success event
+    const handleLoginSuccess = (response: CredentialResponse) => {
+        const { credential } = response;
+        let userData = decodeCredential(response.credential!);
+        console.log("Access Token", credential);
+        console.log(userData)
+    };
+
+    // handle an error event
+    const handleLoginError = () => {
+    console.error("Login failed");
+    };
+</script> -->
 
 <template>
     <div class="flex w-2/3 h-fit mt-20 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown">
@@ -119,15 +166,20 @@
                 <button @click="logIn()" class="flex mx-auto my-6 bg-khaki font-bold tracking-wider py-2 px-6 rounded-full mx-auto duration-300 focus:outline-none">
                     Log in
                 </button>
-                <div class="w-fit mx-auto focus:outline-none">
-                    <span class="py-6">Log in with </span>
-                    <i class="social-icon fa fa-google p-6 text-red-600 hover:text-red-800 duration-300"/>
+                <div class="w-fit mx-auto focus:outline-none flex">
+                    <span class="py-6 w-max">Log in with </span>
                     <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
                     <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
+                    <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 pt-2"
+                            @success="handleLoginSuccess"
+                            @error="handleLoginError"
+                    ></GoogleSignInButton>
                 </div>
+  
                 <NuxtLink to="/signup" class="w-fit flex mx-auto p-6 hover:scale-[1.02] duration-300 focus:outline-none">I don't have an account</NuxtLink>
             </div>
         </div>
+        
     </div>
     
 </template>

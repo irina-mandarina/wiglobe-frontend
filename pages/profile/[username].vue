@@ -42,6 +42,9 @@
     let startAnimation = ref(false)
 
     onBeforeMount(async () => {
+        if (route.params.username === userStore.getLocalStorageUsername()) {
+            navigateTo('/profile/me')
+        }
         try {
             const response = await getUserDetails(route.params.username)
             user.value = response.data

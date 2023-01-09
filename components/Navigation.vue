@@ -4,7 +4,7 @@
     let hide = ref(true)
 </script>
 <template>
-    <div class="relative h-20 z-10">
+    <div class="relative h-20 z-10 focus:outline-none">
         <nav class="absolute w-full">
             <!-- nav items -->
             <div class="flex bg-white">
@@ -50,7 +50,7 @@
             </div>
             <!-- menu -->
             <Transition>
-                <ul v-if="!hide" class="float-right bg-white rounded-lg">
+                <ul v-if="!hide" class="float-right bg-white rounded-lg shadow-lg m-1">
                     <li class="w-full border-b px-6 py-4">
                         <NuxtLink to="/profile/me" class="text-lg hover:text-gray-800 duration-300">
                             <i class="fa fa-user"/>

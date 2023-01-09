@@ -25,13 +25,14 @@
 </script>
 
 <template>
-    <div class="shadow-md rounded-lg w-2/3 mx-auto m-6 overflow-hidden">
+    <div class="shadow-md rounded-lg w-4/5 mx-auto m-6 overflow-hidden">
         
         <div class="flex">
 
             <!-- Journey picture (left) -->
-            <div class="w-1/2 h-fit float-left" @click="navigateTo('/journeys/' + journey.id)">
-                <img class="h-full" src="https://picsum.photos/1000"/>
+            <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
+                <img class="h-[40rem]" src="https://picsum.photos/1000"/>
+                <!-- <div class="absolute h-full w-full journey-image"></div> -->
             </div>
 
             <!-- Journey info (right) -->
@@ -47,17 +48,27 @@
                     </NuxtLink>
                 </div>
                 
+                <!-- date -->
+                <p class="text-center p-6">
+                    From {{ new Date(journey.startDate).toLocaleDateString() }} to {{ new Date(journey.endDate).toLocaleDateString() }} at:
+                </p>
+
+                <!-- destination -->
                 <MiniDestination class="z-100" :destination="journey.destination" />
 
+
                 <!-- Journey description -->
-                <p class="my-6 p-4">{{ journey.description }}</p>
-                <div class="flex justify-evenly" v-if="journey.activities !== null && journey.activities !== undefined && journey.activities.length !== 0">
-                    <div class="h-full float-left" @click="showPreviousActivity()">
-                        -
+                <p class="my-6 p-10 first-letter:font-bold first-letter:text-3xl first-letter-font-droid">&nbsp; &nbsp; &nbsp; {{ journey.description }}</p>
+
+
+                <!-- activities -->
+                <div class="flex h-max justify-evenly p-4" v-if="journey.activities && journey.activities !== undefined && journey.activities.length !== 0">
+                    <div class="h-full float-left bg-rose-500 overflow-hidden" @click="showPreviousActivity()">
+                        <i class="fa fa-chevron-left p-96 " />
                     </div>
                     <Activity :activity="journey.activities[activityOnDisplayId]"/>
-                    <div class="h-full float-right" @click="showNextActivity()">
-                        +
+                    <div class="h-full float-right bg-gray-200 overflow-hidden" @click="showNextActivity()">
+                        <i class="fa fa-chevron-right p-96" />
                     </div>
                 </div>
             </div>
@@ -66,3 +77,12 @@
         
     </div>
 </template>
+<style scoped>
+    .journey-image {
+        background-image: url('https://picsum.photos/1000');
+    }
+
+    .first-letter-font-droid::first-letter {
+        font-family: Droid;
+    }
+</style>
