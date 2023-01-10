@@ -1,5 +1,4 @@
 import { useUserStore } from "~~/stores/UserStore"
-
 export default defineNuxtRouteMiddleware((to, from) => {
     const userStore = useUserStore()
     if (userStore.user === null) {
@@ -7,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             return navigateTo('/login')
         }
         // this must get changed when security is implemented!
-        return navigateTo('/login')
+        else userStore.getUserDetails()
+        // return navigateTo('/login')
     }
-    return true
 })

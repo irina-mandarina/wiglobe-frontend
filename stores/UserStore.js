@@ -76,6 +76,7 @@ export const useUserStore = defineStore('userStore', {
       try {
         const response = await getUserDetails(other) 
         console.log(response)
+        this.user = response.data
       }
       catch (error) {
         console.log(error)

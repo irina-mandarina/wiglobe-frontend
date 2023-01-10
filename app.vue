@@ -73,6 +73,14 @@
   .text-khaki {
     color: var(--khaki);
   }
+  
+  .text-asparagus {
+    color: var(--asparagus);
+  }
+  
+  .text-phtalo {
+    color: var(--phtalo);
+  }
 
   .border-phtalo {
     border-color: var(--phtalo);

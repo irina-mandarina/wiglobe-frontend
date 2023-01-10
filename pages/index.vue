@@ -19,6 +19,6 @@
 <template>
     <NuxtLayout name="default">
         <JourneyAdder />
-        <Journey v-for="journey in journeys" :journey="journey" />
+        <Journey v-for="journey in journeys" :journey="journey" class="my-10" />
     </NuxtLayout>
 </template>

@@ -2,90 +2,50 @@
     const props = defineProps({
         journey: Object
     })
-    let activityOnDisplayId = ref(0)
-    let activityChange = ref(false)
-
-    function showPreviousActivity() {
-        activityChange.value = true
-        setTimeout(() => {
-            if (activityOnDisplayId.value === 0) {
-                activityOnDisplayId.value = props.journey.activities.length - 1
-            }
-            else {
-                activityOnDisplayId.value--
-            }
-        }, 500)
-    }
-
-    function showNextActivity() {
-        activityChange.value = true
-        setTimeout(() => {
-            if (activityOnDisplayId.value === props.journey.activities.length - 1) {
-                activityOnDisplayId.value = 0
-            }
-            else {
-                activityOnDisplayId.value++
-            }
-                activityChange.value = false
-        }, 500)
-    }
 </script>
-
 <template>
-    <div class="shadow-md rounded-lg w-4/5 mx-auto m-6 overflow-hidden">
+    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t overflow-hidden">
         
         <div class="flex">
 
-            <!-- Journey picture (left) -->
+            <!-- Journey info (left) -->
             <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
-                <img class="h-[40rem]" src="https://picsum.photos/1000"/>
-                <!-- <div class="absolute h-full w-full journey-image"></div> -->
-            </div>
-
-            <!-- Journey info (right) -->
-            <div class="w-1/2 float-right h-full">
-                 <!-- User info -->
-                <div class="w-1/2 text-center m-6">
-                    <NuxtLink :to="'/profile/' + journey.usernames.username">
-                        <img class="mx-auto" src="https://picsum.photos/50"/>
-                        <span class="mx-auto"> 
-                            <p class="p-1 font-heebo">{{ journey.usernames.firstName }} {{ journey.usernames.lastName }}</p>
-                        </span>
-                        <p class="mx-auto mb-2 font-heebo">@{{ journey.usernames.username }}</p>  
-                    </NuxtLink>
+                <div class="">
+                    <!-- User info -->
+                    <div class="w-full text-center m-6">
+                        <NuxtLink :to="'/profile/' + journey.usernames.username">
+                            <img class="mx-auto" src="https://picsum.photos/50"/>
+                            <span class="mx-auto"> 
+                                <p class="p-1 font-heebo">{{ journey.usernames.firstName }} {{ journey.usernames.lastName }}</p>
+                            </span>
+                            <p class="mx-auto mb-2 font-heebo">@{{ journey.usernames.username }}</p>  
+                        </NuxtLink>
+                    </div>
+                    <!-- date -->
+                    <p class="w-full text-center py-6 m-6">
+                        From {{ new Date(journey.startDate).toLocaleDateString() }} to {{ new Date(journey.endDate).toLocaleDateString() }} at:
+                    </p>
                 </div>
-                
-                <!-- date -->
-                <p class="text-center p-6">
-                    From {{ new Date(journey.startDate).toLocaleDateString() }} to {{ new Date(journey.endDate).toLocaleDateString() }} at:
-                </p>
 
                 <!-- destination -->
-                <MiniDestination class="z-100" :destination="journey.destination" />
-
-
+                <MiniDestination class="z-100 my-4" :destination="journey.destination" />
+                
                 <!-- Journey description -->
-                <p class="my-6 p-10 first-letter:font-bold first-letter:text-3xl first-letter-font-droid">&nbsp; &nbsp; &nbsp; {{ journey.description }}</p>
+                <p class="my-6 p-10 first-letter:font-bold first-letter:text-3xl first-letter-font-droid">
+                    &nbsp; &nbsp; &nbsp; {{ journey.description }}
+                </p>
+            </div>
 
-
-                <!-- activities -->
-                <div class="flex h-max justify-evenly p-4" v-if="journey.activities && journey.activities !== undefined && journey.activities.length !== 0">
-                    <div class="h-full float-left bg-rose-500 overflow-hidden" @click="showPreviousActivity()">
-                        <i class="fa fa-chevron-left text-2xl h-full" />
-                    </div>
-                    <Activity class="activity" :activity="journey.activities[activityOnDisplayId]" :class="{
-                        'animate-activity': activityChange
-                    }" />
-                    <div class="h-full float-right bg-gray-200 overflow-hidden" @click="showNextActivity()">
-                        <i class="fa fa-chevron-right text-2xl h-full" />
-                    </div>
-                </div>
+            <!-- Pictures and activities (right) -->
+            <div class="w-1/2">
+                <JourneyAttachments class="" :activities="journey.activities" :images="['https://picsum.photos/1100', 'https://picsum.photos/1500']" />
             </div>
                
         </div>
         
     </div>
 </template>
+
 <style scoped>
     .journey-image {
         background-image: url('https://picsum.photos/1000');
@@ -93,14 +53,5 @@
 
     .first-letter-font-droid::first-letter {
         font-family: Droid;
-    }
-
-    .activity:not(.animate-activity) {
-        opacity: 1;
-    }
-
-    .animate-activity {
-        opacity: 0;
-        transition: opacity 500ms ease-in-out;
     }
 </style>

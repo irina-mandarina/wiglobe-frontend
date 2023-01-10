@@ -2,14 +2,39 @@
     const route = useRoute()
     let homeHovered = ref(false), notificationsHovered = ref(false), exploreHovered = ref(false)
     let hide = ref(true)
+    let showNav = ref(true)
+    let lastKnownScrollPosition = 0
+    let currentScrollPosition = 0
+
+    onMounted(() => {
+        document.addEventListener("scroll", (event) => {
+            currentScrollPosition = window.scrollY
+            if (currentScrollPosition > 400) {
+                showNav.value = false
+                hide.value = true
+            }
+            if (currentScrollPosition < lastKnownScrollPosition) {
+                // scrolling up
+                showNav.value = true
+            }
+            else {
+                showNav.value = false
+                hide.value = true
+            }
+            lastKnownScrollPosition = window.scrollY
+        })
+    })
 </script>
 <template>
-    <div class="relative h-20 z-10 focus:outline-none">
-        <nav class="absolute w-full">
+    <div class="w-full h-20 z-10 focus:outline-none mb-6">
+        <nav class="fixed w-full z-50 duration-300 ease-in-out" :class="{
+            'translate-y-0': showNav,
+            '-translate-y-full': !showNav
+        }">
             <!-- nav items -->
-            <div class="flex bg-white">
+            <div class="flex bg-white bg-gray-100">
                 <!-- center: feeds -->
-                <div class="w-fit flex mx-auto font-heebo py-2">
+                <div class="w-fit flex mx-auto font-heebo py-2 overflow-hidden h-20">
                     <NuxtLink to="/" :class="{
                         'active': (route !== null && route !== undefined && route.path === '/')
                         }"
@@ -44,33 +69,41 @@
                     </NuxtLink>
                 </div>
                 <!-- menu button -->
-                <div class="float-right" @click="hide = !hide">
+                <div class="float-right bg-gray-100" @click="hide = !hide">
                     <i class="fa fa-bars py-6 px-8 text-2xl" />
                 </div>
             </div>
             <!-- menu -->
             <Transition>
-                <ul v-if="!hide" class="float-right bg-white rounded-lg shadow-lg m-1">
-                    <li class="w-full border-b px-6 py-4">
-                        <NuxtLink to="/profile/me" class="text-lg hover:text-gray-800 duration-300">
+                <ul v-if="!hide" class="overflow-hidden float-right bg-gray-100 bg-white rounded-lg shadow-lg m-1">
+                    <li class="w-full border-b px-6 py-4" :class="{
+                        'bg-gray-50': route && route.path === '/profile/me'
+                    }">
+                        <NuxtLink to="/profile/me" class="text-lg hover:text-gray-600 duration-300">
                             <i class="fa fa-user"/>
                             <span class="px-2"> Profile </span>
                         </NuxtLink>
                     </li>
-                    <li class="w-full border-b px-6 py-4">
-                        <NuxtLink to="/friends" class="text-lg hover:text-gray-800 duration-300">
+                    <li class="w-full border-b px-6 py-4" :class="{
+                        'bg-gray-50': route && route.path === '/friends'
+                    }">
+                        <NuxtLink to="/friends" class="text-lg hover:text-gray-600 duration-300">
                             <i class="fa fa-address-book"/>
                             <span class="px-2"> Friends </span>
                         </NuxtLink>
                     </li>
-                    <li class="w-full border-b px-6 py-4">
-                        <NuxtLink to="/follow-requests" class="text-lg hover:text-gray-800 duration-300">
+                    <li class="w-full border-b px-6 py-4" :class="{
+                        'bg-gray-50': route && route.path === '/follow-requests'
+                    }">
+                        <NuxtLink to="/follow-requests" class="text-lg hover:text-gray-600 duration-300">
                             <i class="fa fa-users"/>
                             <span class="px-2"> Follow requests </span>
                         </NuxtLink>
                     </li>
-                    <li class="w-full border-b px-6 py-4 block">
-                        <NuxtLink to="/settings" class="text-lg hover:text-gray-800 duration-300">
+                    <li class="w-full border-b px-6 py-4 block" :class="{
+                        'bg-gray-50': route && route.path === '/settings'
+                    }">
+                        <NuxtLink to="/settings" class="text-lg hover:text-gray-600 duration-300">
                             <i class="fa fa-gears"/>
                             <span class="px-2"> Settings </span>
                         </NuxtLink>
