@@ -26,7 +26,7 @@
     })
 </script>
 <template>
-    <div class="w-full h-20 z-10 focus:outline-none mb-6">
+    <div class="w-full h-20 z-10 focus:outline-none">
         <nav class="fixed w-full z-50 duration-300 ease-in-out" :class="{
             'translate-y-0': showNav,
             '-translate-y-full': !showNav

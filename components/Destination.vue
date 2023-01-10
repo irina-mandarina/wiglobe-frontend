@@ -26,7 +26,7 @@
             <div class="flex w-full justify-evenly my-4">
                 <span>Category: {{ destination.featureClass }}</span>
                 <span>Class: {{ destination.featureCode }}</span>
-                <span>Location: {{ destination.country.countryName }}, {{ destination.country.continent }}</span>
+                <span class="flex">Location: {{ destination.country.countryName }}, {{ destination.country.continent }} <img class="w-16 px-2" :src="'https://flagcdn.com/20x15/' + destination.country.countryCode.toLowerCase() + '.png'" /></span>
             </div>
         </div>
     </div>

@@ -5,9 +5,9 @@
 </script>
 
 <template>
-    <div v-if="activity !== undefined" class="overflow-hidden activity-image">
+    <div v-if="activity !== undefined" class="overflow-hidden w-full activity-image">
         <!-- <img class="w-full" src="https://picsum.photos/500/200"/> -->
-        <div class="bg-white/[0.6] w-min h-min p-3 rounded-md m-20">
+        <div class="bg-white/[0.6] w-min h-min p-3 rounded-md left-16 absolute bottom-10">
             <div class="flex w-max" v-if="activity.location !== undefined">
                 {{ activity.title }} <span class="italic text-sm text-phtalo p-1"> {{ activity.type }} </span>
             </div>

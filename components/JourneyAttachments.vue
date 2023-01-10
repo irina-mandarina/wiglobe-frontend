@@ -42,7 +42,7 @@
                 'delay-500': !showArrows,
                 'opacity-100': showArrows
             }" class="absolute left-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300" opacity-100 duration-300 @click="showPreviousAttachment()">
-                <i class="fa fa-chevron-left text-2xl px-3 align-middle py-16" />
+                <i class="fa fa-chevron-left text-2xl px-3 align-middle pt-32" />
             </div>
 
             <div class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
@@ -61,7 +61,7 @@
                 'delay-500': !showArrows,
                 'opacity-100': showArrows
             }" class="absolute right-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300" @click="showNextAttachment()">
-                <i class="fa fa-chevron-right text-2xl px-3 align-middle py-16" />
+                <i class="fa fa-chevron-right text-2xl px-3 align-middle pt-32" />
             </div>
         </div>
     </div>
