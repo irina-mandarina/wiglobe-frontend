@@ -2,9 +2,10 @@
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
     import { getAllActivityTypes } from '~~/js/activityRequests'
+import { searchDestinations } from '~~/js/destinationRequests';
 
-    const journeyStore = useJourneyStore();
-    const userStore = useUserStore();
+    const journeyStore = useJourneyStore()
+    const userStore = useUserStore()
     
     const firstName = computed(() => userStore.user.firstName)
     const lastName = computed(() => userStore.user.lastName)
@@ -13,13 +14,15 @@
     const activityTypes = ref(null)
 
     let destination = ref(null)
-    let destinationObject = ref(null)
+    let destinationId = ref(null)
     let description = ref(null)
     let startDate = ref(null)
     let endDate = ref(null)
     let visibility = ref(null)
     let activity = ref(null)
-    let canBePosted = ref(false)
+    let canBePosted = computed(() => {
+        return destination.value != null && startDate.value != null
+    })
     let creatorOpen = ref(false)
 
     onBeforeMount(async () => {
@@ -31,6 +34,15 @@
         }
     })
 
+    async function findDestinations() {
+        try {
+            const response = await searchDestinations(destination.value)
+            console.log(response)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 </script>
 
 <template>
@@ -45,7 +57,7 @@
             'h-2': !creatorOpen,
             'h-fit': creatorOpen,
             'open': creatorOpen
-        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 overflow-hidden p-6 creator-container bg-khaki relative">
+        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 p-6 creator-container border-khaki border-2 relative">
 
             <div class="flex creator" :class="{
                 'visible': creatorOpen
@@ -72,19 +84,23 @@
                                 Journey duration: 
                             </p>
                             <div class="flex mx-auto justify-center">
-                                <input v-model="startDate" type="date" class="p-2 h-2/3 border-khaki border rounded-lg shadow-inner"/>
+                                <input v-model="startDate" type="date" class="p-2 h-2/3 border-b-2 border-dark-blue rounded-lg focus:outline-none"/>
                                 <span class="my-2 p-2"> - </span>
-                                <input v-model="endDate"   type="date" class="p-2 h-2/3 border-khaki border rounded-lg shadow-inner"/>
+                                <input v-model="endDate"   type="date" class="p-2 h-2/3 border-b-2 border-dark-blue rounded-lg focus:outline-none"/>
                             </div>
                         </div>
                         
                         <div class="mt-4 w-1/2 py-4">
-                            <span v-if="destinationObject === null">
-                                Select your destination:
-                                <input v-model="destination" class="mx-auto px-4 border-khaki border p-2 rounded-full shadow-inner" placeholder="Destination"/>    
+                            <span v-if="destinationId === null">
+                                Select your destination: 
+                                <!-- more than 3 symbols, ass search button -->
+                                <input v-model="destination"
+                                class="mx-auto px-4 border-b-2 border-dark-blue p-2 rounded-full focus:outline-none"
+                                placeholder="Destination"
+                                @keypress.enter="findDestinations()"/>    
                             </span>
-                            <span v-if="destinationObject !== null">
-                                <MiniDestination :destination="destinationObject" />
+                            <span v-if="destinationId !== null">
+                                <MiniDestination :destination="destinationId" />
                             </span>
                         </div>
                     </div>
@@ -93,7 +109,7 @@
                         <p class="p-4">
                             Add a description: 
                         </p>
-                        <textarea v-model="description" class="p-4 flex border-khaki border resize-none rounded-lg w-3/4 h-full shadow-inner"></textarea>
+                        <textarea v-model="description" class="px-4 py-2 flex border-b-2 border-dark-blue resize-none rounded-lg w-3/4 h-min shadow-inner focus:outline-none"></textarea>
                     </div>
                 </div>
 
@@ -107,7 +123,7 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" class="p-2 border-khaki border rounded-lg mx-auto flex my-6" alt="Pictures" />
+                    <input type="file" class="mx-auto flex my-6" alt="Pictures" />
                 </div>
 
                 <!-- Activity adder -->
@@ -119,27 +135,27 @@
 
                         <div class="mb-2">
                             <span>Date: </span>
-                            <input type="date" class="p-1 rounded-lg m-2 bg-khaki border-b-2 border-dark-blue focus:outline-none duration-300" />                    
+                            <input type="date" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />                    
                         </div>
 
                         <div class="mb-2">
                             <span>Title: </span>
-                            <input type="text" class="p-1 rounded-lg m-2 bg-khaki border-b-2 border-dark-blue focus:outline-none duration-300" />
+                            <input type="text" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
                         </div>
                         
                         <div class="mb-2">
                             <span>Description: </span>
-                            <input type="text" class="p-1 rounded-lg m-2 bg-khaki border-b-2 border-dark-blue focus:outline-none duration-300" />
+                            <input type="text" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
                         </div>
 
-                        <div class="mb-2 flex">
+                        <div class="mb-4 flex">
                             <span>Activity type</span>
-                            <ActivityTypes class="mx-2" :activity-types="activityTypes" />
+                            <ActivityTypeSelector class="mx-2" :activity-types="activityTypes" />
                         </div>
 
                         <div class="">
                             <span>Add pictures from this activity: </span>
-                            <input type="file" class="p-2 border-khaki border rounded-lg m-2" alt="Pictures" />
+                            <input type="file" class="m-2" alt="Pictures" />
                         </div>    
                     </div>
                     <div class="w-1/12 float-right relative">
@@ -153,7 +169,9 @@
             
         </div>
 
-        <button v-if="canBePosted" class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300">
+        <button v-if="canBePosted"
+        class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
+        @click="journeyStore.postJourney({startDate, endDate, destinationId, description, activities, visibility})">
             Post journey
         </button>
     </div>
@@ -186,5 +204,11 @@
 
     .border-dark-blue:focus {
         border-color: var(--asparagus);
+    }
+
+    input::file-selector-button {
+        border-radius: 12px;
+        padding: 5px 8px;
+        border: 1px;
     }
 </style>

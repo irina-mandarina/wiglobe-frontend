@@ -21,14 +21,6 @@ export const useUserStore = defineStore('userStore', {
       }
       return this.loggedUsername
     },
-    // DELETE THIS ASAP
-    getLocalStoragePassword() {
-        if (typeof window !== 'undefined') {
-          this.password = localStorage.getItem('password')
-        }
-        console.log(this.password)
-      return this.password
-    },
     async signUp(user) {
         try {
             const response = await signup(user)
@@ -39,7 +31,8 @@ export const useUserStore = defineStore('userStore', {
         catch (error) {
           this.signUpResponseCode = error.response.status
           console.log(error)
-          console.log(error.response.headers)
+          console.log(error.response.headers['emailTaken'])
+          console.log(error.response.headers['usernameTaken'])
         }
     },
 
@@ -49,7 +42,6 @@ export const useUserStore = defineStore('userStore', {
         if (response.status === 200) {
           this.user = response.data
           localStorage.setItem('username', this.user.username)
-          localStorage.setItem('password', user.password)
           this.logInResponseCode = 200
         }
       }

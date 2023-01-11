@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { useUserStore } from '~~/stores/UserStore'
 
-export async function createJourney(username, journey) {
+export async function createJourney(journeyRequest) {
     const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/journeys",
-        journey,
+        journeyRequest,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export async function createJourney(username, journey) {
     return response
 }
 
-export async function deleteJourney(username, journeyId) {
+export async function deleteJourney(journeyId) {
     const userStore = useUserStore()
     const response = await axios.delete("http://localhost:8080/journeys/" + journeyId,
         {
@@ -29,7 +29,7 @@ export async function deleteJourney(username, journeyId) {
 }
 
 
-export async function editJourney(username, journey) {
+export async function editJourney(journey) {
     const userStore = useUserStore()
     const response = await axios.put("http://localhost:8080/journeys/" + journey.id,
         journey,
@@ -43,7 +43,7 @@ export async function editJourney(username, journey) {
     return response
 }
 
-export async function getJourney(username, journeyId) {
+export async function getJourney(journeyId) {
     const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/journeys/" + journeyId,
         {
@@ -56,7 +56,7 @@ export async function getJourney(username, journeyId) {
     return response
 }
 
-export async function getJourneyRecommendations(username) {
+export async function getJourneyRecommendations() {
     const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/journeys",
         {

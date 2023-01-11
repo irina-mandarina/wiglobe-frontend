@@ -1,6 +1,6 @@
 import { useUserStore } from "~/stores/UserStore"
 import { defineStore } from "pinia"
-import { getJourneyRecommendations, getJourneysByUser } from "~~/js/journeyRequests"
+import { getJourneyRecommendations, getJourneysByUser, createJourney } from "~~/js/journeyRequests"
 
 export const useJourneyStore = defineStore('journeyStore', {
   state: () => {
@@ -33,5 +33,15 @@ export const useJourneyStore = defineStore('journeyStore', {
       }
     },
 
+    async postJourney(journeyRequest) {
+      try {
+        const response = await createJourney(journeyRequest)
+        console.log(response.data)
+        this.getJourneysByLogged() // update own profile page
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
   }
 })
