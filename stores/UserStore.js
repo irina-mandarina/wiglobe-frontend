@@ -6,7 +6,7 @@ export const useUserStore = defineStore('userStore', {
     return {
       loggedUsername: null,
       logInResponseCode: null,
-      signUpResponseCode: null,
+      signUpResponse: null,
       user: null,
       password: null
     }
@@ -24,15 +24,12 @@ export const useUserStore = defineStore('userStore', {
     async signUp(user) {
         try {
             const response = await signup(user)
-            this.user = response.data
+            this.user = response.data.userDetails
             localStorage.setItem('username', this.user.username)
-            this.signUpResponseCode = 201
+            this.signUpResponse = 201
         }
         catch (error) {
-          this.signUpResponseCode = error.response.status
-          console.log(error)
-          console.log(error.response.headers['emailTaken'])
-          console.log(error.response.headers['usernameTaken'])
+          this.signUpResponse = error.response.data
         }
     },
 

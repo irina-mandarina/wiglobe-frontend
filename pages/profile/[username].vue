@@ -4,7 +4,7 @@
     import { useFollowStore } from '~~/stores/FollowStore'
     import { useRoute } from 'vue-router'
     import { getJourneysByUser } from '~~/js/journeyRequests'
-    import { deleteFollowRequest, sendFollowRequest, unfollow, getFollowers, getFollowing, getFriends } from '~~/js/followRequests'
+    import { deleteFollowRequest, sendFollowRequest, unfollow, getFollowers, getFollowing, getFriends, respondToFollowRequest } from '~~/js/followRequests'
 
     const userStore = useUserStore()
     const followStore = useFollowStore()
@@ -38,7 +38,21 @@
 
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
-    let isFollowing = ref(false)
+    let isFollowing = computed (() => {
+        return followStore.following.filter ((it) =>
+            it.username === user.value.username
+        ).length !== 0
+    })
+    let hasReceivedAFollowReq = computed(() => {
+        return followStore.sentFollowRequests.filter((it) =>
+            it.receiver.username === user.value.username
+        ).length !== 0
+    })
+    let hasSentAFollowReq = computed(() => {
+        return followStore.receivedFollowRequests.filter((it) =>
+            it.requester.username === user.value.username
+        ).length !== 0
+    })
     let startAnimation = ref(false)
 
     onBeforeMount(async () => {
@@ -52,15 +66,10 @@
         catch (error) {
             console.log(error)
         }
+        followStore.init()
         getFollows()
         getJourneys()
 
-        followStore.getFollowing()
-        for (let i = 0; i < followStore.following.length; i++) {
-            if (followStore.following[i].username === user.value.username) {
-                isFollowing.value = true
-            }
-        }
     })
     
     onMounted(() => {
@@ -109,6 +118,7 @@
         catch (error) {
             console.log(error)
         }
+        followStore.getReceivedFollowRequests()
     }
 
     async function cancelRequest() {
@@ -119,6 +129,7 @@
         catch (error) {
             console.log(error)
         }
+        followStore.getReceivedFollowRequests()
     }
 
     async function unfollow1() {
@@ -128,6 +139,19 @@
         catch (error) {
             console.log(error)
         }
+        followStore.getFollowers()
+    }
+
+    async function respondWith(requester, isApproved) {
+        try {
+            const response = await respondToFollowRequest(requester, isApproved)
+            // console.log(response.data)
+            followStore.getReceivedFollowRequests()
+        }
+        catch (error) {
+            console.log(error)
+        }
+        followStore.getFollowing()
     }
 </script>
 
@@ -157,13 +181,20 @@
         </p>
 
         
-        <div class="flex w-full text-center">
+        <div class="flex w-1/2 mx-auto text-center">
             <button v-if="isFollowing" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="unfollow1()">
                 Unfollow
             </button>
-            <button v-if="!isFollowing" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="follow()">
+            <button v-if="!isFollowing && !hasReceivedAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="follow()">
                 Follow
             </button>
+            <button v-if="hasReceivedAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="cancelRequest()">
+                Cancel follow request
+            </button>
+            <button v-if="hasSentAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="respondWith(user.username, true)">
+                Approve follow request
+            </button>
+            
         </div>
 
         <div class="w-full flex h-max relative">

@@ -32,7 +32,7 @@
         else if (!(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email.value))) {
             return 'the email you entered is not valid'
         }
-        else if (userStore.signUpResponseCode === 404) {
+        else if (userStore.signUpResponse && userStore.signUpResponse.emailTaken !== undefined && userStore.signUpResponse.emailTaken) {
             if (email.value === signUpCredentials.email) {
                 return 'email is taken'
             }
@@ -53,7 +53,7 @@
         else if (!(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(username.value))) {
             return 'username contains invalid characters'
         }
-        else if (userStore.signUpResponseCode === 404) {
+        else if (userStore.signUpResponse && userStore.signUpResponse.usernameTaken !== undefined && userStore.signUpResponse.usernameTaken) {
             if (username.value === signUpCredentials.username) {
                 return 'username is taken'
             }
@@ -106,11 +106,6 @@
         }
     })
     let permitSignUp = computed (() => {
-        console.log(passwordRepError.value)
-        console.log(passwordError.value)
-        console.log(usernameError.value)
-        console.log(birthdateError.value)
-        console.log(emailError.value)
         return !(passwordError.value.length || passwordRepError.value.length || usernameError.value.length || emailError.value.length || birthdateError.value.length)
     })
 
@@ -139,7 +134,7 @@
         
         await userStore.signUp(signUpCredentials)
 
-        if (userStore.signUpResponseCode === 201) {
+        if (userStore.signUpResponse === 201 || (userStore.signUpResponse.emailTaken && userStore.signUpResponse.usernameTaken)) {
             navigateTo('/')
         }
     }
@@ -159,14 +154,15 @@
         }
 
         await userStore.signUp(signUpCredentials)
+        console.log(userStore.signUpResponse)
         
-        if (userStore.signUpResponseCode === 201) {
+        if (userStore.signUpResponse === 201) {
             navigateTo('/')
         }
     }
      // handle an error event
-    const handleSignUpError = () => {
-        console.error("Sign up failed")
+    function handleSignUpError() {
+        console.log('error')
     }
 </script>
 
@@ -281,7 +277,7 @@
                 <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
                 <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 align-middle"
                             @success="handleSignUpSuccess"
-                            @error="handleSignUpError"
+                            @error="handleSignUpError()"
                 ></GoogleSignInButton>
             </div>
             <NuxtLink to="/login" class="w-fit flex mx-auto pb-6 hover:scale-[1.02] duration-300">I already have an account</NuxtLink>

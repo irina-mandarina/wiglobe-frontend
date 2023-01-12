@@ -6,11 +6,11 @@ const userStore = useUserStore()
 export const useFollowStore = defineStore('followStore', {
     state: () => {
         return {
-            friends: null,
-            followers: null,
-            following: null,
-            receivedFollowRequests: null,
-            sentFollowRequests: null
+            friends: [],
+            followers: [],
+            following: [],
+            receivedFollowRequests: [],
+            sentFollowRequests: []
         }
     },
 
@@ -64,6 +64,14 @@ export const useFollowStore = defineStore('followStore', {
                 console.log(error)
             }
         },
+
+        init() {
+            this.getFriends()
+            this.getFollowers()
+            this.getFollowing()
+            this.getSentFollowRequests()
+            this.getReceivedFollowRequests()
+        }
     }      
     
 })
