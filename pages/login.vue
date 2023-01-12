@@ -2,7 +2,6 @@
     import { useUserStore } from '~~/stores/UserStore'
     import { GoogleSignInButton } from "vue3-google-signin"
     import { decodeCredential } from "vue3-google-signin"
-import { login } from '~~/js/userRequests';
 
     let userStore = useUserStore()
     let startAnimation = ref(false)

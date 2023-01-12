@@ -14,7 +14,7 @@
     
     onBeforeMount(async () => {
         try {
-            const response = await getJourney(userStore.loggedUsername, useRoute().params.journeyId)
+            const response = await getJourney(useRoute().params.journeyId)
             journey.value = response.data
         }
         catch (error) {
@@ -34,7 +34,6 @@
     }
 
     async function postComment(content) {
-        console.log('fd')
         try {
             const response = await commentJourney(journey.value.id, {content})
             console.log(response.data)

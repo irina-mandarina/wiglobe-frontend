@@ -1,5 +1,7 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
+    import { GoogleSignInButton } from "vue3-google-signin"
+    import { decodeCredential } from "vue3-google-signin"
 
     const userStore = useUserStore()
 
@@ -141,6 +143,31 @@
             navigateTo('/')
         }
     }
+
+    const handleSignUpSuccess = async (response) => {
+        const { credential } = response
+        let userData = decodeCredential(response.credential)
+        console.log("Access Token: ", credential);
+        console.log(userData)
+
+        signUpCredentials = {
+            firstName: userData.given_name,
+            lastName: userData.family_name,
+            email: userData.email,
+            username: userData.email,
+            password: credential
+        }
+
+        await userStore.signUp(signUpCredentials)
+        
+        if (userStore.signUpResponseCode === 201) {
+            navigateTo('/')
+        }
+    }
+     // handle an error event
+    const handleSignUpError = () => {
+        console.error("Sign up failed")
+    }
 </script>
 
 <template>
@@ -250,9 +277,12 @@
         }" class="w-full bg-white mt-0 relative sign-in-box-bottom">
             <div class="mx-auto w-fit">
                 <span class="py-6">Sign up with: </span>
-                <i class="social-icon fa fa-google p-6 text-red-600 hover:text-red-800 duration-300"/>
                 <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
                 <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
+                <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 align-middle"
+                            @success="handleSignUpSuccess"
+                            @error="handleSignUpError"
+                ></GoogleSignInButton>
             </div>
             <NuxtLink to="/login" class="w-fit flex mx-auto pb-6 hover:scale-[1.02] duration-300">I already have an account</NuxtLink>
         </div>
