@@ -8,11 +8,14 @@
         <div class="absolute fixed px-2 text-rose-500 hover:text-red-700 duration-300 z-[51]" @click="$emit('closeSearchResults')">
                 X
         </div>
-        <ul class="relative max-h-44 max-w-[100%] overflow-y-scroll rounded-md bg-white border border-gray-200 z-50">
+        <ul class="relative max-h-44 max-w-[100%] overflow-y-scroll rounded-md bg-white border border-gray-300 z-50">
             <li v-if="destinationSearchResults === null || destinationSearchResults.length === 0" class="py-2 px-6 text-md">
                 Destination was not found.
             </li>
-            <li v-if="destinationSearchResults !== null && destinationSearchResults.length > 0" v-for="destination in destinationSearchResults" class="p-2 text-md border-b border-gray-500">
+            <li v-if="destinationSearchResults !== null && destinationSearchResults.length > 0"
+                v-for="destination in destinationSearchResults"
+                @click="$emit('chooseDestination', destination.destinationId)"
+                class="p-2 text-md border-b border-gray-400">
                 <span class="pl-4 pr-1 w-max">
                     {{ destination.name }},
                 </span>

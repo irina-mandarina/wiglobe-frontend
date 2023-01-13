@@ -2,7 +2,7 @@
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
     import { getAllActivityTypes } from '~~/js/activityRequests'
-    import { searchDestinations } from '~~/js/destinationRequests'
+    import { searchDestinations, getDestination } from '~~/js/destinationRequests'
 
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
@@ -14,15 +14,15 @@
     const activityTypes = ref(null)
 
     let destinationKeyword = ref(null)
-    let destinationId = ref(null)
+    let chosenDestination = ref(null)
     let destinationSearchResults = ref(null)
     let keywordLength = 0
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
-            if (modifiedKeyword === null || modifiedKeyword.length < keywordLength) {
+            if (chosenDestination.value === null && (modifiedKeyword === null || modifiedKeyword.length < keywordLength)) {
                 destinationSearchResults.value = null
             }
-            else if (destinationSearchResults.value !== null && modifiedKeyword.length > keywordLength) {
+            else if (chosenDestination.value === null && (destinationSearchResults.value !== null && modifiedKeyword.length > keywordLength)) {
                 // show more accurate results
                 destinationSearchResults.value = destinationSearchResults.value.filter ((it) => 
                     it.name.toLowerCase().startsWith(modifiedKeyword.toLowerCase()) || it.country.toLowerCase().startsWith(modifiedKeyword.toLowerCase())
@@ -33,10 +33,10 @@
     let description = ref(null)
     let startDate = ref(null)
     let endDate = ref(null)
-    let visibility = ref(null)
+    let visibility = ref('PUBLIC')
     let activity = ref(null)
     let canBePosted = computed(() => {
-        return destinationId.value != null && startDate.value != null
+        return chosenDestination.value != null && startDate.value != null
     })
     let creatorOpen = ref(false)
 
@@ -58,10 +58,29 @@
             console.log(error)
         }
     }
+
+    async function chooseDestination(destinationId) {
+        try {
+            chosenDestination.value = (await getDestination(destinationId)).data
+        }catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    function toggleVisibility() {
+        console.log(visibility)
+        if (visibility.value === 'PRIVATE') {
+            visibility.value = 'PUBLIC'
+        }
+        else {
+            visibility.value = 'PRIVATE'
+        }
+    }
 </script>
 
 <template>
-    <div class="w-full relative">
+    <div class="w-full relative my-6">
         <div v-if="!creatorOpen" class="p-6 text-2xl mx-auto bg-gray-100 text-center rounded-lg shadow-md w-1/4" @click="creatorOpen = true">
             <span class="font-heebo font-bold text-4xl hover:text-green-700 duration-300">
                 +
@@ -78,9 +97,6 @@
                 'visible': creatorOpen
             }">
 
-                <span class="absolute right-6" @click="creatorOpen = false">
-                    x
-                </span>
                 <!-- User info -->
                 <div class="float-left w-1/6 text-center h-min">
                     <NuxtLink :to="'/profile/' + username">
@@ -105,8 +121,8 @@
                             </div>
                         </div>
                         
-                        <div class="mt-4 w-1/2 py-4 relative justify-content-center">
-                            <span v-if="destinationId === null">
+                        <div class="mt-4 w-1/2 py-4 relative">
+                            <span v-if="chosenDestination === null || chosenDestination === undefined">
                                 Select your destination: 
                                 <!-- more than 3 symbols, ass search button -->
                                 <input v-model="destinationKeyword"
@@ -116,10 +132,11 @@
                                 @keypress.enter="findDestinations()"/>    
                                 <DestinationSearchResult v-if="destinationSearchResults !== null"
                                     @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
+                                    @choose-destination="chooseDestination"
                                     :destination-search-results="destinationSearchResults" />
                             </span>
-                            <span v-if="destinationId !== null">
-                                <MiniDestination :destination="destinationId" />
+                            <span v-if="chosenDestination !== null && chosenDestination !== undefined">
+                                <MiniDestination :destination="chosenDestination" />
                             </span>
                         </div>
                     </div>
@@ -130,6 +147,18 @@
                         </p>
                         <textarea v-model="description" class="px-4 py-2 flex border-b-2 border-dark-blue resize-none rounded-lg w-3/4 h-min shadow-inner focus:outline-none"></textarea>
                     </div>
+                </div>
+                
+                <div class="absolute right-4">
+                    <span class="p-2 w-fit h-fit" @click="toggleVisibility()">
+                        <i class="fa fa-unlock" v-if="visibility === 'PUBLIC'"/>
+                        <i class="fa fa-lock" v-else/>
+                    </span>
+
+                    <span class="p-2" @click="creatorOpen = false">
+                        x
+                    </span>
+
                 </div>
 
             </div>
@@ -190,7 +219,7 @@
 
         <button v-if="canBePosted"
         class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
-        @click="journeyStore.postJourney({startDate, endDate, destinationId, description, activities, visibility})">
+        @click="journeyStore.postJourney({startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
             Post journey
         </button>
     </div>
