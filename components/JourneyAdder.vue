@@ -2,7 +2,7 @@
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
     import { getAllActivityTypes } from '~~/js/activityRequests'
-import { searchDestinations } from '~~/js/destinationRequests';
+    import { searchDestinations } from '~~/js/destinationRequests'
 
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
@@ -13,15 +13,30 @@ import { searchDestinations } from '~~/js/destinationRequests';
 
     const activityTypes = ref(null)
 
-    let destination = ref(null)
+    let destinationKeyword = ref(null)
     let destinationId = ref(null)
+    let destinationSearchResults = ref(null)
+    let keywordLength = 0
+    watch(() => destinationKeyword.value,
+        (modifiedKeyword) => {
+            if (modifiedKeyword === null || modifiedKeyword.length < keywordLength) {
+                destinationSearchResults.value = null
+            }
+            else if (destinationSearchResults.value !== null && modifiedKeyword.length > keywordLength) {
+                // show more accurate results
+                destinationSearchResults.value = destinationSearchResults.value.filter ((it) => 
+                    it.name.toLowerCase().startsWith(modifiedKeyword.toLowerCase()) || it.country.toLowerCase().startsWith(modifiedKeyword.toLowerCase())
+                )
+            }
+            keywordLength = destinationKeyword.value.length
+    })
     let description = ref(null)
     let startDate = ref(null)
     let endDate = ref(null)
     let visibility = ref(null)
     let activity = ref(null)
     let canBePosted = computed(() => {
-        return destination.value != null && startDate.value != null
+        return destinationId.value != null && startDate.value != null
     })
     let creatorOpen = ref(false)
 
@@ -36,8 +51,8 @@ import { searchDestinations } from '~~/js/destinationRequests';
 
     async function findDestinations() {
         try {
-            const response = await searchDestinations(destination.value)
-            console.log(response)
+            const response = await searchDestinations(destinationKeyword.value)
+            destinationSearchResults.value = response.data
         }
         catch(error) {
             console.log(error)
@@ -76,8 +91,8 @@ import { searchDestinations } from '~~/js/destinationRequests';
                         <p class="mx-auto mb-2 font-heebo">@{{ username }}</p>  
                     </NuxtLink>
                 </div>
-                <!-- Journey info (left) -->
-                <div class="w-5/6 h-full">
+                <!-- Journey info (top) -->
+                <div class="w-5/6 h-full relative">
                     <div class="flex w-full">
                         <div class="w-1/2">
                             <p class="text-center my-4">
@@ -90,14 +105,18 @@ import { searchDestinations } from '~~/js/destinationRequests';
                             </div>
                         </div>
                         
-                        <div class="mt-4 w-1/2 py-4">
+                        <div class="mt-4 w-1/2 py-4 relative justify-content-center">
                             <span v-if="destinationId === null">
                                 Select your destination: 
                                 <!-- more than 3 symbols, ass search button -->
-                                <input v-model="destination"
+                                <input v-model="destinationKeyword"
                                 class="mx-auto px-4 border-b-2 border-dark-blue p-2 rounded-full focus:outline-none"
                                 placeholder="Destination"
+                                type="search"
                                 @keypress.enter="findDestinations()"/>    
+                                <DestinationSearchResult v-if="destinationSearchResults !== null"
+                                    @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
+                                    :destination-search-results="destinationSearchResults" />
                             </span>
                             <span v-if="destinationId !== null">
                                 <MiniDestination :destination="destinationId" />
