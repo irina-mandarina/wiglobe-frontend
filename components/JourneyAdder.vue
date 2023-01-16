@@ -11,12 +11,27 @@
     const lastName = computed(() => userStore.user.lastName)
     const username = computed(() => userStore.user.username)
 
-    const activityTypes = ref(null)
-
     let destinationKeyword = ref(null)
     let chosenDestination = ref(null)
     let destinationSearchResults = ref(null)
     let keywordLength = 0
+    let description = ref(null)
+    let startDate = ref(null)
+    let endDate = ref(null)
+
+    let visibility = ref('PUBLIC')
+    let showVisibilityOptions = ref(false)
+    let activity = ref(null)
+    let activities = ref(null)
+    const activityTypes = ref(null)
+
+    let journeyId = null
+
+    let canBePosted = computed(() => {
+        return chosenDestination.value != null && startDate.value != null
+    })
+    let creatorOpen = ref(false)
+
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
             if (chosenDestination.value === null && (modifiedKeyword === null || modifiedKeyword.length < keywordLength)) {
@@ -30,15 +45,13 @@
             }
             keywordLength = destinationKeyword.value.length
     })
-    let description = ref(null)
-    let startDate = ref(null)
-    let endDate = ref(null)
-    let visibility = ref('PUBLIC')
-    let activity = ref(null)
-    let canBePosted = computed(() => {
-        return chosenDestination.value != null && startDate.value != null
+
+    watch( 
+        [startDate, endDate, chosenDestination, description]
+    , async (journey) => {
+        console.log(journey)
+        postToDrafts()
     })
-    let creatorOpen = ref(false)
 
     onBeforeMount(async () => {
         try {
@@ -62,20 +75,22 @@
     async function chooseDestination(destinationId) {
         try {
             chosenDestination.value = (await getDestination(destinationId)).data
-        }catch (error) {
+        }
+        catch (error) {
             console.log(error)
         }
         
     }
 
-    function toggleVisibility() {
-        console.log(visibility)
-        if (visibility.value === 'PRIVATE') {
-            visibility.value = 'PUBLIC'
-        }
-        else {
-            visibility.value = 'PRIVATE'
-        }
+    function postToDrafts() {
+        journeyId = journeyStore.postJourney({
+            startDate: startDate.value,
+            endDate: endDate.value,
+            destinationId: chosenDestination.value.id,
+            description: description.value,
+            activities: activities.value,
+            visibility: 'DRAFT'
+        }).id
     }
 </script>
 
@@ -150,9 +165,36 @@
                 </div>
                 
                 <div class="absolute right-4">
-                    <span class="p-2 w-fit h-fit" @click="toggleVisibility()">
+                    <span class="p-2 w-fit h-fit" @click="showVisibilityOptions = !showVisibilityOptions">
                         <i class="fa fa-unlock" v-if="visibility === 'PUBLIC'"/>
-                        <i class="fa fa-lock" v-else/>
+                        <i class="fa fa-lock"  v-if="visibility === 'PRIVATE'"/>
+                        <i class="fa fa-file"  v-if="visibility === 'DRAFT'"/>
+                        <i class="fa fa-users"  v-if="visibility === 'FRIEND_ONLY'"/>
+
+                        <div v-if="showVisibilityOptions" class="absolute top-8 right-6">
+                            <ul class="bg-gray-50 overflow-hidden rounded-md shadow-md w-max">
+                                <li class="border-b p-2 w-full" @click="visibility = 'PUBLIC'" :class="{
+                                    'bg-gray-100': visibility === 'PUBLIC'
+                                }">
+                                    Public
+                                </li>
+                                <li class="border-b p-2 w-full" @click="visibility = 'PRIVATE'" :class="{
+                                    'bg-gray-100': visibility === 'PRIVATE'
+                                }">
+                                    Private
+                                </li>
+                                <li class="border-b p-2 w-full" @click="visibility = 'FRIEND_ONLY'" :class="{
+                                    'bg-gray-100': visibility === 'FRIEND_ONLY'
+                                }">
+                                    Friends only
+                                </li>
+                                <li class="p-2 w-full" @click="visibility = 'DRAFT'" :class="{
+                                    'bg-gray-100': visibility === 'DRAFT'
+                                }">
+                                    Draft
+                                </li>
+                            </ul>
+                        </div>
                     </span>
 
                     <span class="p-2" @click="creatorOpen = false">
