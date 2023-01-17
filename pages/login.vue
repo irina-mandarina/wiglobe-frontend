@@ -44,7 +44,7 @@
             return "username cannot be blank"
         }   
         else if (!(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(username.value))) {
-            return "The username you entered contains invalid characters"
+            return "The username you entered is invalid"
         }
         else if (userStore.logInResponseCode === 404) {
             // if the username has changed since the last log in request
@@ -147,7 +147,7 @@
             <!-- form -->
             <div :class="{
                 'visible2': startAnimation
-            }" class="py-6 form">
+            }" class="py-6 form" @keyup.enter="logIn()">
                 <div class="w-fit mx-auto">
                     <label for="username">
                         <i class="fa fa-user p-6 text-xl"/>
@@ -170,8 +170,8 @@
                     <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
                     <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
                     <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 pt-2"
-                            @success="handleLoginSuccess"
-                            @error="handleLoginError"
+                        @success="handleLoginSuccess"
+                        @error="handleLoginError"
                     ></GoogleSignInButton>
                 </div>
   
