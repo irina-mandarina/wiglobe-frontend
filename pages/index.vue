@@ -3,10 +3,6 @@
     definePageMeta ({
         middleware: 'authorise'
     })
-    
-    // definePageMeta({
-    //     middleware: 'authorise'
-    // })
 
     const journeyStore = useJourneyStore()
     let journeys = computed(() => journeyStore.journeys)

@@ -212,7 +212,7 @@
         <!-- journeys -->
         <div class="my-20">
             <div class="text-center text-2xl font-droid">Your journeys</div>
-            <Journey v-for="journey in journeys" :journey="journey" />
+            <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
         </div>
 
     </NuxtLayout>

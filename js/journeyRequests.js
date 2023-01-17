@@ -81,3 +81,16 @@ export async function getJourneysByUser(username) {
     )
     return response
 }
+
+export async function getJourneyDrafts(username) {
+    const userStore = useUserStore()
+    const response = await axios.get("http://localhost:8080/" + username + "/journeys/drafts",
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                username: userStore.getLocalStorageUsername()
+            }
+        }
+    )
+    return response
+}

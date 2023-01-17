@@ -10,6 +10,10 @@
 
             <!-- Journey info (left) -->
             <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
+                <div class="absolute top-4 left-4">
+                    <i class="fa fa-file"  v-if="journey.visibility === 'DRAFT'"/>
+                    <i class="fa fa-users"  v-if="journey.visibility === 'FRIEND_ONLY'"/>
+                </div>
                 <div class="">
                     <!-- User info -->
                     <div class="w-full text-center m-6">
