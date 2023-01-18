@@ -36,6 +36,7 @@ export const useJourneyStore = defineStore('journeyStore', {
     async postJourney(journeyRequest) {
       try {
         const response = await createJourney(journeyRequest)
+        console.log(response.data)
         this.getJourneysByLogged() // update own profile page
         return response.data
       }

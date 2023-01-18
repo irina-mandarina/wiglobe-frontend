@@ -36,7 +36,6 @@
     async function postComment(content) {
         try {
             const response = await commentJourney(journey.value.id, {content})
-            console.log(response.data)
         }
         catch (error) {
             console.log(error)

@@ -1,7 +1,7 @@
 <script setup>
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
-    import { getAllActivityTypes } from '~~/js/activityRequests'
+    import { addActivityToJourney, getAllActivityTypes } from '~~/js/activityRequests'
     import { searchDestinations, getDestination } from '~~/js/destinationRequests'
 
     const journeyStore = useJourneyStore()
@@ -21,9 +21,7 @@
 
     let visibility = ref('PUBLIC')
     let showVisibilityOptions = ref(false)
-    let activity = ref(null)
-    let activities = ref(null)
-    const activityTypes = ref(null)
+    let activities = ref([])
 
     let journeyId = null
 
@@ -49,17 +47,10 @@
     watch( 
         [startDate, endDate, chosenDestination, description]
     , async (journey) => {
-        console.log(journey)
         postToDrafts()
     })
 
     onBeforeMount(async () => {
-        try {
-            activityTypes.value = (await getAllActivityTypes()).data
-        }
-        catch(error) {
-            console.log(error)
-        }
     })
 
     async function findDestinations() {
@@ -82,15 +73,38 @@
         
     }
 
-    function postToDrafts() {
-        journeyId = journeyStore.postJourney({
+    async function postToDrafts() {
+        journeyId = (await journeyStore.postJourney({
+            id: journeyId,
             startDate: startDate.value,
             endDate: endDate.value,
-            destinationId: chosenDestination.value.id,
+            destinationId: () => {
+                if (chosenDestination.value === null) {
+                    return null
+                }
+                else {
+                    return chosenDestination.value.id
+                }
+            },
             description: description.value,
             activities: activities.value,
             visibility: 'DRAFT'
-        }).id
+        })).id
+        console.log(journeyId)
+    }
+
+    async function addActivity(activityRequest) {
+        console.log(activityRequest)
+        if (journeyId === null) {
+            await postToDrafts()
+        }
+        try {
+            const response = await addActivityToJourney(journeyId, activityRequest)
+            activities.value.push(response.data)
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 </script>
 
@@ -217,43 +231,11 @@
                 </div>
 
                 <!-- Activity adder -->
-                <div class="w-1/2 h-fit p-2 relative">
-                    <div>
-                        <div class="text-center p-2 font-heebo font-bold text-lg">
-                            Add activities you engaged in on your journey
-                        </div>
-
-                        <div class="mb-2">
-                            <span>Date: </span>
-                            <input type="date" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />                    
-                        </div>
-
-                        <div class="mb-2">
-                            <span>Title: </span>
-                            <input type="text" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
-                        </div>
-                        
-                        <div class="mb-2">
-                            <span>Description: </span>
-                            <input type="text" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
-                        </div>
-
-                        <div class="mb-4 flex">
-                            <span>Activity type</span>
-                            <ActivityTypeSelector class="mx-2" :activity-types="activityTypes" />
-                        </div>
-
-                        <div class="">
-                            <span>Add pictures from this activity: </span>
-                            <input type="file" class="m-2" alt="Pictures" />
-                        </div>    
+                <div class="w-1/2 h-fit p-2 bg-rose-100 relative">
+                    <div class="">
+                        <Activity v-for="activity in activities" :activity="activity" />
+                        <ActivityAdder @add-activity="addActivity" />
                     </div>
-                    <div class="w-1/12 float-right relative">
-                        <button class="rounded-full bg-fawn text-center px-4 py-2 bold border-4 border-peach">
-                            +
-                        </button>
-                    </div>
-                    
                 </div>    
             </div>
             
@@ -261,7 +243,7 @@
 
         <button v-if="canBePosted"
         class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
-        @click="journeyStore.postJourney({startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
+        @click="journeyStore.postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
             Post journey
         </button>
     </div>

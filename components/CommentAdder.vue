@@ -12,6 +12,7 @@
 
     function emitPost() {
         emits('postComment', content.value)
+        content.value = null
     }
 </script>
 
@@ -39,10 +40,11 @@
                 {{ new Date().toDateString() }}
             </p>
             <input class="p-2 w-full pb-8 m-4 rounded-lg focus:outline-[#7EA172]"
+                @keyup.enter="emitPost()"
                 v-model="content"
                 placeholder="Add a new comment"
             />
-            <button @click="emitPost()" class="bg-asparagus px-6 py-2 text-white rounded-full hover:text-gray-200 focus:outline-none mx-auto flex">
+            <button @click="emitPost()" @keyup.enter="emitPost()" class="bg-asparagus px-6 py-2 text-white rounded-full hover:text-gray-200 focus:outline-none mx-auto flex">
                 Post comment
             </button>
         </div>

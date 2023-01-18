@@ -4,15 +4,14 @@
     })
 </script>
 <template>
-    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t overflow-hidden">
+    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t overflow-hidden text-md">
         
         <div class="flex">
 
             <!-- Journey info (left) -->
             <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
                 <div class="absolute top-4 left-4">
-                    <i class="fa fa-file"  v-if="journey.visibility === 'DRAFT'"/>
-                    <i class="fa fa-users"  v-if="journey.visibility === 'FRIEND_ONLY'"/>
+                    <JourneyMenu :visibility="journey.visibility" />
                 </div>
                 <div class="">
                     <!-- User info -->
@@ -26,13 +25,13 @@
                         </NuxtLink>
                     </div>
                     <!-- date -->
-                    <p class="w-full text-center py-6 m-6">
+                    <p v-if="journey.startDate !== undefined && journey.startDate !== null && journey.endDate !== undefined && journey.endDate !== null" class="w-full text-center py-6 m-6">
                         From {{ new Date(journey.startDate).toLocaleDateString() }} to {{ new Date(journey.endDate).toLocaleDateString() }} at:
                     </p>
                 </div>
 
                 <!-- destination -->
-                <MiniDestination class="z-100 my-4" :destination="journey.destination" />
+                <MiniDestination v-if="journey.destination !== undefined && journey.destination !== null" class="z-100 my-4" :destination="journey.destination" />
                 
                 <!-- Journey description -->
                 <p class="my-6 p-10 first-letter:font-bold first-letter:text-3xl first-letter-font-droid">

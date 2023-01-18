@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { useUserStore } from '~~/stores/UserStore'
 
-export async function addActivityToJourney(username, journeyId, activity) {
+export async function addActivityToJourney(journeyId, activityReruest) {
     const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/journeys/" + journeyId + "/activities",
-        activity,
+        activityReruest,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export async function addActivityToJourney(username, journeyId, activity) {
     return response
 }
 
-export async function getActivitiesForJourney(username, journeyId) {
+export async function getActivitiesForJourney(journeyId) {
     const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/journeys/" + journeyId + "/activities",
         {
@@ -28,7 +28,7 @@ export async function getActivitiesForJourney(username, journeyId) {
     return response
 }
 
-export async function editActivityForJourney(username, journeyId, activity) {
+export async function editActivityForJourney(journeyId, activity) {
     const userStore = useUserStore()
     const response = await axios.put("http://localhost:8080/journeys/" + journeyId + "/activities/" + activity.id,
         activity,
@@ -42,7 +42,7 @@ export async function editActivityForJourney(username, journeyId, activity) {
     return response
 }
 
-export async function deleteActivityFromJourney(username, journeyId, activityId) {
+export async function deleteActivityFromJourney(journeyId, activityId) {
     const userStore = useUserStore()
     const response = await axios.delete("http://localhost:8080/journeys/" + journeyId + "/activities/" + activityId,
         {
