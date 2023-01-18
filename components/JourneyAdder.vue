@@ -231,10 +231,9 @@
                 </div>
 
                 <!-- Activity adder -->
-                <div class="w-1/2 h-fit p-2 bg-rose-100 relative">
+                <div class="w-1/2 h-fit p-2 relative">
                     <div class="">
-                        <Activity v-for="activity in activities" :activity="activity" />
-                        <ActivityAdder @add-activity="addActivity" />
+                        <ActivityAdder @add-activity="addActivity" :activities="activities" />
                     </div>
                 </div>    
             </div>
