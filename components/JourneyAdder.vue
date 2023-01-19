@@ -45,9 +45,9 @@
     })
 
     watch( 
-        [startDate, endDate, chosenDestination, description]
+        [startDate, endDate, chosenDestination, activities]
     , async (journey) => {
-        postToDrafts()
+            await postToDrafts()
     })
 
     onBeforeMount(async () => {
@@ -90,7 +90,6 @@
             activities: activities.value,
             visibility: 'DRAFT'
         })).id
-        console.log(journeyId)
     }
 
     async function addActivity(activityRequest) {
@@ -105,6 +104,10 @@
         catch (error) {
             console.log(error)
         }
+    }
+
+    async function postJourney(journey) {
+        navigateTo('/journeys/' + (await journeyStore.postJourney(journey)).id)
     }
 </script>
 
@@ -242,7 +245,7 @@
 
         <button v-if="canBePosted"
         class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
-        @click="journeyStore.postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
+        @click="postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
             Post journey
         </button>
     </div>

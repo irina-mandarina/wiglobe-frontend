@@ -1,17 +1,23 @@
 <script setup>
+    import { useUserStore } from '~~/stores/UserStore'
+
+    const userStore = useUserStore()
+
     const props = defineProps({
         journey: Object
     })
+
+    let manageJourney = ref(false)
 </script>
 <template>
-    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t overflow-hidden text-md">
-        
+    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t relative overflow-hidden text-md">
+        <JourneyManager v-if="manageJourney" />
         <div class="flex">
 
             <!-- Journey info (left) -->
             <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
                 <div class="absolute top-4 left-4">
-                    <JourneyMenu :visibility="journey.visibility" />
+                    <JourneyMenu @manage-journey="manageJourney = !manageJourney" :visibility="journey.visibility" :edit-permission="journey.usernames.username === userStore.user.username" />
                 </div>
                 <div class="">
                     <!-- User info -->

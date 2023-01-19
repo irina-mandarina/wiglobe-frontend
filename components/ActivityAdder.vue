@@ -38,7 +38,6 @@
         emits('addActivity', activityRequest)
 
         title.value = null
-        type.value = null
         location.value = null
         description.value = null
         date.value = null
@@ -55,7 +54,7 @@
                 activityOnDisplayId.value = null
             }
             else if (activityOnDisplayId.value === null) {
-                activityOnDisplayId.value = 0
+                activityOnDisplayId.value = props.activities.length - 1
             }
             else {
                 activityOnDisplayId.value--
@@ -71,7 +70,7 @@
                 activityOnDisplayId.value = null
             }
             else if (activityOnDisplayId.value === null) {
-                activityOnDisplayId.value = props.activities.length - 1
+                activityOnDisplayId.value = 0
             }
             else {
                 activityOnDisplayId.value++
@@ -84,7 +83,7 @@
 <template>
     <div class="h-fit relative">
         <div v-if="activities">
-            <div class="flex relative" @mouseenter="()=>{if (activities !== null) {showArrows = true}}" @mouseleave="showArrows = false">
+            <div class="flex relative" @mouseenter="()=>{if (activities !== null && activities.length !== 0) {showArrows = true; }}" @mouseleave="showArrows = false">
                 <div :class="{
                     'opacity-0': !showArrows,
                     'delay-500': !showArrows,
