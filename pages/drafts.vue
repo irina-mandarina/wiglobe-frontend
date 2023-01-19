@@ -1,8 +1,12 @@
 <script setup>
     import { getJourneyDrafts } from '~~/js/journeyRequests'
+    import { useUserStore } from '~~/stores/UserStore'
     
+    const userStore = useUserStore()
     let journeys = ref(null)
+    
     onBeforeMount(async () => {
+        await userStore.init()
         try{
             journeys.value = (await getJourneyDrafts()).data
         }

@@ -37,15 +37,10 @@
     let startAnimation = ref(false)
     let editMode = ref(false)
 
-    definePageMeta({
-        middleware: 'authorise'
-    })
-
     onBeforeMount(async () => {
+        await userStore.init()
+        await followStore.init()
         journeyStore.getJourneysByLogged()
-        followStore.getFollowers()
-        followStore.getFollowing()
-        followStore.getFriends()
     })
 
     onMounted(() => {
@@ -63,7 +58,7 @@
 </script>
 
 <template>
-    <NuxtLayout name="default">
+    <NuxtLayout name="default" v-if="user !== null">
 
         <!-- edit profile button -->
         <button @click="editMode = !editMode" class="absolute m-6 bg-asparagus rounded-full shadow-inner">

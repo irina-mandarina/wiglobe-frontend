@@ -3,16 +3,13 @@
     import { useRoute } from 'vue-router'
     import { useUserStore } from '~~/stores/UserStore'
     import { commentJourney, getCommentsForJourney } from '~~/js/commentRequests'
-    const userStore = useUserStore()
 
+    const userStore = useUserStore()
     let journey = ref(null)
     let comments = ref(null)
     
-    definePageMeta({
-        middleware: 'authorise'
-    })
-    
     onBeforeMount(async () => {
+        await userStore.init()
         try {
             const response = await getJourney(useRoute().params.journeyId)
             journey.value = response.data

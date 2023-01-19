@@ -5,7 +5,7 @@ import { getJourneyRecommendations, getJourneysByUser, createJourney } from "~~/
 export const useJourneyStore = defineStore('journeyStore', {
   state: () => {
     return {
-        journeys: null,
+        journeyRecommendations: null,
         loggedUserJourneys: null
     }
   },
@@ -15,7 +15,7 @@ export const useJourneyStore = defineStore('journeyStore', {
       const userStore = useUserStore()
       try {
           const response = await getJourneyRecommendations(userStore.user.username)
-          this.journeys = response.data
+          this.journeyRecommendations = response.data
       }
       catch (error) {
           console.log(error)
@@ -43,6 +43,11 @@ export const useJourneyStore = defineStore('journeyStore', {
       catch (error) {
         console.log(error)
       }
-    }
+    },
+
+    // async init() {
+    //   await getJourneyRecommendations()
+    //   await this.getJourneysByLogged() 
+    // }
   }
 })

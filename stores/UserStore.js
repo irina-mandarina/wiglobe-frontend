@@ -1,4 +1,4 @@
-import { login, logout, signup } from "~~/js/userRequests"
+import { login, logout, signup, getUserDetails } from "~~/js/userRequests"
 import { defineStore } from "pinia"
 
 export const useUserStore = defineStore('userStore', {
@@ -59,7 +59,8 @@ export const useUserStore = defineStore('userStore', {
     },
     
     async getUserDetails(other) {
-      if (other === null) {
+      debugger
+      if (other === null || other === undefined || other === '') {
         other = this.loggedUsername
       }
       try {
@@ -92,6 +93,11 @@ export const useUserStore = defineStore('userStore', {
         console.log(error)
       }
     },
+
+    async init() {
+      this.getLocalStorageUsername()
+      await this.getUserDetails()
+    }
     
   }
 })

@@ -8,13 +8,8 @@
     let requestTypeSent = ref(false)
     
     onBeforeMount(async () => {
-        if (followStore.receivedFollowRequests === null) {
-            followStore.getReceivedFollowRequests()
-        }
-        
-        if (followStore.sentFollowRequests === null) {
-            followStore.getSentFollowRequests()
-        }
+        await userStore.init()
+        await followStore.init()
     })
 
     async function respondWith(requester, isApproved) {

@@ -1,12 +1,12 @@
 <script setup>
     import { useJourneyStore } from '~~/stores/JourneyStore'
-    definePageMeta ({
-        middleware: 'authorise'
-    })
+    import { useUserStore } from '~~/stores/UserStore'
 
+    const userStore = useUserStore()
     const journeyStore = useJourneyStore()
     let journeys = computed(() => journeyStore.journeys)
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
+        await userStore.init()
         journeyStore.getJourneyRecommendations()
         // journeys.value = journeyStore.journeys
     })

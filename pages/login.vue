@@ -4,6 +4,14 @@
     import { decodeCredential } from "vue3-google-signin"
 
     let userStore = useUserStore()
+
+    onBeforeMount(async () => {
+        await userStore.init()
+        if (userStore.user !== null) {
+            navigateTo('/')
+        }
+    })
+
     let startAnimation = ref(false)
     let username = ref(null)
     let password = ref(null)

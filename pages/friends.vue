@@ -7,12 +7,9 @@
 
     const friends = computed(() => followStore.followers)
 
-    definePageMeta({
-        middleware: 'authorise'
-    })
-
     onBeforeMount(async () => {
-        followStore.getFriends()
+        await userStore.init()
+        await followStore.getFriends()
     })
 
     onMounted(() => {

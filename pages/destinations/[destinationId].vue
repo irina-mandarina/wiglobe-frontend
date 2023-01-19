@@ -1,13 +1,16 @@
 <script setup>
     import { useRoute } from 'vue-router'
+    import { useUserStore } from '~~/stores/UserStore'
     import { getDestination } from '~~/js/destinationRequests'
     import { getReviewsForDestination, reviewDestination } from '~~/js/reviewRequests'
 
+    const userStore = useUserStore()
     const route = useRoute()
     let destination = ref(null)
     let reviews = ref(null)
 
     onBeforeMount(async() => {
+        await userStore.init()
         try {
             const response = await getDestination(route.params.destinationId) 
             destination.value = response.data
