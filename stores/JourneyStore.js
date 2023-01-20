@@ -1,5 +1,5 @@
-import { useUserStore } from "~/stores/UserStore"
 import { defineStore } from "pinia"
+import { getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { getJourneyRecommendations, getJourneysByUser, createJourney } from "~~/js/journeyRequests"
 
 export const useJourneyStore = defineStore('journeyStore', {
@@ -12,9 +12,8 @@ export const useJourneyStore = defineStore('journeyStore', {
 
   actions: {
     async getJourneyRecommendations() {
-      const userStore = useUserStore()
       try {
-          const response = await getJourneyRecommendations(userStore.user.username)
+          const response = await getJourneyRecommendations(getLocalStorageUsername())
           this.journeyRecommendations = response.data
       }
       catch (error) {
@@ -22,10 +21,9 @@ export const useJourneyStore = defineStore('journeyStore', {
       }
     },
 
-    async getJourneysByLogged() {
-      const userStore = useUserStore()
+    async getLoggedUserJourneys() {
       try {
-          const response = await getJourneysByUser(userStore.user.username)
+          const response = await getJourneysByUser(getLocalStorageUsername())
           this.loggedUserJourneys = response.data
       }
       catch (error) {
@@ -37,7 +35,7 @@ export const useJourneyStore = defineStore('journeyStore', {
       try {
         const response = await createJourney(journeyRequest)
         console.log(response.data)
-        this.getJourneysByLogged() // update own profile page
+        this.getLoggedUserJourneys() // update own profile page
         return response.data
       }
       catch (error) {
@@ -47,7 +45,7 @@ export const useJourneyStore = defineStore('journeyStore', {
 
     // async init() {
     //   await getJourneyRecommendations()
-    //   await this.getJourneysByLogged() 
+    //   await this.getLoggedUserJourneys() 
     // }
   }
 })

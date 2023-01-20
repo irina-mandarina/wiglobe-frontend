@@ -1,4 +1,5 @@
 import { login, logout, signup, getUserDetails } from "~~/js/userRequests"
+import { getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
 
 export const useUserStore = defineStore('userStore', {
@@ -13,14 +14,6 @@ export const useUserStore = defineStore('userStore', {
   },
 
   actions: {
-    getLocalStorageUsername() {
-      if (this.loggedUsername === null || this.loggedUsername === undefined) {
-        if (typeof window !== 'undefined') {
-          this.loggedUsername = localStorage.getItem('username')
-        }
-      }
-      return this.loggedUsername
-    },
     async signUp(user) {
         try {
             const response = await signup(user)
@@ -59,13 +52,11 @@ export const useUserStore = defineStore('userStore', {
     },
     
     async getUserDetails(other) {
-      debugger
       if (other === null || other === undefined || other === '') {
         other = this.loggedUsername
       }
       try {
-        const response = await getUserDetails(other) 
-        console.log(response)
+        const response = await getUserDetails(other)
         this.user = response.data
       }
       catch (error) {
@@ -95,7 +86,7 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async init() {
-      this.getLocalStorageUsername()
+      this.loggedUsername = getLocalStorageUsername()
       await this.getUserDetails()
     }
     

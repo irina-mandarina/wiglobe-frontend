@@ -7,6 +7,18 @@
     const journeyStore = useJourneyStore()
     const followStore = useFollowStore()
 
+    onBeforeMount(async () => {
+        await userStore.init()
+        await followStore.init()
+        await journeyStore.getLoggedUserJourneys()
+    })
+
+    let startAnimation = ref(false)
+
+    onMounted(() => {
+        startAnimation.value = true
+    })
+
     const user = computed(() => userStore.user)
     let journeys = computed(() => journeyStore.loggedUserJourneys)
     const followers = computed(() => followStore.followers)
@@ -34,18 +46,7 @@
     })
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
-    let startAnimation = ref(false)
     let editMode = ref(false)
-
-    onBeforeMount(async () => {
-        await userStore.init()
-        await followStore.init()
-        journeyStore.getJourneysByLogged()
-    })
-
-    onMounted(() => {
-        startAnimation.value = true
-    })
 
     async function unfollow(username) {
         try {

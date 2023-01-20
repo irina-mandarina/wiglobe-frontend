@@ -6,7 +6,7 @@
     const journeyStore = useJourneyStore()
     let journeys = computed(() => journeyStore.journeys)
     onBeforeMount(async () => {
-        await userStore.init()
+        // await userStore.init()
         journeyStore.getJourneyRecommendations()
         // journeys.value = journeyStore.journeys
     })

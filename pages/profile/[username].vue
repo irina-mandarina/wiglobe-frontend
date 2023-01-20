@@ -3,6 +3,7 @@
     import { useUserStore } from '~~/stores/UserStore'
     import { useFollowStore } from '~~/stores/FollowStore'
     import { useRoute } from 'vue-router'
+    import { getLocalStorageUsername } from '~~/js/localStorageUtil'
     import { getJourneysByUser } from '~~/js/journeyRequests'
     import { deleteFollowRequest, sendFollowRequest, unfollow, getFollowers, getFollowing, getFriends, respondToFollowRequest } from '~~/js/followRequests'
 
@@ -57,7 +58,7 @@
 
     onBeforeMount(async () => {
         await userStore.init()
-        if (route.params.username === userStore.getLocalStorageUsername()) {
+        if (route.params.username === getLocalStorageUsername()) {
             navigateTo('/profile/me')
         }
         try {
@@ -67,7 +68,7 @@
         catch (error) {
             console.log(error)
         }
-        followStore.init()
+        await followStore.init()
         getFollows()
         getJourneys()
 

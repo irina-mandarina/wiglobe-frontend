@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useUserStore } from '~~/stores/UserStore'
+import { getLocalStorageUsername } from './localStorageUtil'
 
 export async function searchDestinations(search) {
     const response = await axios.get("http://localhost:8080/destinations",
@@ -16,12 +16,11 @@ export async function searchDestinations(search) {
 }
 
 export async function getDestination(id) {
-    const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/destinations/" + id,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )

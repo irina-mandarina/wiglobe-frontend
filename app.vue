@@ -1,3 +1,40 @@
+<script setup>
+  import { useUserStore } from '~~/stores/UserStore'
+  import { useFollowStore } from '~~/stores/FollowStore'
+  import { useJourneyStore } from '~~/stores/JourneyStore'
+
+  const userStore = useUserStore()
+  const followStore = useFollowStore()
+  const journeyStore = useJourneyStore()
+  const router = useRouter()
+  
+  router.beforeEach(async (to, from, next) => {
+    if (userStore.user === null) {
+      await userStore.init()
+      if (userStore.loggedUsername === undefined || userStore.loggedUsername === null || userStore.loggedUsername.length === 0) {
+        return { path: '/login'}
+      }
+      else {
+        return next()
+      }
+    }
+
+    if (to.path === '/login' && userStore.loggedUsername !== null) {
+      return { path: '/'}
+    }
+
+    else if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
+      await followStore.init() 
+      if (to.path.includes('profile')) {
+        await journeyStore.getLoggedUserJourneys()
+      }
+      return next()
+    }
+
+    return next()
+  })
+</script>
+
 <template>
   <Head>
     <Link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Heebo" />

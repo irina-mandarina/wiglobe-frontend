@@ -50,9 +50,6 @@
             await postToDrafts()
     })
 
-    onBeforeMount(async () => {
-    })
-
     async function findDestinations() {
         try {
             const response = await searchDestinations(destinationKeyword.value)

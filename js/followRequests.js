@@ -1,14 +1,13 @@
 import axios from 'axios'
-import { useUserStore } from '~~/stores/UserStore'
+import { getLocalStorageUsername } from './localStorageUtil'
 
 export async function sendFollowRequest(recieverUsername) {
-    const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/users/" + recieverUsername + "/follow-requests",
         null,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -16,12 +15,11 @@ export async function sendFollowRequest(recieverUsername) {
 }
 
 export async function deleteFollowRequest(recieverUsername) {
-    const userStore = useUserStore()
     const response = await axios.delete("http://localhost:8080/users/" + recieverUsername + "/follow-requests",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -29,12 +27,11 @@ export async function deleteFollowRequest(recieverUsername) {
 }
 
 export async function respondToFollowRequest(requesterUsername, approve) {
-    const userStore = useUserStore()
-    const response = await axios.delete("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/" + requesterUsername,
+    const response = await axios.delete("http://localhost:8080/users/" + getLocalStorageUsername() + "/follow-requests/" + requesterUsername,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             },
             params: {
                 response: approve
@@ -45,12 +42,11 @@ export async function respondToFollowRequest(requesterUsername, approve) {
 }
 
 export async function unfollow(recieverUsername) {
-    const userStore = useUserStore()
-    const response = await axios.delete("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/followers/" + recieverUsername,
+    const response = await axios.delete("http://localhost:8080/users/" + getLocalStorageUsername() + "/followers/" + recieverUsername,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -58,12 +54,11 @@ export async function unfollow(recieverUsername) {
 }
 
 export async function getReceivedFollowRequests() {
-    const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/received",
+    const response = await axios.get("http://localhost:8080/users/" + getLocalStorageUsername() + "/follow-requests/received",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -71,12 +66,11 @@ export async function getReceivedFollowRequests() {
 }
 
 export async function getSentFollowRequests() {
-    const userStore = useUserStore()
-    const response = await axios.get("http://localhost:8080/users/" + userStore.getLocalStorageUsername() + "/follow-requests/sent",
+    const response = await axios.get("http://localhost:8080/users/" + getLocalStorageUsername() + "/follow-requests/sent",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -84,12 +78,11 @@ export async function getSentFollowRequests() {
 }
 
 export async function getFollowers(username) {
-    const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/users/" + username + "/followers",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -97,12 +90,11 @@ export async function getFollowers(username) {
 }
 
 export async function getFollowing(username) {
-    const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/users/" + username + "/following",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -110,12 +102,11 @@ export async function getFollowing(username) {
 }
 
 export async function getFriends(username) {
-    const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/users/" + username + "/friends",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )

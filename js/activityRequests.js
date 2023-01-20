@@ -1,14 +1,13 @@
 import axios from 'axios'
-import { useUserStore } from '~~/stores/UserStore'
+import { getLocalStorageUsername } from './localStorageUtil'
 
 export async function addActivityToJourney(journeyId, activityReruest) {
-    const userStore = useUserStore()
     const response = await axios.post("http://localhost:8080/journeys/" + journeyId + "/activities",
         activityReruest,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -16,12 +15,11 @@ export async function addActivityToJourney(journeyId, activityReruest) {
 }
 
 export async function getActivitiesForJourney(journeyId) {
-    const userStore = useUserStore()
     const response = await axios.get("http://localhost:8080/journeys/" + journeyId + "/activities",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -29,13 +27,12 @@ export async function getActivitiesForJourney(journeyId) {
 }
 
 export async function editActivityForJourney(journeyId, activity) {
-    const userStore = useUserStore()
     const response = await axios.put("http://localhost:8080/journeys/" + journeyId + "/activities/" + activity.id,
         activity,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )
@@ -43,12 +40,11 @@ export async function editActivityForJourney(journeyId, activity) {
 }
 
 export async function deleteActivityFromJourney(journeyId, activityId) {
-    const userStore = useUserStore()
     const response = await axios.delete("http://localhost:8080/journeys/" + journeyId + "/activities/" + activityId,
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: userStore.getLocalStorageUsername()
+                username: getLocalStorageUsername()
             }
         }
     )

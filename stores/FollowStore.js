@@ -1,7 +1,6 @@
 import { getReceivedFollowRequests, getSentFollowRequests, getFriends, getFollowers, getFollowing } from "~~/js/followRequests"
-import { useUserStore } from "./UserStore"
+import { getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
-const userStore = useUserStore()
 
 export const useFollowStore = defineStore('followStore', {
     state: () => {
@@ -17,7 +16,7 @@ export const useFollowStore = defineStore('followStore', {
     actions: {
         async getFriends() {
             try {
-                const response = await getFriends(userStore.getLocalStorageUsername())
+                const response = await getFriends(getLocalStorageUsername())
                 this.friends = response.data
             }
             catch (error) {
@@ -27,7 +26,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getReceivedFollowRequests() {
             try {
-                const response = await getReceivedFollowRequests(userStore.getLocalStorageUsername())
+                const response = await getReceivedFollowRequests(getLocalStorageUsername())
                 this.receivedFollowRequests = response.data
             }
             catch (error) {
@@ -37,7 +36,7 @@ export const useFollowStore = defineStore('followStore', {
         
         async getSentFollowRequests() {
             try {
-                const response = await getSentFollowRequests(userStore.getLocalStorageUsername())
+                const response = await getSentFollowRequests(getLocalStorageUsername())
                 this.sentFollowRequests = response.data
             }
             catch (error) {
@@ -47,7 +46,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowing() {
             try {
-                const response = await getFollowing(userStore.getLocalStorageUsername())
+                const response = await getFollowing(getLocalStorageUsername())
                 this.following = response.data
             }
             catch (error) {
@@ -57,7 +56,7 @@ export const useFollowStore = defineStore('followStore', {
 
         async getFollowers() {
             try {
-                const response = await getFollowers(userStore.getLocalStorageUsername())
+                const response = await getFollowers(getLocalStorageUsername())
                 this.followers = response.data
             }
             catch (error) {
