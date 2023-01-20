@@ -5,13 +5,14 @@
     import { commentJourney, getCommentsForJourney } from '~~/js/commentRequests'
 
     const userStore = useUserStore()
+    const route = useRoute()
     let journey = ref(null)
     let comments = ref(null)
     
     onBeforeMount(async () => {
         await userStore.init()
         try {
-            const response = await getJourney(useRoute().params.journeyId)
+            const response = await getJourney(route.params.journeyId)
             journey.value = response.data
         }
         catch (error) {
@@ -42,9 +43,9 @@
 </script>
 
 <template>
-    <NuxtLayout name="default">
-        <Journey v-if="journey !== null" :journey="journey" />
-        <CommentAdder  class="mx-auto my-6" @post-comment="postComment"/>
+    <NuxtLayout name="default" v-if="journey !== null && userStore.user !== null">
+        <Journey :journey="journey" />
+        <CommentAdder class="mx-auto my-6" @post-comment="postComment"/>
         <Comment v-if="comments !== null" v-for="comment in comments" :comment="comment" class="mx-40 my-6" />   
     </NuxtLayout>
 </template>

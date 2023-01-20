@@ -12,6 +12,7 @@
 
   onBeforeMount(async () => {
     await userStore.init()
+    await followStore.init()
   })
   
   router.beforeEach(async (to, from, next) => {

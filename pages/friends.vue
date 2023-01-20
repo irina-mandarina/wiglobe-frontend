@@ -5,19 +5,19 @@
     const userStore = useUserStore()
     const followStore = useFollowStore()
 
-    const friends = computed(() => followStore.followers)
 
     onBeforeMount(async () => {
         await userStore.init()
         await followStore.getFriends()
     })
 
+    const friends = computed(() => followStore.followers)
     onMounted(() => {
     })
 </script>
 
 <template>
     <NuxtLayout name="default">
-        <UserDetails v-if="friends !== null" v-for="friend in friends" />
+        <UserDetails v-if="friends !== null" v-for="friend in friends" :user="friend"/>
     </NuxtLayout>
 </template>

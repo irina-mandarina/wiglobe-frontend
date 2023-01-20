@@ -1,17 +1,29 @@
 <script setup>
+    import { deleteJourney } from '~~/js/journeyRequests'
     import { useUserStore } from '~~/stores/UserStore'
 
     const userStore = useUserStore()
+    const router = useRouter()
 
     const props = defineProps({
         journey: Object
     })
 
     let manageJourney = ref(false)
+
+    async function deleteJ() {
+        try {
+            const response = await deleteJourney(props.journey.id)
+            navigateTo(router.go(-1))
+        }
+        catch (error) {
+            console.log(error)
+        }
+    } 
 </script>
 <template>
     <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t relative overflow-hidden text-md">
-        <JourneyManager v-if="manageJourney" />
+        <JourneyManager v-if="manageJourney" :visibility="journey.visibility" @delete-journey="deleteJ" />
         <div class="flex">
 
             <!-- Journey info (left) -->
