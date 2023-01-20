@@ -7,6 +7,7 @@
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
     
+    userStore.init()
     const firstName = computed(() => userStore.user.firstName)
     const lastName = computed(() => userStore.user.lastName)
     const username = computed(() => userStore.user.username)

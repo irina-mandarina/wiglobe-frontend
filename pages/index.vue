@@ -1,14 +1,11 @@
 <script setup>
     import { useJourneyStore } from '~~/stores/JourneyStore'
-    import { useUserStore } from '~~/stores/UserStore'
-
-    const userStore = useUserStore()
+    
     const journeyStore = useJourneyStore()
-    let journeys = computed(() => journeyStore.journeys)
+    let journeys = computed(() => journeyStore.journeyRecommendations)
+
     onBeforeMount(async () => {
-        // await userStore.init()
         journeyStore.getJourneyRecommendations()
-        // journeys.value = journeyStore.journeys
     })
 </script>
 

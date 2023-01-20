@@ -9,24 +9,14 @@
   const followStore = useFollowStore()
   const journeyStore = useJourneyStore()
   const router = useRouter()
+
+  onBeforeMount(async () => {
+    await userStore.init()
+  })
   
   router.beforeEach(async (to, from, next) => {
-    console.log(userStore.user)
-    // if (userStore.user === null) {
-    //   console.log(getLocalStorageUsername())
-    //   if (getLocalStorageUsername() === null) {
-    //     console.log('red to login')
-    //     next( '/login' )
-    //   }
-    //   else {
-    //     await userStore.init()
-    //     next()
-    //   }
-    // }
-
     if (to.path === '/login' && userStore.user !== null) {
       next ( '/' )
-      return
     }
 
     else if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
@@ -43,7 +33,7 @@
 
   axios.interceptors.request.use(function (config) {
     if (config.headers.username === null) {
-      return navigateTo('/')
+      return navigateTo('/login')
     }
     return config;
   }, function (error) {
