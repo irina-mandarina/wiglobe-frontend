@@ -86,8 +86,10 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async init() {
-      this.loggedUsername = getLocalStorageUsername()
-      await this.getUserDetails()
+      if (getLocalStorageUsername() !== null) {
+        this.loggedUsername = getLocalStorageUsername()
+        await this.getUserDetails()
+      }
     }
     
   }

@@ -1,7 +1,9 @@
 <script setup>
+  import axios from 'axios'
   import { useUserStore } from '~~/stores/UserStore'
   import { useFollowStore } from '~~/stores/FollowStore'
   import { useJourneyStore } from '~~/stores/JourneyStore'
+  import { getLocalStorageUsername } from './js/localStorageUtil'
 
   const userStore = useUserStore()
   const followStore = useFollowStore()
@@ -9,18 +11,22 @@
   const router = useRouter()
   
   router.beforeEach(async (to, from, next) => {
-    if (userStore.user === null) {
-      await userStore.init()
-      if (userStore.loggedUsername === undefined || userStore.loggedUsername === null || userStore.loggedUsername.length === 0) {
-        return { path: '/login'}
-      }
-      else {
-        return next()
-      }
-    }
+    console.log(userStore.user)
+    // if (userStore.user === null) {
+    //   console.log(getLocalStorageUsername())
+    //   if (getLocalStorageUsername() === null) {
+    //     console.log('red to login')
+    //     next( '/login' )
+    //   }
+    //   else {
+    //     await userStore.init()
+    //     next()
+    //   }
+    // }
 
-    if (to.path === '/login' && userStore.loggedUsername !== null) {
-      return { path: '/'}
+    if (to.path === '/login' && userStore.user !== null) {
+      next ( '/' )
+      return
     }
 
     else if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
@@ -28,11 +34,32 @@
       if (to.path.includes('profile')) {
         await journeyStore.getLoggedUserJourneys()
       }
-      return next()
+      next()
     }
 
-    return next()
+    else next()
+
   })
+
+  axios.interceptors.request.use(function (config) {
+    if (config.headers.username === null) {
+      return navigateTo('/')
+    }
+    return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  })
+
+  axios.interceptors.response.use(function (response) {
+    return response;
+  }, function (error) {
+    // if (error.response.status === 401) {
+      navigateTo('/login')
+    // }
+    console.log(error)
+    return Promise.reject(error);
+  });
 </script>
 
 <template>

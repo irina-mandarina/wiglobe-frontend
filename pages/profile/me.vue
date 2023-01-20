@@ -23,7 +23,7 @@
     let journeys = computed(() => journeyStore.loggedUserJourneys)
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
-    const friends = computed(() => followStore.followers)
+    const friends = computed(() => followStore.friends)
 
     let followerCount = computed(() => {
         if (followStore.followers === null)
