@@ -29,7 +29,7 @@
             <!-- Journey info (left) -->
             <div class="w-1/2 relative h-full overflow-hidden float-left" @click="navigateTo('/journeys/' + journey.id)">
                 <div class="absolute top-4 left-4">
-                    <JourneyMenu @manage-journey="manageJourney = !manageJourney" :visibility="journey.visibility" :edit-permission="journey.usernames.username === userStore.user.username" />
+                    <JourneyMenu @manage-journey="manageJourney = !manageJourney" :visibility="journey.visibility" :edit-permission="journey.usernames.username === userStore.username" />
                 </div>
                 <div class="">
                     <!-- User info -->

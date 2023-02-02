@@ -114,26 +114,6 @@
         }
     }
 </script>
-<!-- <script setup lang="ts">
-    import {
-    GoogleSignInButton,
-    type CredentialResponse,
-    } from "vue3-google-signin";
-    import { decodeCredential } from "vue3-google-signin"; 
-
-    // handle success event
-    const handleLoginSuccess = (response: CredentialResponse) => {
-        const { credential } = response;
-        let userData = decodeCredential(response.credential!);
-        console.log("Access Token", credential);
-        console.log(userData)
-    };
-
-    // handle an error event
-    const handleLoginError = () => {
-    console.error("Login failed");
-    };
-</script> -->
 
 <template>
     <div class="flex w-2/3 h-fit mt-20 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown">
@@ -149,7 +129,7 @@
             }" class="text-center font-sans font-black text-2xl py-6 w-full header">
                 Log into your 
                 <!-- worldly maybe? -->
-                <span class="font-khaki">NAME</span> 
+                <span class="font-khaki">WiGlobe</span> 
                  account
             </h1>
             <!-- form -->

@@ -7,7 +7,9 @@
 
     const userStore = useUserStore()
 
-    let user = computed(() => userStore.user)
+    let username = computed(() => userStore.username)
+    let firstName = computed(() => userStore.firstName)
+    let lastName = computed(() => userStore.lastName)
     let content = ref(null)
 
     function emitPost() {
@@ -29,9 +31,9 @@
             <div>
                 <img class="p-2 ml-2 float-left" src="https://picsum.photos/50"/>
                 <span class="flex mb-0">  
-                    <p class="p-1 font-droid"> {{ user.firstName }} {{ user.lastName }}</p>
+                    <p class="p-1 font-droid"> {{ firstName }} {{ lastName }}</p>
                 </span>
-                <p class="flex p-2 pt-0 mt-0">@{{ user.username }}</p>  
+                <p class="flex p-2 pt-0 mt-0">@{{ username }}</p>  
             </div>
         </div>
         <!-- Comment body -->

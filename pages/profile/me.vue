@@ -19,7 +19,15 @@
         startAnimation.value = true
     })
 
-    const user = computed(() => userStore.user)
+    const username = computed(() => userStore.username)
+    const firstName = computed(() => userStore.firstName)
+    const lastName = computed(() => userStore.lastName)
+    const gender = computed(() => userStore.gender)
+    const registrationTimestamp = computed(() => userStore.registrationTimestamp)
+    const birthdate = computed(() => userStore.birthdate)
+    const biography = computed(() => userStore.biography)
+    const residence = computed(() => userStore.residence)
+    const profilePrivacy = computed(() => userStore.profilePrivacy)
     let journeys = computed(() => journeyStore.loggedUserJourneys)
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
@@ -59,7 +67,7 @@
 </script>
 
 <template>
-    <NuxtLayout name="default" v-if="user !== null">
+    <NuxtLayout name="default">
 
         <!-- edit profile button -->
         <button @click="editMode = !editMode" class="absolute m-6 bg-asparagus rounded-full shadow-inner">
@@ -82,13 +90,13 @@
 
         <!-- names -->
         <div class="z-100 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">
-            <p>{{ user.firstName }} {{ user.lastName }}</p>
-            <p class="text-2xl p-4 font-metrophobic">@{{ user.username }}</p>
+            <p>{{ firstName }} {{ lastName }}</p>
+            <p class="text-2xl p-4 font-metrophobic">@{{ username }}</p>
         </div> 
 
         <!-- bio -->
         <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
-            {{ user.biography }}
+            {{ biography }}
         </p>
 
         <div class="w-full flex h-max relative">
@@ -100,17 +108,17 @@
                     :class="{
                         'slide-up': startAnimation
                     }">
-                    <p v-if="user.gender === 'FEMALE'" class="text-center p-6">
+                    <p v-if="gender === 'FEMALE'" class="text-center p-6">
                         She / Her
                         <i class="fa fa-female" />
                     </p>
                     
-                    <p v-if="user.gender === 'MALE'" class="text-center p-6">
+                    <p v-if="gender === 'MALE'" class="text-center p-6">
                         He / Him
                         <i class="fa fa-male" />
                     </p>
 
-                    <p v-if="user.gender === 'OTHER'" class="text-center p-6">
+                    <p v-if="gender === 'OTHER'" class="text-center p-6">
                         They / Them
                         <i class="fa fa-user" />
                     </p>
@@ -122,9 +130,9 @@
                         'slide-up': startAnimation
                     }">
                     <p class="text-center p-6">
-                        Born on {{ new Date(user.birthdate).toDateString() }}
+                        Born on {{ new Date(birthdate).toDateString() }}
                         <br />
-                        {{ parseInt(( new Date().getTime() - new Date(user.birthdate).getTime()) / (1000*60*60*24*365)) }} years old
+                        {{ parseInt(( new Date().getTime() - new Date(birthdate).getTime()) / (1000*60*60*24*365)) }} years old
                     </p>
                 </div>
 
@@ -134,7 +142,7 @@
                         'slide-up': startAnimation
                     }">
                     <p class="text-center p-6">
-                        City, Country
+                        From {{ residence }}
                     </p>
                 </div>
 
@@ -146,7 +154,7 @@
                     <p class="text-center p-6">
                         Joined NAME on
                         <br />
-                        {{ new Date(user.registrationDate).toDateString() }}
+                        {{ new Date(registrationTimestamp).toDateString() }}
                     </p>
                 </div>
 
@@ -244,13 +252,6 @@
         transform: translateY(0%);
         transition: all 1s ease-in-out;
     }
-/* 
-    .edit-button:hover:after {
-        content: "edit profile";
-        border-radius: 100%;
-        padding: 2rem;
-        background-color: var(--fawn);
-    } */
 
     .hover-border-asparagus:hover {
         border-bottom: 4px solid var(--khaki);

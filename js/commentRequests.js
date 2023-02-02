@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function getCommentsForJourney(journeyId) {
     const response = await axios.get("http://localhost:8080/journeys/" + journeyId + "/comments",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -19,7 +19,7 @@ export async function commentJourney(journeyId, comment) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -32,7 +32,7 @@ export async function editComment(journeyId, comment) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -44,7 +44,7 @@ export async function deleteComment(journeyId, commentId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -56,7 +56,7 @@ export async function getComments(journeyId, commentId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

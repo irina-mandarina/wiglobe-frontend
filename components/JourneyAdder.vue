@@ -8,9 +8,9 @@
     const userStore = useUserStore()
     
     userStore.init()
-    const firstName = computed(() => userStore.user.firstName)
-    const lastName = computed(() => userStore.user.lastName)
-    const username = computed(() => userStore.user.username)
+    const firstName = computed(() => userStore.firstName)
+    const lastName = computed(() => userStore.lastName)
+    const username = computed(() => userStore.username)
 
     let destinationKeyword = ref(null)
     let chosenDestination = ref(null)
@@ -224,7 +224,7 @@
                 'visible': creatorOpen
             }">
                 <!-- Journey picture  -->
-                <div class="w-1/2 h-fit p-2 relative">
+                <div class="w-1/3 h-fit p-2 relative">
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
@@ -232,7 +232,7 @@
                 </div>
 
                 <!-- Activity adder -->
-                <div class="w-1/2 h-fit p-2 relative">
+                <div class="w-2/3 h-fit p-2 relative">
                     <div class="">
                         <ActivityAdder @add-activity="addActivity" :activities="activities" />
                     </div>

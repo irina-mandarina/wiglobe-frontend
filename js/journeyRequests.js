@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function createJourney(journeyRequest) {
     const response = await axios.post("http://localhost:8080/journeys",
@@ -7,7 +7,7 @@ export async function createJourney(journeyRequest) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -19,7 +19,7 @@ export async function deleteJourney(journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -33,7 +33,7 @@ export async function editJourney(journey) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -45,7 +45,7 @@ export async function getJourney(journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -57,7 +57,7 @@ export async function getJourneyRecommendations() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -69,7 +69,7 @@ export async function getJourneysByUser(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -81,7 +81,7 @@ export async function getJourneyDrafts(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

@@ -9,7 +9,16 @@ export const useUserStore = defineStore('userStore', {
       logInResponseCode: null,
       signUpResponse: null,
       user: null,
-      password: null
+      username: null,
+      firstName: null,
+      lastName: null,
+      birthdate: null,
+      biography: null,
+      email: null,
+      gender: null,
+      profilePrivacy: null,
+      registrationTimestamp: null,
+      residence: null
     }
   },
 
@@ -17,7 +26,7 @@ export const useUserStore = defineStore('userStore', {
     async signUp(user) {
         try {
             const response = await signup(user)
-            this.user = response.data.userDetails
+            this.setUserDetails(response.data.userDetails)
             localStorage.setItem('username', this.user.username)
             this.signUpResponse = 201
         }
@@ -30,8 +39,9 @@ export const useUserStore = defineStore('userStore', {
       try {
         const response = await login(user)
         if (response.status === 200) {
-          this.user = response.data
-          localStorage.setItem('username', this.user.username)
+          this.setUserDetails(response.data.userDetails)
+          localStorage.setItem('username', this.username)
+          localStorage.setItem('jwt', response.data.token)
           this.logInResponseCode = 200
         }
       }
@@ -44,7 +54,6 @@ export const useUserStore = defineStore('userStore', {
       try {
         const response = await logout(this.user.username) 
         console.log(response)
-        this.user = null
       }
       catch (error) {
         console.log(error)
@@ -57,7 +66,7 @@ export const useUserStore = defineStore('userStore', {
       }
       try {
         const response = await getUserDetails(other)
-        this.user = response.data
+        this.setUserDetails(response.data)
       }
       catch (error) {
         console.log(error)
@@ -85,10 +94,26 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    setUserDetails(data) {
+      this.username = data.username
+      this.firstName = data.firstName
+      this.lastName = data.lastName
+      this.birthdate = data.birthdate
+      this.biography = data.biography
+      this.email = data.email
+      this.gender = data.gender
+      this.profilePrivacy = data.profilePrivacy
+      this.registrationTimestamp = data.registrationTimestamp
+      this.residence = data.residence
+    },
+
     async init() {
       if (getLocalStorageUsername() !== null && this.user === null) {
         this.loggedUsername = getLocalStorageUsername()
         await this.getUserDetails()
+        if (this.username === null) {
+          navigateTo('/login')
+        }
       }
       else if (getLocalStorageUsername() === null) (
         navigateTo('/login')

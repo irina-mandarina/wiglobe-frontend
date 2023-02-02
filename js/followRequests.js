@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage, getLocalStorageUsername } from '~~/js/localStorageUtil'
 
 export async function sendFollowRequest(recieverUsername) {
     const response = await axios.post("http://localhost:8080/users/" + recieverUsername + "/follow-requests",
@@ -7,7 +7,7 @@ export async function sendFollowRequest(recieverUsername) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -19,7 +19,7 @@ export async function deleteFollowRequest(recieverUsername) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -31,7 +31,7 @@ export async function respondToFollowRequest(requesterUsername, approve) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             },
             params: {
                 response: approve
@@ -46,7 +46,7 @@ export async function unfollow(recieverUsername) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -58,7 +58,7 @@ export async function getReceivedFollowRequests() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -70,7 +70,7 @@ export async function getSentFollowRequests() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -82,7 +82,7 @@ export async function getFollowers(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -94,7 +94,7 @@ export async function getFollowing(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -106,7 +106,7 @@ export async function getFriends(username) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

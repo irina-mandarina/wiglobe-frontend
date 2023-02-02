@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function signup(user) {
     const response = await axios.post("http://localhost:8080/users/signup",
@@ -30,7 +30,7 @@ export async function logout() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -42,7 +42,7 @@ export async function getUserDetails(other) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -54,7 +54,7 @@ export async function deleteAccount() {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -67,7 +67,7 @@ export async function editBio(bio) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

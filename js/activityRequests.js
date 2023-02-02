@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function addActivityToJourney(journeyId, activityReruest) {
     const response = await axios.post("http://localhost:8080/journeys/" + journeyId + "/activities",
@@ -7,7 +7,7 @@ export async function addActivityToJourney(journeyId, activityReruest) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -19,7 +19,7 @@ export async function getActivitiesForJourney(journeyId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -32,7 +32,7 @@ export async function editActivityForJourney(journeyId, activity) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -44,7 +44,7 @@ export async function deleteActivityFromJourney(journeyId, activityId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -56,6 +56,7 @@ export async function getAllActivityTypes() {
         {
             headers: {
                 'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

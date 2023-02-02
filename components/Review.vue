@@ -24,7 +24,7 @@
         </div>
         <!-- date -->
         <div>
-            <p class="italic font-droid text-sm text-center text-khaki p-4">{{ new Date(review.reviewedDate).toDateString() }}</p>
+            <p class="italic font-droid text-sm text-center text-khaki p-4">{{ new Date(review.postedOn).toDateString() }}</p>
         </div>
 
         <!-- Review star rating -->

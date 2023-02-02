@@ -24,13 +24,13 @@
 <template>
     <div class="shadow-md rounded-lg w-1/3 bg-white p-6 ">
         <!-- Review user -->
-        <div class="w-full text-center">
-            <NuxtLink :to="'/profile/' + user.username">
+        <div v-if="user !== null" class="w-full text-center">
+            <NuxtLink :to="'/profile/' + username">
                 <img class="mx-auto" src="https://picsum.photos/50"/>
                 <span class="mx-auto"> 
-                    <p class="p-1 font-heebo">{{ user.firstName }} {{ user.lastName }}</p>
+                    <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
                 </span>
-                <p class="mx-auto mb-2 font-metrophobic text-gray-900">@{{ user.username }}</p>  
+                <p class="mx-auto mb-2 font-metrophobic text-gray-900">@{{ username }}</p>  
             </NuxtLink>
         </div>
 

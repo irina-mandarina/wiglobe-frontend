@@ -3,7 +3,7 @@
   import { useUserStore } from '~~/stores/UserStore'
   import { useFollowStore } from '~~/stores/FollowStore'
   import { useJourneyStore } from '~~/stores/JourneyStore'
-  import { getLocalStorageUsername } from './js/localStorageUtil'
+  import { cleanLocalStorage, getLocalStorageUsername } from './js/localStorageUtil'
 
   const userStore = useUserStore()
   const followStore = useFollowStore()
@@ -33,11 +33,13 @@
   })
 
   axios.interceptors.request.use(function (config) {
-    if (config.headers.username === null) {
-      return navigateTo('/login')
-    }
+    // if (getLocalStorageUsername() === undefined || getLocalStorageUsername() === null) {
+    //   return navigateTo('/login')
     return config;
+    
   }, function (error) {
+      // cleanLocalStorage()
+      navigateTo('/login')
     // Do something with request error
     return Promise.reject(error);
   })
@@ -46,6 +48,7 @@
     return response;
   }, function (error) {
     // if (error.response.status === 401) {
+      // cleanLocalStorage()
       navigateTo('/login')
     // }
     console.log(error)

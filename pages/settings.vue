@@ -8,7 +8,7 @@
             'subcategories': [
                 {
                     'subcategory': 'Names',
-                    'value': userStore.user.firstName + " " + userStore.user.lastName
+                    'value': userStore.firstName + " " + userStore.lastName
                 },
                 {
                     'subcategory': 'Birthdate',

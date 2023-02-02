@@ -25,7 +25,7 @@
         <!-- Comment body -->
         <div class="w-full">
             <p class="py-2 px-6 text-sm italic">
-                {{ new Date(comment.datePosted).toDateString() }}
+                {{ new Date(comment.postedOn).toDateString() }}
             </p>
             <p class="p-2 pb-8 m-4">
                 {{ comment.content }}

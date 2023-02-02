@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function searchDestinations(search) {
     const response = await axios.get("http://localhost:8080/destinations",
@@ -8,7 +8,8 @@ export async function searchDestinations(search) {
                 search
             },
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -20,7 +21,7 @@ export async function getDestination(id) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: getLocalStorageUsername()
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { getLocalStorageUsername } from './localStorageUtil'
+import { getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function getReviewsForDestination(destinationId) {
     const response = await axios.get("http://localhost:8080/destinations/" + destinationId + "/reviews",
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: loggedUsername
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -19,7 +19,7 @@ export async function reviewDestination(destinationId, review) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: loggedUsername
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -32,7 +32,7 @@ export async function editReview(destinationId, review) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: loggedUsername
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )
@@ -44,7 +44,7 @@ export async function deleteReview(destinationId, reviewId) {
         {
             headers: {
                 'Content-Type': 'application/json',
-                username: loggedUsername
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

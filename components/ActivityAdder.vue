@@ -94,7 +94,7 @@
 
                 <!-- activity adder -->
 
-                <div class="px-20" v-if="activityOnDisplayId === null">
+                <div class="px-12" v-if="activityOnDisplayId === null">
                     <div class="text-center w-full mx-auto p-2 font-heebo font-bold text-lg">
                         Add activities you engaged in on your journey
                     </div>
