@@ -22,7 +22,7 @@
     } 
 </script>
 <template>
-    <div class="shadow-xl rounded-lg w-4/5 mx-auto border-t relative overflow-hidden text-md">
+    <div class="shadow-xl rounded-lg w-4/5 mx-auto relative overflow-hidden text-md">
         <JourneyManager v-if="manageJourney" :visibility="journey.visibility" @delete-journey="deleteJ" />
         <div class="flex">
 

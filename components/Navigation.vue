@@ -32,7 +32,7 @@
             '-translate-y-full': !showNav
         }">
             <!-- nav items -->
-            <div class="flex bg-white bg-gray-50">
+            <div class="flex bg-white bg-gray-50 bg-slate-50 shadow-sm">
                 <!-- center: feeds -->
                 <div class="w-fit flex mx-auto font-heebo py-2 overflow-hidden h-20">
                     <NuxtLink to="/" :class="{
@@ -69,53 +69,53 @@
                     </NuxtLink>
                 </div>
                 <!-- menu button -->
-                <div class="float-right bg-gray-50" @click="hide = !hide">
+                <div class="float-right bg-slate-100" @click="hide = !hide">
                     <i class="fa fa-bars py-6 px-8 text-2xl" />
                 </div>
             </div>
             <!-- menu -->
             <Transition>
-                <ul v-if="!hide" class="overflow-hidden float-right bg-gray-50 bg-white rounded-lg shadow-lg m-1">
-                    <li class="w-full border-b px-6 py-4" :class="{
-                        'bg-gray-100': route && route.path === '/profile/me'
+                <ul v-if="!hide" class="overflow-hidden float-right bg-slate-50 bg-white rounded-lg shadow-lg m-1">
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/profile/me'
                     }">
-                        <NuxtLink to="/profile/me" class="text-lg hover:text-gray-600 duration-300">
+                        <NuxtLink to="/profile/me" class="text-lg">
                             <i class="fa fa-user"/>
                             <span class="px-2"> Profile </span>
                         </NuxtLink>
                     </li>
                     
-                    <li class="w-full border-b px-6 py-4" :class="{
-                        'bg-gray-100': route && route.path === '/drafts'
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/drafts'
                     }">
-                        <NuxtLink to="/drafts" class="text-lg hover:text-gray-600 duration-300">
+                        <NuxtLink to="/drafts" class="text-lg">
                             <i class="fa fa-file"/>
                             <span class="px-2"> Drafts </span>
                         </NuxtLink>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4" :class="{
-                        'bg-gray-100': route && route.path === '/friends'
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/friends'
                     }">
-                        <NuxtLink to="/friends" class="text-lg hover:text-gray-600 duration-300">
+                        <NuxtLink to="/friends" class="text-lg">
                             <i class="fa fa-address-book"/>
                             <span class="px-2"> Friends </span>
                         </NuxtLink>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4" :class="{
-                        'bg-gray-100': route && route.path === '/follow-requests'
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/follow-requests'
                     }">
-                        <NuxtLink to="/follow-requests" class="text-lg hover:text-gray-600 duration-300">
+                        <NuxtLink to="/follow-requests" class="text-lg">
                             <i class="fa fa-users"/>
                             <span class="px-2"> Follow requests </span>
                         </NuxtLink>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4 block" :class="{
-                        'bg-gray-100': route && route.path === '/settings'
+                    <li class="w-full border-b px-6 py-4 block hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/settings'
                     }">
-                        <NuxtLink to="/settings" class="text-lg hover:text-gray-600 duration-300">
+                        <NuxtLink to="/settings" class="text-lg">
                             <i class="fa fa-gears"/>
                             <span class="px-2"> Settings </span>
                         </NuxtLink>

@@ -43,8 +43,8 @@
 </script>
 
 <template>
-    <NuxtLayout name="default" v-if="journey !== null && userStore.user !== null">
-        <Journey :journey="journey" />
+    <NuxtLayout name="default" v-if="journey !== null && userStore.username !== null">
+        <Journey :journey="journey" class="mt-6" />
         <CommentAdder class="mx-auto my-6" @post-comment="postComment"/>
         <Comment v-if="comments !== null" v-for="comment in comments" :comment="comment" class="mx-40 my-6" />   
     </NuxtLayout>

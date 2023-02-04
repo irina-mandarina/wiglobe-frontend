@@ -172,10 +172,12 @@
         </div>
         <h1 :class="{
             'visible': startAnimation
-        }" class="text-center font-sans text-2xl py-6 w-full font-black tracking-wide text-white header absolute mt-16">
+        }" class="text-center font-sans text-2xl py-6 w-full font-black tracking-wide text-brown header overflow-y-visible absolute mt-16">
             Create an account for
-            <span class="font-khaki">NAME</span>
+            <img src="../assets/logo.svg" class="w-1/4 inline"/>
         </h1>
+
+
         <div class="bg-white h-1/2 w-full mt-60 relative input-container"
             :class="{
                 'in-view': startAnimation

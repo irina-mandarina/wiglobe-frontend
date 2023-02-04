@@ -128,8 +128,7 @@
                 'visible': startAnimation
             }" class="text-center font-sans font-black text-2xl py-6 w-full header">
                 Log into your 
-                <!-- worldly maybe? -->
-                <span class="font-khaki">WiGlobe</span> 
+                <img src="../assets/logo.svg" class="w-1/3 inline"/>
                  account
             </h1>
             <!-- form -->
