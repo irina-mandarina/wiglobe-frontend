@@ -33,6 +33,10 @@
         }">
             <!-- nav items -->
             <div class="flex bg-white bg-gray-50 bg-slate-50 shadow-sm">
+                
+                <!-- logo -->
+                <img src="../assets/logo.svg" class="w-1/12 absolute left-4 top-4" @click="navigateTo('/')" />
+
                 <!-- center: feeds -->
                 <div class="w-fit flex mx-auto font-heebo py-2 overflow-hidden h-20">
                     <NuxtLink to="/" :class="{
