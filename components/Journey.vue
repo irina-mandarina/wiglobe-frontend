@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- destination -->
-                <MiniDestination v-if="journey.destination !== undefined && journey.destination !== null" class="z-100 my-4" :destination="journey.destination" />
+                <DestinationMini v-if="journey.destination !== undefined && journey.destination !== null" class="z-100 my-4" :destination="journey.destination" />
                 
                 <!-- Journey description -->
                 <p class="my-6 p-10 first-letter:font-bold first-letter:text-3xl first-letter-font-droid">

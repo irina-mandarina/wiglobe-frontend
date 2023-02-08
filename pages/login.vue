@@ -51,7 +51,7 @@
         else if (!username.value) {
             return "username cannot be blank"
         }   
-        else if (!(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(username.value))) {
+        else if (!(/^[A-Za-z][A-Za-z0-9_]/.test(username.value))) {
             return "The username you entered is invalid"
         }
         else if (userStore.logInResponseCode === 404) {

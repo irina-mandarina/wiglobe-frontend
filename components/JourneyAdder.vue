@@ -166,7 +166,7 @@
                                     :destination-search-results="destinationSearchResults" />
                             </span>
                             <span v-if="chosenDestination !== null && chosenDestination !== undefined">
-                                <MiniDestination :destination="chosenDestination" />
+                                <DestinationMini :destination="chosenDestination" />
                             </span>
                         </div>
                     </div>

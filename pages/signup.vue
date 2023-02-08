@@ -50,7 +50,7 @@
         else if (username.value.length < 4) {
             return 'username should be at least 4 characters'
         }
-        else if (!(/^[A-Za-z][A-Za-z0-9_]{4,14}$/.test(username.value))) {
+        else if (!(/^[A-Za-z][A-Za-z0-9_]/.test(username.value))) {
             return 'username contains invalid characters'
         }
         else if (userStore.signUpResponse && userStore.signUpResponse.usernameTaken !== undefined && userStore.signUpResponse.usernameTaken) {

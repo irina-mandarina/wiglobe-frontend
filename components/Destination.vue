@@ -17,16 +17,24 @@
         <!-- Destination info -->
         <div class="w-full text-green-900 p-6 text-center relative">
             <div class="mx-auto w-full font-droid">
-                <span>* * * * *</span>
-                <p v-if="destination.averageRating >= 0 && destination.reviewCount >= 0">
+                <span v-if="destination.reviewCount > 0" class="relative">
+                    <i class="fa fa-star text-fawn" v-for="star in destination.averageRating"/>
+                    <i class="fa fa-star" v-for="star in 5 - destination.averageRating"/>
+                </span>
+                <p v-if="destination.reviewCount > 0">
                     Average rating: {{ destination.averageRating }} ({{ destination.reviewCount }} reviews)
                 </p>
-                <p>7049 visits</p>
+                <p>
+                    {{ destination.visitCount }} visits
+                </p>
             </div>
             <div class="flex w-full justify-evenly my-4">
                 <span>Category: {{ destination.featureClass }}</span>
                 <span>Class: {{ destination.featureCode }}</span>
-                <span class="flex">Location: {{ destination.country.countryName }}, {{ destination.country.continent }} <img class="w-16 px-2" :src="'https://flagcdn.com/20x15/' + destination.country.countryCode.toLowerCase() + '.png'" /></span>
+                <span class="flex h-min">
+                    Location: {{ destination.country.countryName }}, {{ destination.country.continent }} 
+                    <img class="inline w-fit px-2" :src="'https://flagcdn.com/20x15/' + destination.country.countryCode.toLowerCase() + '.png'" />
+                </span>
             </div>
         </div>
     </div>
