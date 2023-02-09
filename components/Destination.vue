@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <div class="shadow-xl overflow-hidden bg-white">
+    <div v-if="destination !== undefined" class="shadow-xl overflow-hidden bg-white">
         <!-- Destination Header -->
         <div class="w-full text-center">
             <div class="text-center w-full">
