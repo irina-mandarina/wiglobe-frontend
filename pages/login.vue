@@ -7,15 +7,7 @@
 
     definePageMeta({
         middleware: "auth"
-        // or middleware: 'auth'
     })
-
-    // onBeforeMount(async () => {
-    //     await userStore.init()
-    //     if (userStore.user !== null) {
-    //         navigateTo('/')
-    //     }
-    // })
 
     let startAnimation = ref(false)
     let username = ref(null)

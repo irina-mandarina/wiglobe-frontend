@@ -1,4 +1,6 @@
 <script setup>
+    import { useUserStore } from '~~/stores/UserStore'
+    const userStore = useUserStore()
     const route = useRoute()
     let homeHovered = ref(false), notificationsHovered = ref(false), exploreHovered = ref(false), draftsHovered = ref(false)
     let hide = ref(true)
@@ -114,6 +116,15 @@
                             <i class="fa fa-users"/>
                             <span class="px-2"> Follow requests </span>
                         </NuxtLink>
+                    </li>
+
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                        'bg-slate-200': route && route.path === '/follow-requests'
+                    }">
+                        <div @click="userStore.logOut()" class="text-lg">
+                            <i class="fa fa-door-open" />
+                            <span class="px-2"> Log out </span>
+                        </div>
                     </li>
 
                     <li class="w-full border-b px-6 py-4 block hover:bg-slate-100 duration-100" :class="{

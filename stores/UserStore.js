@@ -1,5 +1,5 @@
 import { login, logout, signup, getUserDetails } from "~~/js/userRequests"
-import { getLocalStorageUsername } from "~~/js/localStorageUtil"
+import { cleanLocalStorage, getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
 
 export const useUserStore = defineStore('userStore', {
@@ -51,13 +51,15 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async logOut() {
-      try {
-        const response = await logout(this.user.username) 
-        console.log(response)
-      }
-      catch (error) {
-        console.log(error)
-      }
+      cleanLocalStorage()
+      navigateTo('/login')
+      // try {
+      //   const response = await logout(this.user.username) 
+      //   console.log(response)
+      // }
+      // catch (error) {
+      //   console.log(error)
+      // }
     },
     
     async getUserDetails(other) {
