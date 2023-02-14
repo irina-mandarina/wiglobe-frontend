@@ -2,6 +2,7 @@
     const props = defineProps({
         notification: Object
     })
+    let content = ref(props.notification?.content.replace(props.notification?.subject, ''))
 </script>
 
 <template>
@@ -10,7 +11,13 @@
             <i class="fa fa-bell"/>
         </div>
         <div>
-            {{ notification.content }}
+            <NuxtLink :to="'/profile/' + notification?.subject">
+                {{ notification?.subject }}
+            </NuxtLink>
+            {{ content }}
+        </div>
+        <div class="float-right">
+            {{ new Date(notification?.timestamp).toUTCString()}}
         </div>
     </div>
 </template>

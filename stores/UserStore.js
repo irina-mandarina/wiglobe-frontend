@@ -108,11 +108,14 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async init() {
-      if (getLocalStorageUsername() !== null && this.user === null) {
+      if (getLocalStorageUsername() !== null && this.username === null) {
         this.loggedUsername = getLocalStorageUsername()
         await this.getUserDetails()
         if (this.username === null) {
           navigateTo('/login')
+        }
+        else {
+          this.logInResponseCode = 200
         }
       }
       else if (getLocalStorageUsername() === null) (

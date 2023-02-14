@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getTokenFromLocalStorage } from './localStorageUtil'
+import { getLocalStorageUsername, getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function createJourney(journeyRequest) {
     const response = await axios.post("http://localhost:8080/journeys",
@@ -76,8 +76,20 @@ export async function getJourneysByUser(username) {
     return response
 }
 
-export async function getJourneyDrafts(username) {
-    const response = await axios.get("http://localhost:8080/" + username + "/journeys/drafts",
+export async function getJourneyDrafts() {
+    const response = await axios.get("http://localhost:8080/" + getLocalStorageUsername() + "/journeys/drafts",
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function getJourneysByDestination(destinationId) {
+    const response = await axios.get("http://localhost:8080/destinations/" + destinationId+ "/journeys",
         {
             headers: {
                 'Content-Type': 'application/json',

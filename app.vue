@@ -16,7 +16,7 @@
   })
   
   router.beforeEach(async (to, from, next) => {
-    if (to.path === '/login' && userStore.user !== null) {
+    if ((to.path === '/login' || to.path === '/signup') && getLocalStorageUsername() !== null) {
       next ( '/' )
     }
 

@@ -8,8 +8,8 @@
     const followStore = useFollowStore()
 
     onBeforeMount(async () => {
-        await userStore.init()
-        await followStore.init()
+        // await userStore.init()
+        // await followStore.init()
         await journeyStore.getLoggedUserJourneys()
     })
 
