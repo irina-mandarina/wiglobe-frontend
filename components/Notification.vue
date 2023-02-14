@@ -3,21 +3,41 @@
         notification: Object
     })
     let content = ref(props.notification?.content.replace(props.notification?.subject, ''))
+    let usernameHovered = ref(false)
 </script>
 
 <template>
     <div class="w-5/6 my-6 flex shadow-md mx-auto p-6 rounded-full">
-        <div class="w-1/3 px-10">
+        <div class="w-1/12 px-10">
             <i class="fa fa-bell"/>
         </div>
-        <div>
-            <NuxtLink :to="'/profile/' + notification?.subject">
+
+        <div class="w-3/4 text-center">
+            <NuxtLink :to="'/profile/' + notification?.subject" class="text-fawn font-bold relative" 
+            @mouseenter="usernameHovered = true" @mouseleave="usernameHovered = false">
                 {{ notification?.subject }}
+                <Transition>
+                    <ProfileMini v-if="usernameHovered"
+                    @mouseenter="usernameHovered = true" @mouseleave="usernameHovered = false" 
+                    :username="notification?.subject" class="absolute w-40 left-0" />
+                </Transition>
             </NuxtLink>
             {{ content }}
         </div>
-        <div class="float-right">
-            {{ new Date(notification?.timestamp).toUTCString()}}
+
+        <div class="w-1/12 whitespace-nowrap">
+            {{ new Date(notification?.timestamp).toDateString()}}
         </div>
     </div>
 </template>
+<style scoped>
+    .v-enter-active,
+    .v-leave-active {
+    transition: opacity 0.5s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+    opacity: 0;
+    }
+</style>

@@ -16,11 +16,11 @@
   })
   
   router.beforeEach(async (to, from, next) => {
-    if ((to.path === '/login' || to.path === '/signup') && getLocalStorageUsername() !== null) {
-      next ( '/' )
-    }
+    // if ((to.path === '/login' || to.path === '/signup') && getLocalStorageUsername() !== null) {
+    //   next ( '/' )
+    // }
 
-    else if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
+    if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
       await followStore.init() 
       if (to.path.includes('profile')) {
         await journeyStore.getLoggedUserJourneys()
@@ -130,6 +130,10 @@
   
   .text-phtalo {
     color: var(--phtalo);
+  }
+
+  .text-dark-blue {
+    color: var(--dark-blue)
   }
 
   .border-phtalo {

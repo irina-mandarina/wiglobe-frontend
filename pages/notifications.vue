@@ -3,7 +3,6 @@
     import { getNotifications } from '~~/js/notificationRequests'
 
     const userStore = useUserStore()
-    const username = computed(userStore.username)
     let notifications = ref(null)
 
     onBeforeMount(async () => {
