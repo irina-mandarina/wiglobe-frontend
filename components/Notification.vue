@@ -4,6 +4,12 @@
     })
     let content = ref(props.notification?.content.replace(props.notification?.subject, ''))
     let usernameHovered = ref(false)
+    let prepositionObject = ref(props.notification?.prepositionObjectType?.toLowerCase())
+    console.log(props.notification)
+    if (props.notification?.prepositionObjectType === "JOURNEY") {
+        content.value = content.value.replace('journey', '')
+
+    }
 </script>
 
 <template>
@@ -23,6 +29,9 @@
                 </Transition>
             </NuxtLink>
             {{ content }}
+            <NuxtLink :to="'/journeys/' + notification?.prepositionObjectId" class="text-fawn font-bold relative">
+                {{ prepositionObject }}
+            </NuxtLink>
         </div>
 
         <div class="w-1/12 whitespace-nowrap">
