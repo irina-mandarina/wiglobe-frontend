@@ -53,13 +53,6 @@ export const useUserStore = defineStore('userStore', {
     async logOut() {
       cleanLocalStorage()
       navigateTo('/login')
-      // try {
-      //   const response = await logout(this.user.username) 
-      //   console.log(response)
-      // }
-      // catch (error) {
-      //   console.log(error)
-      // }
     },
     
     async getUserDetails(other) {

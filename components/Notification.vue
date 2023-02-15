@@ -4,11 +4,18 @@
     })
     let content = ref(props.notification?.content.replace(props.notification?.subject, ''))
     let usernameHovered = ref(false)
-    let prepositionObject = ref(props.notification?.prepositionObjectType?.toLowerCase())
-    console.log(props.notification)
+    let object = ref(null)
+    let objectLink = ref(null)
+    
     if (props.notification?.prepositionObjectType === "JOURNEY") {
         content.value = content.value.replace('journey', '')
-
+        objectLink.value = '/journeys/' + props.notification?.prepositionObjectId
+        object.value = 'journey'
+    }
+    else if (props.notification.objectType === "FOLLOW_REQUEST") {
+        content.value = content.value.replace('follow requst', '')
+        objectLink.value = '/follow-requests'
+        object.value = 'follow request'
     }
 </script>
 
@@ -29,8 +36,8 @@
                 </Transition>
             </NuxtLink>
             {{ content }}
-            <NuxtLink :to="'/journeys/' + notification?.prepositionObjectId" class="text-fawn font-bold relative">
-                {{ prepositionObject }}
+            <NuxtLink :to="objectLink" class="text-fawn font-bold relative">
+                {{ object }}
             </NuxtLink>
         </div>
 

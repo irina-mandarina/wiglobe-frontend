@@ -47,10 +47,10 @@
   axios.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
-    // if (error.response.status === 401) {
-      // cleanLocalStorage()
+    if (error.response.status === 401) {
+      cleanLocalStorage()
       navigateTo('/login')
-    // }
+    }
     console.log(error)
     return Promise.reject(error);
   });

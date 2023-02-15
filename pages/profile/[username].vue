@@ -56,6 +56,10 @@
     })
     let startAnimation = ref(false)
 
+    let isFollowedOrPublic = computed(() => {
+        return isFollowing.value || user.profilePrivacy === "PUBLIC"
+    })
+
     onBeforeMount(async () => {
         await userStore.init()
         if (route.params.username === getLocalStorageUsername()) {
@@ -281,7 +285,7 @@
              </div>
         </div>
         
-        <div v-if="followersListOpen" class="absolute top-40 w-full overflow-hidden h-full">
+        <div v-if="followersListOpen && isFollowedOrPublic" class="absolute top-40 w-full overflow-hidden h-full">
             <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
                 <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followersListOpen = false">
                     x
@@ -294,7 +298,7 @@
             </div>
         </div>
         
-        <div v-if="followingListOpen" class="absolute top-40 w-full overflow-hidden h-full">
+        <div v-if="followingListOpen && isFollowedOrPublic" class="absolute top-40 w-full overflow-hidden h-full">
             <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
                 <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followingListOpen = false">
                     x
@@ -311,9 +315,17 @@
         </div>
 
         <!-- journeys -->
-        <div class="my-20">
+        <div v-if="isFollowedOrPublic" class="my-20">
             <div class="text-center text-2xl font-droid">{{ user.firstName}}'s journeys</div>
             <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
+        </div>
+
+        <div v-if="hasReceivedAFollowReq" class="text-center text-2xl py-10 font-droid">
+            You have sent {{ user.firstName }} a follow request
+        </div>
+
+        <div v-else class="text-center text-2xl py-10 font-droid">
+            Follow {{ user.firstName }} to see their journeys
         </div>
 
     </NuxtLayout>
