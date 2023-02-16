@@ -77,12 +77,12 @@
         console.log("Access Token", credential);
         console.log(userData)
         
-        logInCredentials = {
-            email: userData.email,
-            password: password.value
-        }
+        // logInCredentials = {
+        //     email: userData.email,
+        //     password: password.value
+        // }
 
-        await userStore.logIn(logInCredentials)
+        await userStore.authenticationWithGoogle(credential, userData)
         
         if (userStore.logInResponseCode === 200) {
             navigateTo('/')
@@ -91,8 +91,8 @@
 
     // handle an error event
     const handleLoginError = () => {
-    console.error("Login failed");
-    };
+        console.error("Login failed")
+    }
 
     async function logIn() {
         if (!permitLogIn.value) {
@@ -100,7 +100,7 @@
         }
 
         logInCredentials = {
-            username: username.value,
+            userIdentifier: username.value,
             password: password.value
         }
 

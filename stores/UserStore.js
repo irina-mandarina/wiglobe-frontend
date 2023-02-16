@@ -1,4 +1,4 @@
-import { login, logout, signup, getUserDetails } from "~~/js/userRequests"
+import { login, logout, signup, getUserDetails, authenticateWithGoogle } from "~~/js/userRequests"
 import { cleanLocalStorage, getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
 
@@ -38,6 +38,22 @@ export const useUserStore = defineStore('userStore', {
     async logIn(user) {
       try {
         const response = await login(user)
+        if (response.status === 200) {
+          this.setUserDetails(response.data.userDetails)
+          localStorage.setItem('username', this.username)
+          localStorage.setItem('jwt', response.data.token)
+          this.logInResponseCode = 200
+        }
+      }
+      catch (error) {
+        this.logInResponseCode = error.response.status
+      }
+    },
+    
+    async authenticationWithGoogle(token, userData) {
+      try {
+        const response = await authenticateWithGoogle(token, userData)
+        console.log(response)
         if (response.status === 200) {
           this.setUserDetails(response.data.userDetails)
           localStorage.setItem('username', this.username)

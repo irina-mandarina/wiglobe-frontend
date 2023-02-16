@@ -50,7 +50,7 @@ export async function getUserDetails(other) {
 }
 
 export async function deleteAccount() {
-    const response = await axios.delete("http://localhost:8080/users/" + getLocalStorageUsername(), // fix this in the backend later
+    const response = await axios.delete("http://localhost:8080/users/" + getLocalStorageUsername(),
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -62,12 +62,26 @@ export async function deleteAccount() {
 }
 
 export async function editBio(bio) {
-    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/bio", // fix this in the backend later
+    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
         bio,
         {
             headers: {
                 'Content-Type': 'application/json',
                 'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function authenticateWithGoogle(token, googlePayload) {
+    console.log(token)
+    const response = await axios.post("http://localhost:8080/users/login/google",
+        googlePayload,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + token
             }
         }
     )

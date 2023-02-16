@@ -39,7 +39,7 @@
 
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
-    let isFollowing = computed (() => {
+    let isFollowedByLoggedUser = computed (() => {
         return followStore.following.filter ((it) =>
             it.username === user.value.username
         ).length !== 0
@@ -50,6 +50,7 @@
         ).length !== 0
     })
     let hasSentAFollowReq = computed(() => {
+        console.log("thinking")
         return followStore.receivedFollowRequests.filter((it) =>
             it.requester.username === user.value.username
         ).length !== 0
@@ -57,7 +58,7 @@
     let startAnimation = ref(false)
 
     let isFollowedOrPublic = computed(() => {
-        return isFollowing.value || user.profilePrivacy === "PUBLIC"
+        return isFollowedByLoggedUser.value || user.profilePrivacy === "PUBLIC"
     })
 
     onBeforeMount(async () => {
@@ -124,7 +125,7 @@
         catch (error) {
             console.log(error)
         }
-        followStore.getReceivedFollowRequests()
+        await followStore.getReceivedFollowRequests()
     }
 
     async function cancelRequest() {
@@ -135,17 +136,17 @@
         catch (error) {
             console.log(error)
         }
-        followStore.getReceivedFollowRequests()
+        await followStore.getReceivedFollowRequests()
     }
 
-    async function unfollow1() {
+    async function unfollowUser() {
         try {
             const response = await unfollow(user.value.username) 
         }
         catch (error) {
             console.log(error)
         }
-        followStore.getFollowers()
+        await followStore.getFollowers()
     }
 
     async function respondWith(requester, isApproved) {
@@ -157,7 +158,7 @@
         catch (error) {
             console.log(error)
         }
-        followStore.getFollowing()
+        await followStore.getFollowing()
     }
 </script>
 
@@ -188,10 +189,10 @@
 
         
         <div class="flex w-1/2 mx-auto text-center">
-            <button v-if="isFollowing" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="unfollow1()">
+            <button v-if="isFollowedByLoggedUser" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="unfollowUser()">
                 Unfollow
             </button>
-            <button v-if="!isFollowing && !hasReceivedAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="follow()">
+            <button v-if="!isFollowedByLoggedUser && !hasReceivedAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="follow()">
                 Follow
             </button>
             <button v-if="hasReceivedAFollowReq" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="cancelRequest()">
