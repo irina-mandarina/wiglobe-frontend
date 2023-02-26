@@ -113,10 +113,7 @@
 </script>
 
 <template>
-    <div class="flex w-2/3 h-fit mt-20 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown">
-        <div class="bg-image absolute">
-        </div>
-        
+    <div class="flex w-2/3 h-2/3 mt-20 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
         <div class="bg-white p-6 w-1/2 input-container"
             :class="{
                 'in-view': startAnimation
@@ -150,9 +147,9 @@
                     Log in
                 </button>
                 <div class="w-fit mx-auto focus:outline-none flex">
-                    <span class="py-6 w-max">Log in with </span>
-                    <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
-                    <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
+                    <span class="py-6 mx-2 w-max">Log in with </span>
+                    <!-- <i class="social-icon fa fa-brands fa-facebook-f p-6 text-blue-600 hover:text-blue-900 duration-300"/>
+                    <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/> -->
                     <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 pt-2"
                         @success="handleLoginSuccess"
                         @error="handleLoginError"
@@ -162,16 +159,17 @@
                 <NuxtLink to="/signup" class="w-fit flex mx-auto p-6 hover:scale-[1.02] duration-300 focus:outline-none">I don't have an account</NuxtLink>
             </div>
         </div>
+        <div class="absolute text-white/50 text-lg bottom-2 right-2">
+            Photo by Ivaylo Georgiev
+        </div>
         
     </div>
     
 </template>
 <style scoped>
     .bg-image {
-        background-image: url("https://picsum.photos/2000");
+        background-image: url("../assets/images/lake.jpg");
         background-size: cover;
-        width: 100%;
-        height: 600px;
     }
 
     .in-view {

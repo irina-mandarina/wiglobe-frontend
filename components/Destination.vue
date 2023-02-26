@@ -7,13 +7,14 @@
 <template>
     <div v-if="destination !== undefined && destination !== null" class="shadow-xl overflow-hidden bg-white">
         <!-- Destination Header -->
-        <div class="w-full text-center">
-            <div class="text-center w-full">
-                <h1 class="font-bold font-heebo tracking-wider w-full py-8 text-xl text-white bg-img text-drop-shadow">
+        <NuxtLink :to="'/destinations/' + destination?.id" class="w-full text-center">
+            <div class="text-center w-full bg-img" 
+                :style="{ 'background-image': 'url(https://flagcdn.com/w640/' + destination?.country?.countryCode?.toLowerCase() + '.png)' }">
+                <h1 class="font-bold font-heebo tracking-wider w-full py-20 text-3xl text-white text-drop-shadow">
                     {{ destination.name }}
                 </h1>
             </div>
-        </div>
+        </NuxtLink>
         <!-- Destination info -->
         <div class="w-full text-green-900 p-6 text-center relative">
             <div class="mx-auto w-full font-droid">
@@ -24,16 +25,16 @@
                 <p v-if="destination.reviewCount > 0">
                     Average rating: {{ destination.averageRating }} ({{ destination.reviewCount }} reviews)
                 </p>
-                <p>
+                <NuxtLink :to="'/destinations/' + destination?.id + '/journeys'">
                     {{ destination.visitCount }} visits
-                </p>
+                </NuxtLink>
             </div>
             <div class="flex w-full justify-evenly my-4">
                 <span>Category: {{ destination.featureClass }}</span>
                 <span>Class: {{ destination.featureCode }}</span>
                 <span class="flex h-min">
                     Location: {{ destination.country.countryName }}, {{ destination.country.continent }} 
-                    <img class="inline w-fit px-2" :src="'https://flagcdn.com/20x15/' + destination.country.countryCode.toLowerCase() + '.png'" />
+                    <!-- <img class="inline w-fit px-2" :src="'https://flagsapi.com/' + destination?.country?.countryCode + '/flat/64.png'" /> -->
                 </span>
             </div>
         </div>
@@ -41,7 +42,9 @@
 </template>
 <style scoped>
     .text-drop-shadow {
-        text-shadow: 0 0 20px black;
+        text-shadow: 0 0 50px rgb(255, 255, 255);
+        stroke: white;
+        stroke-width: 2px;
     }
 
     .box-drop-shadow {
@@ -49,8 +52,9 @@
     }
 
     .bg-img {
-        background-image: url('https://picsum.photos/1000/300');
-        background-size: cover;
+        background-size: 100%;
+        backdrop-filter: blur(100px);
         background-repeat: no-repeat;
+        background-position: center;
     }
 </style>

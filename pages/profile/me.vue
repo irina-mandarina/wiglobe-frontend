@@ -2,14 +2,14 @@
     import { useUserStore } from '~~/stores/UserStore'
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useFollowStore } from '~~/stores/FollowStore'
+    import { unfollow } from '~~/js/followRequests'
+    import { editGender, editBirthdate, editResidence, editBio } from '~~/js/userRequests'
 
     const userStore = useUserStore()
     const journeyStore = useJourneyStore()
     const followStore = useFollowStore()
 
     onBeforeMount(async () => {
-        // await userStore.init()
-        // await followStore.init()
         await journeyStore.getLoggedUserJourneys()
     })
 
@@ -28,41 +28,99 @@
     const biography = computed(() => userStore.biography)
     const residence = computed(() => userStore.residence)
     const profilePrivacy = computed(() => userStore.profilePrivacy)
-    let journeys = computed(() => journeyStore.loggedUserJourneys)
+
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
     const friends = computed(() => followStore.friends)
 
-    let followerCount = computed(() => {
-        if (followStore.followers === null)
-            return 0
-        else
-            return followStore.followers.length
-    })
-    let followingCount = computed(() => {
-        if (followStore.following === null)
-            return 0
-        else
-            return followStore.following.length
-    })
+    let journeys = computed(() => journeyStore.loggedUserJourneys)
     
-    let friendCount = computed(() => {
-        if (followStore.friends === null)
-            return 0
-        else
-            return followStore.friends.length
-    })
-    let followersListOpen = ref(false)
-    let followingListOpen = ref(false)
     let editMode = ref(false)
+    let newBirthdate = ref(null)
+    let newGender = ref(null)
+    let newBio = ref(biography.value)
+    let newResidence = ref(null)
 
-    async function unfollow(username) {
+    async function unfollowUser(username) {
         try {
-            const response = await unfollow(username)
+            await unfollow(username)
         }
         catch (error) {
             console.log(error)
         }
+        await followStore.getFollowing()
+    }
+
+    async function changeBirthdate(){
+        try {
+            await editBirthdate(newBirthdate.value)
+        }
+        catch (error) {
+
+        }
+    }
+
+    async function changeGender() {
+        try {
+            await editGender(newGender.value)
+        }
+        catch (error) {
+
+        }
+    }
+
+    async function changeResidence() {
+        try {
+            await editResidence(newResidence.value)
+        }        
+        catch (error) {
+            
+        }
+    }
+
+    async function changeBiography() {
+        try {
+            await editBio(newBio.value)
+        }        
+        catch (error) {
+            
+        }
+    }
+
+    function setNewBirthdate(val) {
+        newBirthdate.value = val
+    }
+
+    function setNewGender(val) {
+        newGender.value = val
+    }
+
+    function setNewResidence(val) {
+        console.log('set dest : ' + val)
+        newResidence.value = val
+    }
+
+    async function toggleEditMode() {
+        if (editMode.value) {
+            if (newGender.value !== null && gender.value !== newGender.value) {
+                console.log("new gen")
+                await changeGender()
+            }
+            if (newResidence.value !== null && residence.value?.id !== residence.value?.id) {
+                console.log("new res")
+                await changeResidence()
+            }
+            if (newBirthdate.value !== null && birthdate.value !== newBirthdate.value) {
+                console.log("new birt")
+                await changeBirthdate()
+            }
+            if (newBio.value !== null && biography.value !== newBio.value) {
+                console.log("new bio")
+                await changeBiography()
+            }
+            await userStore.init()
+        }
+        editMode.value = !editMode.value
     }
 </script>
 
@@ -70,8 +128,11 @@
     <NuxtLayout name="default">
 
         <!-- edit profile button -->
-        <button @click="editMode = !editMode" class="absolute m-6 bg-asparagus rounded-full shadow-inner">
-            <i class="fa fa-gear text-4xl py-2 px-3 hover:text-gray-700 duration-500 hover:rotate-180" />
+        <button @click="toggleEditMode()" class="absolute m-6 bg-asparagus rounded-full shadow-inner">
+            <span v-if="editMode" class="p-2 text-xl text-white font-heebo">
+                Save changes
+            </span>
+            <i v-else class="fa fa-gear text-4xl py-2 px-3 hover:text-gray-700 duration-500 hover:rotate-180" />
         </button>
 
         <!-- header -->
@@ -95,122 +156,51 @@
         </div> 
 
         <!-- bio -->
-        <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
+        <p v-if="!editMode" class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
             {{ biography }}
         </p>
+        <input v-else  class="rounded-full border-b bg-white mx-auto p-2 text-center w-fit flex focus:outline-none focus:border-slate-500" placeholder="Something about you" v-model="newBio"/>
 
         <div class="w-full flex h-max relative">
             <!-- details -->
             <div class="mx-auto flex flex-wrap w-1/2 my-6 p-6">
 
                 <!-- gender and pronouns -->
-                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1000ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p v-if="gender === 'FEMALE'" class="text-center p-6">
-                        She / Her
-                        <i class="fa fa-female" />
-                    </p>
-                    
-                    <p v-if="gender === 'MALE'" class="text-center p-6">
-                        He / Him
-                        <i class="fa fa-male" />
-                    </p>
-
-                    <p v-if="gender === 'OTHER'" class="text-center p-6">
-                        They / Them
-                        <i class="fa fa-user" />
-                    </p>
-                </div>
+                <DetailBox class="delay-[1500ms] details-box" 
+                v-if="gender?.length || editMode" :detail="gender" detailType="gender" :editMode="editMode"
+                @save="setNewGender" 
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- birthday and age -->
-                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1500ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        Born on {{ new Date(birthdate).toDateString() }}
-                        <br />
-                        {{ parseInt(( new Date().getTime() - new Date(birthdate).getTime()) / (1000*60*60*24*365)) }} years old
-                    </p>
-                </div>
+                <DetailBox v-if="birthdate || editMode" class="delay-[1500ms] details-box"
+                :detail="birthdate" detailType="birthdate" :editMode="editMode"
+                @save="setNewBirthdate" 
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- location -->
-                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2000ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        From {{ residence }}
-                    </p>
-                </div>
+                <DetailBox v-if="residence || editMode" class="delay-[1700ms] details-box"
+                :detail="residence" detailType="residence" :editMode="editMode"
+                @save="setNewResidence" 
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- joined on -->
-                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2500ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        Joined NAME on
-                        <br />
-                        {{ new Date(registrationTimestamp).toDateString() }}
-                    </p>
-                </div>
+                <DetailBox v-if="registrationTimestamp" class="delay-[2000ms] details-box"
+                :detail="registrationTimestamp" detailType="registrationTimestamp" :editMode="editMode"
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
             </div>
-             <!-- end of details -->
+            <!-- end of details -->
 
              <!-- follow -->
-             <div class="w-1/2 overflow-hidden my-6 text-lg p-6">
-                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followersListOpen = !followersListOpen">
-                    Followers: {{ followerCount }}
-                </div>
-                
-                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followingListOpen = !followingListOpen">
-                    Following: {{ followingCount }}
-                </div>
-                <div class="bg-white">
-                    <p class="hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg">
-                        Friends
-                    </p>
-                    <div class="flex flex-wrap w-max">
-                        <UserDetails class="w-40 m-4" v-for="friend in friends" v-if="friends !== null && friends !== undefined" :user="friend" />
-                    </div>
-                </div>
-             </div>
-        </div>
-        
-        <div v-if="followersListOpen" class="absolute top-40 w-full overflow-hidden h-full">
-            <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
-                <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followersListOpen = false">
-                    x
-                </span>
-                <p class="font-droid text-brown"> Followers: {{ followerCount }}</p>
-                <div v-for="follower in followers" @click="navigateTo('/profile/'+follower.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full w-full">
-                    <div class="p-4 float-left">@{{ follower.username }}</div>
-                    <div class="p-4 float-right">{{ follower.firstName }} {{ follower.lastName }}</div>
-                </div>
-            </div>
-        </div>
-        
-        <div v-if="followingListOpen" class="absolute top-40 w-full overflow-hidden h-full">
-            <div class="bg-peach w-1/2 h-3/4 mx-auto p-6 rounded-lg shadow-xl overflow-hidden overflow-y-scroll">
-                <span class="float-right hover:text-red-700 hover:font-bold duration-300 " @click="followingListOpen = false">
-                    x
-                </span>
-                <p class="font-droid text-brown"> Followed by you: {{ followingCount }}</p>
-                <div v-for="followed in following" @click="navigateTo('/profile/'+followed.username)" class="w-full flex my-4 shadow-inner bg-white rounded-full overflow-hidden">
-                    <div class="p-4 float-left">@{{ followed.username }}</div>
-                    <div class="p-4 float-right">{{ followed.firstName }} {{ followed.lastName }}</div>
-                    <button class="hover:bg-gray-200 bg-white p-4 float-right right-0" @click="unfollow(followed.username)">
-                        Unfollow
-                    </button>
-                </div>
-                <div v-if="followingCount === 0" class="text-center py-16">
-                    You haven't followed anyone
-                </div>
-            </div>
+             <FollowList :followers="followers" :following="following" :friends="friends" @unfollowUser="unfollowUser" />
         </div>
 
         <!-- journeys -->

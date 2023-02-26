@@ -13,7 +13,7 @@
         object.value = 'journey'
     }
     else if (props.notification.objectType === "FOLLOW_REQUEST") {
-        content.value = content.value.replace('follow requst', '')
+        content.value = content.value.replace('follow request', '')
         objectLink.value = '/follow-requests'
         object.value = 'follow request'
     }

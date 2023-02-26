@@ -28,7 +28,7 @@
 
 <template>
     <Transition>
-        <div v-if="followRequest !== null && followRequest !== undefined" class="rounded-full m-10 mt-32 shadow-lg w-1/4 overflow-hidden">
+        <div v-if="followRequest !== null && followRequest !== undefined" class="rounded-xl m-10 mt-32 shadow-lg w-1/4 overflow-hidden">
             <div class="mx-auto mt-0 m-4 px-4 py-20 profile-picture">
             </div>
             <div class="mx-auto text-center">

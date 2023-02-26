@@ -25,18 +25,6 @@ export async function login(user) {
     return response
 }
 
-export async function logout() {
-    const response = await axios.post("http://localhost:8080/users/logout",
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
-            }
-        }
-    )
-    return response
-}
-
 export async function getUserDetails(other) {
     const response = await axios.get("http://localhost:8080/users/" + other,
         {
@@ -74,8 +62,46 @@ export async function editBio(bio) {
     return response
 }
 
+export async function editGender(gender) {
+    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/gender",
+        gender,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function editResidence(destinationId) {
+    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/residence",
+        destinationId,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function editBirthdate(birthdate) {
+    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/birthdate",
+        birthdate,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
 export async function authenticateWithGoogle(token, googlePayload) {
-    console.log(token)
     const response = await axios.post("http://localhost:8080/users/login/google",
         googlePayload,
         {

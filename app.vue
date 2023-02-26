@@ -3,7 +3,7 @@
   import { useUserStore } from '~~/stores/UserStore'
   import { useFollowStore } from '~~/stores/FollowStore'
   import { useJourneyStore } from '~~/stores/JourneyStore'
-  import { cleanLocalStorage, getLocalStorageUsername } from './js/localStorageUtil'
+  import { cleanLocalStorage } from './js/localStorageUtil'
 
   const userStore = useUserStore()
   const followStore = useFollowStore()
@@ -16,11 +16,9 @@
   })
   
   router.beforeEach(async (to, from, next) => {
-    // if ((to.path === '/login' || to.path === '/signup') && getLocalStorageUsername() !== null) {
-    //   next ( '/' )
-    // }
-
-    if (to.path === '/friends' || to.path === '/follow-requests' || to.path.includes('profile')) {
+    if (to.path === '/friends' || 
+    to.path === '/follow-requests' || 
+    to.path.includes('profile')) {
       await followStore.init() 
       if (to.path.includes('profile')) {
         await journeyStore.getLoggedUserJourneys()
@@ -33,8 +31,6 @@
   })
 
   axios.interceptors.request.use(function (config) {
-    // if (getLocalStorageUsername() === undefined || getLocalStorageUsername() === null) {
-    //   return navigateTo('/login')
     return config;
     
   }, function (error) {

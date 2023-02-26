@@ -11,7 +11,7 @@
     onMounted(() => {
         document.addEventListener("scroll", (event) => {
             currentScrollPosition = window.scrollY
-            if (currentScrollPosition > 400) {
+            if (currentScrollPosition > 700) {
                 showNav.value = false
                 hide.value = true
             }
@@ -37,7 +37,7 @@
             <div class="flex bg-white bg-gray-50 bg-slate-50 shadow-sm">
                 
                 <!-- logo -->
-                <img src="../assets/logo.svg" class="w-1/12 absolute left-4 top-4" @click="navigateTo('/')" />
+                <img src="../assets/logo.svg" class="w-1/12 px-4" @click="navigateTo('/')" />
 
                 <!-- center: feeds -->
                 <div class="w-fit flex mx-auto font-heebo py-2 overflow-hidden h-20">
@@ -74,9 +74,10 @@
                         <span :class="{visible: exploreHovered}" class="navlink-text w-full h-1/2 text-center">Explore</span>
                     </NuxtLink>
                 </div>
+
                 <!-- menu button -->
-                <div class="float-right bg-slate-100" @click="hide = !hide">
-                    <i class="fa fa-bars py-6 px-8 text-2xl" />
+                <div class="w-1/12 float-right" @click="hide = !hide">
+                    <i class="fa fa-bars py-6 px-8 float-right text-2xl bg-slate-100" />
                 </div>
             </div>
             <!-- menu -->
@@ -118,9 +119,7 @@
                         </NuxtLink>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
-                        'bg-slate-200': route && route.path === '/follow-requests'
-                    }">
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100">
                         <div @click="userStore.logOut()" class="text-lg">
                             <i class="fa fa-door-open" />
                             <span class="px-2"> Log out </span>

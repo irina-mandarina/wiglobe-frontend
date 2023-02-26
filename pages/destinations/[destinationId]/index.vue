@@ -52,14 +52,15 @@
     }
 </script>
 
-<template>        <div class="bg-khaki mt-0">
-
-    <NuxtLayout name="default">
-        <Destination class="mx-auto w-full mb-0" v-if="destination !== null" :destination="destination" />
-            <ReviewAdder @post-review="postReview" class="mx-auto my-8"/>
-            <div class="flex flex-wrap justify-evenly">
-                <Review v-if="reviews !== null" v-for="review in reviews" :review="review" class="m-6" />
-            </div>    
-    </NuxtLayout>        </div>
+<template>        
+    <div class="bg-khaki h-screen mt-0">
+        <NuxtLayout name="default">
+            <Destination class="mx-auto w-full mb-0" v-if="destination !== null" :destination="destination" />
+                <ReviewAdder @post-review="postReview" class="mx-auto my-8"/>
+                <div class="flex flex-wrap justify-evenly">
+                    <Review v-if="reviews !== null" v-for="review in reviews" :review="review" class="m-6" />
+                </div>    
+        </NuxtLayout>       
+     </div>
 
 </template>

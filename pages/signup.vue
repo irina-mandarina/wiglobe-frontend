@@ -167,14 +167,12 @@
 </script>
 
 <template>
-    <div class="w-2/3 h-[700px] mt-6 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown">
-        <div class="bg-image absolute">
-        </div>
+    <div class="w-2/3 h-[700px] my-10 m-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
         <h1 :class="{
             'visible': startAnimation
         }" class="text-center font-sans text-2xl py-6 w-full font-black tracking-wide text-brown header overflow-y-visible absolute mt-16">
             Create an account for
-            <img src="../assets/logo.svg" class="w-1/4 inline"/>
+            <img src="../assets/logo.svg" class="w-1/6 inline"/>
         </h1>
 
 
@@ -189,7 +187,7 @@
                 'visible2': startAnimation,
                 'form-disappear': formOnDisplay !== 1,
                 'form-appear': formOnDisplay === 1
-            }" class="pt-20 form-1 w-full absolute">
+            }" class="pt-20 form-1 w-full absolute bottom-0">
                 <div class="w-fit mx-auto">
                     <label for="fistName">
                        First name
@@ -211,7 +209,7 @@
             <div :class="{
                 'form-disappear': formOnDisplay !== 2,
                 'form-appear': formOnDisplay === 2
-            }" class="py-6 form w-full absolute">
+            }" class="py-6 form w-full absolute bottom-0">
                 <div class="w-fit mx-auto">
                     <label for="birthdate">
                         Date of birth:
@@ -247,7 +245,7 @@
             <div :class="{
                 'form-disappear': formOnDisplay !== 3,
                 'form-appear': formOnDisplay === 3
-            }" class="py-4 form w-full absolute">
+            }" class="py-4 form w-full absolute bottom-0">
                 <input v-model="email"       name="email"    type="email"    class="mx-auto flex border rounded-full p-2 px-4 mb-2 focus:outline-none" placeholder="email"/>
                 <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">{{ emailError }}</div>
 
@@ -272,11 +270,9 @@
         </div>
         <div :class="{
             'in-view': startAnimation
-        }" class="w-full bg-white mt-0 relative sign-in-box-bottom">
-            <div class="mx-auto w-fit">
+        }" class="w-full bg-white mt-0 sign-in-box-bottom absolute bottom-0 p-4">
+            <div class="mx-auto w-fit relative">
                 <span class="py-6">Sign up with: </span>
-                <i class="social-icon fa fa-facebook p-6 text-blue-600 hover:text-blue-900 duration-300"/>
-                <i class="social-icon fa fa-twitter p-6 text-indigo-700 hover:text-indigo-800 duration-300"/>
                 <GoogleSignInButton class="text-indigo-700 hover:text-indigo-800 duration-300 align-middle"
                             @success="handleSignUpSuccess"
                             @error="handleSignUpError()"
@@ -289,10 +285,8 @@
 
 <style scoped>
     .bg-image {
-        background-image: url("https://picsum.photos/2000");
+        background-image: url("../assets/images/mountain_rocks.jpg");
         background-size: cover;
-        width: 100%;
-        height: 800px;
     }
 
     .in-view {

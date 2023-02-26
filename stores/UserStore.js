@@ -1,4 +1,4 @@
-import { login, logout, signup, getUserDetails, authenticateWithGoogle } from "~~/js/userRequests"
+import { login, signup, getUserDetails, authenticateWithGoogle } from "~~/js/userRequests"
 import { cleanLocalStorage, getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
 

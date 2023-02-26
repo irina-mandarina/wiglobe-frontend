@@ -4,7 +4,7 @@
     })
 </script>
 <template>
-    <div class="absolute my-2">
+    <div class="absolute my-2 ">
         <div class="absolute fixed px-2 text-rose-500 hover:text-red-700 duration-300 z-[51]" @click="$emit('closeSearchResults')">
                 X
         </div>

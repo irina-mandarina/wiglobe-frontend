@@ -1,5 +1,5 @@
 <script setup>
-import { deleteComment } from '~~/js/commentRequests'
+    import { deleteComment } from '~~/js/commentRequests'
     import { useUserStore } from '~~/stores/UserStore'
 
     const props = defineProps({
@@ -13,7 +13,6 @@ import { deleteComment } from '~~/js/commentRequests'
     async function deleteCom() {
         try {
             const response = await deleteComment(props.comment.journeyId, props.comment.id)
-            
         }
         catch(error) {
             console.log(error)

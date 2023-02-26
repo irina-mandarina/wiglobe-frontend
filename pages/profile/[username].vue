@@ -39,27 +39,28 @@
 
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
-    let isFollowedByLoggedUser = computed (() => {
-        return followStore.following.filter ((it) =>
-            it.username === user.value.username
-        ).length !== 0
-    })
-    let hasReceivedAFollowReq = computed(() => {
-        return followStore.sentFollowRequests.filter((it) =>
-            it.receiver.username === user.value.username
-        ).length !== 0
-    })
-    let hasSentAFollowReq = computed(() => {
-        console.log("thinking")
-        return followStore.receivedFollowRequests.filter((it) =>
-            it.requester.username === user.value.username
-        ).length !== 0
-    })
+    let isFollowedByLoggedUser = ref(false)
+    let hasReceivedAFollowReq = ref(false)
+    let hasSentAFollowReq = ref(false)
     let startAnimation = ref(false)
 
-    let isFollowedOrPublic = computed(() => {
-        return isFollowedByLoggedUser.value || user.profilePrivacy === "PUBLIC"
-    })
+    let isFollowedOrPublic = ref(false)
+
+    function setFollowRelationships() {
+        isFollowedByLoggedUser.value = (followStore.following.filter ((it) =>
+                it.username === user.value.username
+            ).length !== 0)
+
+        hasReceivedAFollowReq.value = (followStore.sentFollowRequests.filter((it) =>
+                it.receiver.username === user.value.username
+            ).length !== 0)
+
+        hasSentAFollowReq.value = (followStore.receivedFollowRequests.filter((it) =>
+                it.requester.username === user.value.username
+            ).length !== 0)
+
+        isFollowedOrPublic.value = (isFollowedByLoggedUser.value || user.profilePrivacy === "PUBLIC")
+    }
 
     onBeforeMount(async () => {
         await userStore.init()
@@ -76,6 +77,7 @@
         await followStore.init()
         getFollows()
         getJourneys()
+        setFollowRelationships()
 
     })
     
@@ -115,6 +117,7 @@
         catch (error) {
             console.log(error)
         }
+        setFollowRelationships()
     }
 
     async function follow() {
@@ -126,6 +129,7 @@
             console.log(error)
         }
         await followStore.getReceivedFollowRequests()
+        setFollowRelationships()
     }
 
     async function cancelRequest() {
@@ -137,6 +141,7 @@
             console.log(error)
         }
         await followStore.getReceivedFollowRequests()
+        setFollowRelationships()
     }
 
     async function unfollowUser() {
@@ -147,23 +152,43 @@
             console.log(error)
         }
         await followStore.getFollowers()
+        setFollowRelationships()
     }
 
     async function respondWith(requester, isApproved) {
         try {
             const response = await respondToFollowRequest(requester, isApproved)
-            // console.log(response.data)
             followStore.getReceivedFollowRequests()
         }
         catch (error) {
             console.log(error)
         }
         await followStore.getFollowing()
+        setFollowRelationships()
+    }
+
+    let friendPage = ref(1)
+    function nextFriendPage() {
+        if (friendPage.value === friendCount.value / 2) {
+            friendPage.value = 1
+        }
+        else {
+            friendPage.value ++
+        }
+    }
+
+    function prevFriendPage() {
+        if (friendPage.value === 1) {
+            friendPage.value = friendCount.value / 2
+        }
+        else {
+            friendPage.value --
+        }
     }
 </script>
 
 <template>
-    <NuxtLayout name="default" v-if="user!== null">
+    <NuxtLayout name="default" v-if="user !== null">
 
         <!-- header -->
         <div class="w-full h-1/2 absolute header-picture">
@@ -209,59 +234,32 @@
             <div class="mx-auto flex flex-wrap w-1/2 my-6 p-6">
 
                 <!-- gender and pronouns -->
-                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1000ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p v-if="user.gender === 'FEMALE'" class="text-center p-6">
-                        She / Her
-                        <i class="fa fa-female" />
-                    </p>
-                    
-                    <p v-if="user.gender === 'MALE'" class="text-center p-6">
-                        He / Him
-                        <i class="fa fa-male" />
-                    </p>
-                    
-                    <p v-if="user.gender === 'OTHER'" class="text-center p-6">
-                        They / Them
-                        <i class="fa fa-user" />
-                    </p>
-                </div>
+                <DetailBox class="delay-[1500ms] details-box" 
+                v-if="user.gender?.length" :detail="user.gender" detailType="gender"
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- birthday and age -->
-                <div class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1500ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        Born on {{ new Date(user.birthdate).toDateString() }}
-                        <br />
-                        {{ parseInt(( new Date().getTime() - new Date(user.birthdate).getTime()) / (1000*60*60*24*365)) }} years old
-                    </p>
-                </div>
+                <DetailBox v-if="user.birthdate" class="delay-[1500ms] details-box"
+                :detail="user.birthdate" detailType="birthdate"
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- location -->
-                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2000ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        City, Country
-                    </p>
-                </div>
+                <DetailBox v-if="user.residence" class="delay-[1700ms] details-box"
+                :detail="user.residence" detailType="residence"
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
                 <!-- joined on -->
-                <div class="rounded-2xl my-4 mx-auto shadow-lg w-3/4 border-khaki border-2 text-center delay-[2500ms] details-box bg-white overflow-hidden"
-                    :class="{
-                        'slide-up': startAnimation
-                    }">
-                    <p class="text-center p-6">
-                        Joined NAME on
-                        <br />
-                        {{ new Date(user.registrationDate).toDateString() }}
-                    </p>
-                </div>
+                <DetailBox v-if="user.registrationTimestamp" class="delay-[2000ms] details-box"
+                :detail="user.registrationTimestamp" detailType="registrationTimestamp"
+                :class="{
+                    'slide-up': startAnimation
+                }"/>
 
             </div>
              <!-- end of details -->
@@ -279,8 +277,18 @@
                     <p class="hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg">
                         Friends
                     </p>
-                    <div class="flex flex-wrap w-max">
-                        <UserDetails class="w-40 m-4" v-for="friend in friends" v-if="friends !== null && friends !== undefined" :user="friend" />
+                    <div v-if="friendCount" class="flex w-full">
+                        <div class="my-auto w-1/12">
+                            <i @click="prevFriendPage()" class="fa fa-chevron-left p-2"/>
+                        </div>    
+                        <UserDetails class="w-5/6 m-4" v-if="friendCount > 0" :user="friends[friendPage-1]" />
+                        <UserDetails class="w-5/6 m-4" v-if="friendPage < friendCount" :user="friends[friendPage]" />
+                        <div class="my-auto w-1/12">
+                            <i @click="nextFriendPage()" class="fa fa-chevron-right p-2"/>
+                        </div>
+                    </div>
+                    <div v-else>
+                        You do not have any friends yet.
                     </div>
                 </div>
              </div>

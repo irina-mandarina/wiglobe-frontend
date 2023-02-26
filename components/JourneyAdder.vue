@@ -7,7 +7,6 @@
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
     
-    userStore.init()
     const firstName = computed(() => userStore.firstName)
     const lastName = computed(() => userStore.lastName)
     const username = computed(() => userStore.username)
@@ -33,13 +32,17 @@
 
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
-            if (chosenDestination.value === null && (modifiedKeyword === null || modifiedKeyword.length < keywordLength)) {
+            if (chosenDestination.value === null &&
+             (modifiedKeyword === null || modifiedKeyword.length < keywordLength)) {
                 destinationSearchResults.value = null
             }
-            else if (chosenDestination.value === null && (destinationSearchResults.value !== null && modifiedKeyword.length > keywordLength)) {
+            else if (chosenDestination.value === null && 
+            (destinationSearchResults.value !== null && 
+            modifiedKeyword.length > keywordLength)) {
                 // show more accurate results
                 destinationSearchResults.value = destinationSearchResults.value.filter ((it) => 
-                    it.name.toLowerCase().startsWith(modifiedKeyword.toLowerCase()) || it.country.toLowerCase().startsWith(modifiedKeyword.toLowerCase())
+                    it.name.toLowerCase().startsWith(modifiedKeyword.toLowerCase()) ||
+                     it.country.toLowerCase().startsWith(modifiedKeyword.toLowerCase())
                 )
             }
             keywordLength = destinationKeyword.value.length

@@ -5,7 +5,7 @@
     let destinationsOnDisplayCount = 3
     let pageSize = 5
     let pageNumber = 1
-    let slideNumber = 1
+    let searchStr = ref(null)
 
     onBeforeMount(async () => {
         await getDestinations()
@@ -33,8 +33,6 @@
         return destinationRecommendations.value?.slice(firstDisplayedDestIndex.value, firstDisplayedDestIndex.value + destinationsOnDisplayCount)
     })
 
-    // let destinationsOnDisplay()
-
     function previousDestination() {
         if (firstDisplayedDestIndex.value !== 0) {
             firstDisplayedDestIndex.value--
@@ -44,6 +42,8 @@
 
 <template>
     <NuxtLayout name="default">
+        <SearchBar />
+
         <!-- container -->
         <div class="w-full relative">
             <!-- carousel -->
@@ -62,3 +62,9 @@
         </div>
     </NuxtLayout>
 </template>
+
+<style scoped>
+    .bg-peach:hover{
+        background-color: var(--fawn);
+    }
+</style>
