@@ -99,3 +99,18 @@ export async function getJourneysByDestination(destinationId) {
     )
     return response
 }
+
+export async function searchJourneys(keyword, pageNumber, pageSize) {
+    const response = await axios.get("http://localhost:8080/journeys/search",
+        {
+            params: {
+                keyword, pageNumber, pageSize
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}

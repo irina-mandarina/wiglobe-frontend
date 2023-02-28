@@ -1,8 +1,25 @@
 <script setup>
+    import { BlobServiceClient, AnonymousCredential } from '@azure/storage-blob';
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
-    import { addActivityToJourney, getAllActivityTypes } from '~~/js/activityRequests'
+    import { addActivityToJourney } from '~~/js/activityRequests'
     import { searchDestinations, getDestination } from '~~/js/destinationRequests'
+
+    // connect-with-sas-token.js
+    // const accountName = "wiglobeimages"
+    // const sasToken = "sp=racw&st=2023-02-28T19:27:56Z&se=2023-03-31T02:27:56Z&sip=84.238.195.243&sv=2021-06-08&sr=c&sig=Swh9BGSWkbzLdGg%2BCeixmxRuKT%2F78huG1ZaDXyPwHDY%3D"
+
+    // const blobServiceUri = `https://${accountName}.blob.core.windows.net`;
+
+    // // https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN
+    // const blobServiceClient = new BlobServiceClient(
+    //     `${blobServiceUri}?${sasToken}`,
+    //     null
+    // )
+    // const containerName = 'journey-images'
+    // const containerClient = blobServiceClient.getContainerClient(containerName)
+    // await containerClient.createIfNotExists()
+    // const selectedFile = ref(null)
 
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
@@ -109,6 +126,18 @@
 
     async function postJourney(journey) {
         navigateTo('/journeys/' + (await journeyStore.postJourney(journey)).id)
+    }
+
+    function onFileSelected(event) {
+      selectedFile.value = event.target.files[0]
+    }
+
+    async function uploadFile() {
+      const containerName = 'user-uploads'
+      const blobName = selectedFile.value.name
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName)
+      await blockBlobClient.uploadData(selectedFile.value)
+      console.log('Upload block blob ${blobName} successfully')
     }
 </script>
 
@@ -231,7 +260,7 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" class="mx-auto flex my-6" alt="Pictures" />
+                    <input type="file" class="mx-auto flex my-6" alt="Pictures" @change="onFileSelected" />
                 </div>
 
                 <!-- Activity adder -->

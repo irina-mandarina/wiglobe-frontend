@@ -42,6 +42,9 @@
                             <p class="mx-auto mb-2 font-heebo">@{{ journey.usernames.username }}</p>  
                         </NuxtLink>
                     </div>
+                    <div class="font-oblique text-sm text-center font-droid">
+                        Posted on {{ journey?.postedOn }}
+                    </div>
                     <!-- date -->
                     <p v-if="journey.startDate !== undefined && journey.startDate !== null && journey.endDate !== undefined && journey.endDate !== null" class="w-full text-center py-6 m-6">
                         From {{ new Date(journey.startDate).toLocaleDateString() }} to {{ new Date(journey.endDate).toLocaleDateString() }} at:
@@ -59,7 +62,7 @@
 
             <!-- Pictures and activities (right) -->
             <div class="w-1/2">
-                <JourneyAttachments class="" :activities="journey.activities" :images="['https://picsum.photos/1100', 'https://picsum.photos/1500']" />
+                <JourneyAttachments class="" :activities="journey.activities" :images="['https://wiglobeimages.blob.core.windows.net/journey-images/86794874_630307537801870_7801456429851738112_n.jpg', 'https://picsum.photos/1500']" />
             </div>
                
         </div>

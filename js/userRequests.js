@@ -50,6 +50,7 @@ export async function deleteAccount() {
 }
 
 export async function editBio(bio) {
+    debugger
     const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
         bio,
         {
@@ -59,6 +60,20 @@ export async function editBio(bio) {
             }
         }
     )
+    // const res = await axios({
+    //     method: 'put',
+    //     url: "http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
+    //     data: {
+    //         bio
+    //     },
+        
+    //     headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+    //         }
+        
+    // })
+    console.log(response)
     return response
 }
 
@@ -108,6 +123,21 @@ export async function authenticateWithGoogle(token, googlePayload) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authentication': 'Bearer ' + token
+            }
+        }
+    )
+    return response
+}
+
+export async function searchUsers(keyword, pageNumber, pageSize) {
+    const response = await axios.get("http://localhost:8080/users/search",
+        {
+            params: {
+                keyword, pageNumber, pageSize
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
             }
         }
     )

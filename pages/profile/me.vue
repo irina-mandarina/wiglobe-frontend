@@ -200,7 +200,7 @@
             <!-- end of details -->
 
              <!-- follow -->
-             <FollowList :followers="followers" :following="following" :friends="friends" @unfollowUser="unfollowUser" />
+             <FollowList :followers="followers" :following="following" :friends="friends" :username="username" @unfollowUser="unfollowUser" />
         </div>
 
         <!-- journeys -->

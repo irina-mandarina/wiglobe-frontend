@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { getTokenFromLocalStorage } from './localStorageUtil'
 
-export async function searchDestinations(search) {
+export async function searchDestinations(keyword, pageNumber, pageSize) {
     const response = await axios.get("http://localhost:8080/destinations/search",
         {
             params: {
-                search
+                keyword, pageNumber, pageSize
             },
             headers: {
                 'Content-Type': 'application/json',

@@ -235,63 +235,40 @@
 
                 <!-- gender and pronouns -->
                 <DetailBox class="delay-[1500ms] details-box" 
-                v-if="user.gender?.length" :detail="user.gender" detailType="gender"
+                v-if="user?.gender?.length" :detail="user?.gender" detailType="gender" :editMode="false"
+                @save="setNewGender" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
 
                 <!-- birthday and age -->
-                <DetailBox v-if="user.birthdate" class="delay-[1500ms] details-box"
-                :detail="user.birthdate" detailType="birthdate"
+                <DetailBox v-if="user?.birthdate" class="delay-[1500ms] details-box"
+                :detail="user?.birthdate" detailType="birthdate" :editMode="false"
+                @save="setNewBirthdate" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
 
                 <!-- location -->
-                <DetailBox v-if="user.residence" class="delay-[1700ms] details-box"
-                :detail="user.residence" detailType="residence"
+                <DetailBox v-if="user?.residence" class="delay-[1700ms] details-box"
+                :detail="user?.residence" detailType="residence" :editMode="false"
+                @save="setNewResidence" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
 
                 <!-- joined on -->
-                <DetailBox v-if="user.registrationTimestamp" class="delay-[2000ms] details-box"
-                :detail="user.registrationTimestamp" detailType="registrationTimestamp"
+                <DetailBox v-if="user?.registrationTimestamp" class="delay-[2000ms] details-box"
+                :detail="user?.registrationTimestamp" detailType="registrationTimestamp" :editMode="false"
                 :class="{
                     'slide-up': startAnimation
                 }"/>
 
             </div>
-             <!-- end of details -->
+            <!-- end of details -->
 
              <!-- follow -->
-             <div class="w-1/2 overflow-hidden my-6 text-lg p-6">
-                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followersListOpen = !followersListOpen">
-                    Followers: {{ followerCount }}
-                </div>
-                
-                <div class="bg-white hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg" @click="followingListOpen = !followingListOpen">
-                    Following: {{ followingCount }}
-                </div>
-                <div class="bg-white">
-                    <p class="hover-border-asparagus border-0 border-b-4 duration-300 my-2 p-4 rounded-lg">
-                        Friends
-                    </p>
-                    <div v-if="friendCount" class="flex w-full">
-                        <div class="my-auto w-1/12">
-                            <i @click="prevFriendPage()" class="fa fa-chevron-left p-2"/>
-                        </div>    
-                        <UserDetails class="w-5/6 m-4" v-if="friendCount > 0" :user="friends[friendPage-1]" />
-                        <UserDetails class="w-5/6 m-4" v-if="friendPage < friendCount" :user="friends[friendPage]" />
-                        <div class="my-auto w-1/12">
-                            <i @click="nextFriendPage()" class="fa fa-chevron-right p-2"/>
-                        </div>
-                    </div>
-                    <div v-else>
-                        You do not have any friends yet.
-                    </div>
-                </div>
-             </div>
+             <FollowList :followers="followers" :following="following" :friends="friends" :username="user?.username" @unfollowUser="unfollowUser" />
         </div>
         
         <div v-if="followersListOpen && isFollowedOrPublic" class="absolute top-40 w-full overflow-hidden h-full">

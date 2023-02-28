@@ -1,8 +1,11 @@
 <script setup>
+    import { getLocalStorageUsername } from '~~/js/localStorageUtil'
+
     const props = defineProps({
         followers: Array,
         following: Array,
-        friends: Array
+        friends: Array,
+        username: String
     })
 
     let followerCount = computed(() => {
@@ -91,7 +94,7 @@
                     <div @click="navigateTo('/profile/' + user.username)" class="py-3 text-center w-2/5">
                         {{ user.firstName }} {{ user.lastName }}
                     </div>
-                    <div @click="$emit('unfollowUser', user.username)" class="my-auto p-1 bg-slate-300 duration-100 hover:bg-slate-400 rounded-full w-1/5 text-center">
+                    <div v-if="username === getLocalStorageUsername()" @click="$emit('unfollowUser', user.username)" class="my-auto p-1 bg-slate-300 duration-100 hover:bg-slate-400 rounded-full w-1/5 text-center">
                         Unfollow
                     </div>
                 </div>
