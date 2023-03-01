@@ -5,11 +5,20 @@
     let destinationSearchResults = ref(null)
     let chosenDestination = ref(null)
     const emits = defineEmits(['chooseDestination'])
+    const pageSize = 20
+    let pageNumber = ref(1)
 
     async function findDestinations() {
         try {
-            const response = await searchDestinations(destinationKeyword.value)
-            destinationSearchResults.value = response.data
+            const response = await searchDestinations(destinationKeyword.value, pageNumber.value, pageSize)
+            if (response.data?.length > 0) {
+                // there aren't any results on the page requested
+                results.value.destinations = response.data
+                if (pageNumber.value !== 1) {
+                    // if the page is turned and there are not any results, stay on prev page
+                    pageNumber.value --
+                }
+            }
         }
         catch(error) {
             console.log(error)
@@ -27,6 +36,18 @@
         
     }
 
+    async function nextPage() {
+        pageNumber.value ++
+        await findDestinations()
+    }
+
+    async function prevPage() {
+        if (pageNumber.value > 1) {
+            pageNumber.value --
+            await findDestinations()
+        }
+    }
+
 </script>
 <template>
     <div>
@@ -39,7 +60,8 @@
             <DestinationSearchResult class="absolute z-50" v-if="destinationSearchResults !== null"
                 @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
                 @choose-destination="chooseDestination"
-                :destination-search-results="destinationSearchResults" />
+                :destination-search-results="destinationSearchResults" 
+                @next-page="nextPage" prev-page="prevPage" />
         </span>
         
         <span v-else>

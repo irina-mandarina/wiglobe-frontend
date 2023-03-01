@@ -20,6 +20,9 @@
             title: title.value,
             starRating: starRating.value
         })
+        content.value = ''
+        title.value = ''
+        starRating.value = 0
     }
 </script>
 

@@ -26,8 +26,11 @@ import { getJourneysByDestination } from '~~/js/journeyRequests';
     <NuxtLayout name="default">
         <Destination :destination="destination" />
         <div class="text-center text-3xl font-droid font-bold my-10">
-            Journeys to {{ destination.name }}
+            Journeys to {{ destination?.name }}
         </div>
-        <Journey v-for="journey in journeys" :journey="journey" class="my-10" />
+        <Journey v-if="journeys?.length > 0 && journeys !== null" v-for="journey in journeys" :journey="journey" class="my-10" />
+        <div v-else class="text-center text-xl font-droid">
+            There are not any journeys to {{ destination?.name }} yet
+        </div>
     </NuxtLayout>
 </template>

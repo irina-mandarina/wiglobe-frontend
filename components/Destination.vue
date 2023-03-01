@@ -10,7 +10,7 @@
         <NuxtLink :to="'/destinations/' + destination?.id" class="w-full text-center">
             <div class="text-center w-full bg-img" 
                 :style="{ 'background-image': 'url(https://flagcdn.com/w640/' + destination?.country?.countryCode?.toLowerCase() + '.png)' }">
-                <h1 class="font-bold font-heebo tracking-wider w-full py-20 text-3xl text-white text-drop-shadow">
+                <h1 class="font-bold font-heebo tracking-wider w-full py-20 text-3xl text-white text-stroke">
                     {{ destination.name }}
                 </h1>
             </div>
@@ -41,10 +41,13 @@
     </div>
 </template>
 <style scoped>
-    .text-drop-shadow {
-        text-shadow: 0 0 50px rgb(255, 255, 255);
-        stroke: white;
-        stroke-width: 2px;
+    .text-stroke {
+        color: white;
+        text-shadow:
+            -1px -1px 0 #000,  
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
     }
 
     .box-drop-shadow {
