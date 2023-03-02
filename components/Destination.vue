@@ -34,7 +34,6 @@
                 <span>Class: {{ destination.featureCode }}</span>
                 <span class="flex h-min">
                     Location: {{ destination.country.countryName }}, {{ destination.country.continent }} 
-                    <!-- <img class="inline w-fit px-2" :src="'https://flagsapi.com/' + destination?.country?.countryCode + '/flat/64.png'" /> -->
                 </span>
             </div>
         </div>

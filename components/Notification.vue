@@ -26,13 +26,13 @@
         </div>
 
         <div class="w-3/4 text-center">
-            <NuxtLink :to="'/profile/' + notification?.subject" class="text-fawn font-bold relative" 
+            <NuxtLink :to="'/profile/' + notification?.subject" class="text-fawn font-bold relative z-1" 
             @mouseenter="usernameHovered = true" @mouseleave="usernameHovered = false">
                 {{ notification?.subject }}
                 <Transition>
                     <ProfileMini v-if="usernameHovered"
                     @mouseenter="usernameHovered = true" @mouseleave="usernameHovered = false" 
-                    :username="notification?.subject" class="absolute w-40 left-0" />
+                    :username="notification?.subject" class="absolute w-40 left-0 z-50" />
                 </Transition>
             </NuxtLink>
             {{ content }}

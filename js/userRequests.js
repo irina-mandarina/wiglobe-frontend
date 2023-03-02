@@ -50,8 +50,7 @@ export async function deleteAccount() {
 }
 
 export async function editBio(bio) {
-    debugger
-    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
         bio,
         {
             headers: {
@@ -78,7 +77,7 @@ export async function editBio(bio) {
 }
 
 export async function editGender(gender) {
-    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/gender",
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/gender",
         gender,
         {
             headers: {
@@ -91,7 +90,7 @@ export async function editGender(gender) {
 }
 
 export async function editResidence(destinationId) {
-    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/residence",
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/residence",
         destinationId,
         {
             headers: {
@@ -104,7 +103,7 @@ export async function editResidence(destinationId) {
 }
 
 export async function editBirthdate(birthdate) {
-    const response = await axios.put("http://localhost:8080/users/" + getLocalStorageUsername() + "/birthdate",
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/birthdate",
         birthdate,
         {
             headers: {

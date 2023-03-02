@@ -115,7 +115,7 @@
                 await changeBirthdate()
             }
             if (newBio.value !== null && biography.value !== newBio.value) {
-                console.log("new bio")
+                console.log("new bio ")
                 await changeBiography()
             }
             await userStore.init()

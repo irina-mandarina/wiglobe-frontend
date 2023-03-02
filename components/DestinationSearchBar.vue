@@ -13,7 +13,7 @@
             const response = await searchDestinations(destinationKeyword.value, pageNumber.value, pageSize)
             if (response.data?.length > 0) {
                 // there aren't any results on the page requested
-                results.value.destinations = response.data
+                destinationSearchResults.value = response.data
                 if (pageNumber.value !== 1) {
                     // if the page is turned and there are not any results, stay on prev page
                     pageNumber.value --
@@ -50,7 +50,7 @@
 
 </script>
 <template>
-    <div>
+    <div class="z-50">
         <span v-if="chosenDestination === null || chosenDestination === undefined">
             <input v-model="destinationKeyword"
             class="mx-auto px-4 border-b-2 border-dark-blue p-2 rounded-full focus:outline-none"

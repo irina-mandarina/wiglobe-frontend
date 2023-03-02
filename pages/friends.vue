@@ -18,6 +18,14 @@
 
 <template>
     <NuxtLayout name="default">
-        <UserDetails v-if="friends !== null" v-for="friend in friends" :user="friend"/>
+        <div class="text-center text-3xl font-droid p-6">
+            Friends make the journey of life worth every mile.
+        </div>
+        <div v-if="friends && friends?.length > 0" class="flex flex-wrap justify-evenly">
+            <UserDetails v-for="friend in friends" :user="friend" class="w-1/4"/>
+        </div>
+        <div v-else class="text-center font-droid text-xl">
+            You do not have any friends yet.
+        </div>
     </NuxtLayout>
 </template>

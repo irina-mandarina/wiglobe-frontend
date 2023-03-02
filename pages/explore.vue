@@ -45,11 +45,11 @@
         <SearchBar />
 
         <!-- container -->
-        <div class="w-full relative">
-            <!-- carousel -->
+        <div v-if="destinationRecommendations?.length > 0" class="w-full relative">
             <p class="font-heebo font-bold text-3xl p-6">
                 We think you'd like
             </p>
+            <!-- carousel -->
             <div v-if="destinationsOnDisplay !== undefined" class="flex justify-evenly w-full">
                 <i @click="previousDestination()" class="fa fa-chevron-left bg-gray-200 w-10 py-6 px-2"/>
 

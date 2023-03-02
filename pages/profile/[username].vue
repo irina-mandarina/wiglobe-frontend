@@ -75,8 +75,8 @@
             console.log(error)
         }
         await followStore.init()
-        getFollows()
-        getJourneys()
+        await getFollows()
+        await getJourneys()
         setFollowRelationships()
 
     })
@@ -128,7 +128,8 @@
         catch (error) {
             console.log(error)
         }
-        await followStore.getReceivedFollowRequests()
+        await followStore.getSentFollowRequests()
+        await followStore.getFollowing()
         setFollowRelationships()
     }
 
@@ -140,7 +141,7 @@
         catch (error) {
             console.log(error)
         }
-        await followStore.getReceivedFollowRequests()
+        await followStore.getSentFollowRequests()
         setFollowRelationships()
     }
 
@@ -151,7 +152,7 @@
         catch (error) {
             console.log(error)
         }
-        await followStore.getFollowers()
+        await followStore.getFollowing()
         setFollowRelationships()
     }
 
@@ -165,25 +166,6 @@
         }
         await followStore.getFollowing()
         setFollowRelationships()
-    }
-
-    let friendPage = ref(1)
-    function nextFriendPage() {
-        if (friendPage.value === friendCount.value / 2) {
-            friendPage.value = 1
-        }
-        else {
-            friendPage.value ++
-        }
-    }
-
-    function prevFriendPage() {
-        if (friendPage.value === 1) {
-            friendPage.value = friendCount.value / 2
-        }
-        else {
-            friendPage.value --
-        }
     }
 </script>
 
