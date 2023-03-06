@@ -6,10 +6,15 @@ export default defineEventHandler(async (event) => {
   if (event.node.req.method === 'POST') {
     let folderName = "C:/wiglobe/images/"
     if (!fs.existsSync(folderName)){
+        debugger
       fs.mkdirSync(folderName)
     }
+
+    console.log(event)
+
     fs.writeFile(folderName + generateUUID() + ".png", await event.node.req.read(), 'binary', (err) => {
       // In case of an error throw err.
+      debugger
       if (err) throw err
     })
   }

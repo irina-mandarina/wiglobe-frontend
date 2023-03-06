@@ -43,29 +43,31 @@
         reader.onload = async () => {
             const data = reader.result;
 
-            await axios.post('/journeys/upload', data, {
-                headers: {
-                    'Content-Type': 'application/octet-stream'
-                }
+            await axios.post('/api/journeys/upload', 
+                data, 
+                {
+                    headers: {
+                        'Content-Type': 'application/octet-stream'
+                    }
                 })
                 .then(response => {
-                    console.log(response);
+                    console.log(response)
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
             }
     }
 
-    async function uploadFile(event) {
-      console.log(event.target.files)
-      const headers = { 'Content-Type': 'multipart/form-data' };
-      const response = await axios.post('/journeys/upload', event.target.files[0], { headers }).then((res) => {
-        res.data.files; // binary representation of the file
-        res.status; // HTTP status
-      })
-      console.log(response)
-    }
+    // async function uploadFile(event) {
+    //   console.log(event.target.files)
+    //   const headers = { 'Content-Type': 'multipart/form-data' };
+    //   const response = await axios.post('/api/journeys/upload', event.target.files[0], { headers }).then((res) => {
+    //     res.data.files; // binary representation of the file
+    //     res.status; // HTTP status
+    //   })
+    //   console.log(response)
+    // }
 
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
@@ -276,7 +278,7 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" @change="uploadFile" accept="image/png, image/jpeg" class="p-10" />
+                    <input type="file" @change="handleFileUpload" accept="image/png, image/jpeg" class="p-10" />
                 </div>
 
                 <!-- Activity adder -->
