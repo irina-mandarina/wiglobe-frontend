@@ -1,25 +1,10 @@
 <script setup>
-    import { BlobServiceClient, AnonymousCredential } from '@azure/storage-blob';
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useUserStore } from '~~/stores/UserStore'
     import { addActivityToJourney } from '~~/js/activityRequests'
     import { searchDestinations, getDestination } from '~~/js/destinationRequests'
-
-    // connect-with-sas-token.js
-    // const accountName = "wiglobeimages"
-    // const sasToken = "sp=racw&st=2023-02-28T19:27:56Z&se=2023-03-31T02:27:56Z&sip=84.238.195.243&sv=2021-06-08&sr=c&sig=Swh9BGSWkbzLdGg%2BCeixmxRuKT%2F78huG1ZaDXyPwHDY%3D"
-
-    // const blobServiceUri = `https://${accountName}.blob.core.windows.net`;
-
-    // // https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN
-    // const blobServiceClient = new BlobServiceClient(
-    //     `${blobServiceUri}?${sasToken}`,
-    //     null
-    // )
-    // const containerName = 'journey-images'
-    // const containerClient = blobServiceClient.getContainerClient(containerName)
-    // await containerClient.createIfNotExists()
-    // const selectedFile = ref(null)
+    import { postImage } from "~~/js/journeyRequests"
+    import axios from 'axios'
 
     const journeyStore = useJourneyStore()
     const userStore = useUserStore()
@@ -36,16 +21,51 @@
     let startDate = ref(null)
     let endDate = ref(null)
 
+    let images = ref([])
     let visibility = ref('PUBLIC')
     let showVisibilityOptions = ref(false)
     let activities = ref([])
 
     let journeyId = null
-
     let canBePosted = computed(() => {
         return chosenDestination.value != null && startDate.value != null
     })
     let creatorOpen = ref(false)
+
+    function handleFileUpload(event) {
+        const file = event.target.files[event.target.files.length - 1]
+        images.value.push(file)
+        console.log(images.value)
+        
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+
+        reader.onload = async () => {
+            const data = reader.result;
+
+            await axios.post('/journeys/upload', data, {
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                }
+                })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }
+    }
+
+    async function uploadFile(event) {
+      console.log(event.target.files)
+      const headers = { 'Content-Type': 'multipart/form-data' };
+      const response = await axios.post('/journeys/upload', event.target.files[0], { headers }).then((res) => {
+        res.data.files; // binary representation of the file
+        res.status; // HTTP status
+      })
+      console.log(response)
+    }
 
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
@@ -66,7 +86,7 @@
     })
 
     watch( 
-        [startDate, endDate, chosenDestination, activities]
+        [startDate, endDate, chosenDestination, activities, images]
     , async (journey) => {
             await postToDrafts()
     })
@@ -106,8 +126,15 @@
             },
             description: description.value,
             activities: activities.value,
-            visibility: 'DRAFT'
+            visibility: 'DRAFT',
         })).id
+
+
+        if (images.value !== null) {
+            for (let i = 0; i < images.value.length; i++) {
+                await postImage(journeyId, images.value[i])
+            }
+        }
     }
 
     async function addActivity(activityRequest) {
@@ -128,17 +155,6 @@
         navigateTo('/journeys/' + (await journeyStore.postJourney(journey)).id)
     }
 
-    function onFileSelected(event) {
-      selectedFile.value = event.target.files[0]
-    }
-
-    async function uploadFile() {
-      const containerName = 'user-uploads'
-      const blobName = selectedFile.value.name
-      const blockBlobClient = containerClient.getBlockBlobClient(blobName)
-      await blockBlobClient.uploadData(selectedFile.value)
-      console.log('Upload block blob ${blobName} successfully')
-    }
 </script>
 
 <template>
@@ -260,7 +276,7 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" class="mx-auto flex my-6" alt="Pictures" @change="onFileSelected" />
+                    <input type="file" @change="uploadFile" accept="image/png, image/jpeg" class="p-10" />
                 </div>
 
                 <!-- Activity adder -->
@@ -275,7 +291,7 @@
 
         <button v-if="canBePosted"
         class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
-        @click="postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility})">
+        @click="postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility, images})">
             Post journey
         </button>
     </div>
