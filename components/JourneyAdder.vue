@@ -41,13 +41,14 @@
         reader.readAsArrayBuffer(file);
 
         reader.onload = async () => {
-            const data = reader.result;
+            // const data = reader.result;
+            const data = file
 
-            await axios.post('/api/journeys/upload', 
+            await axios.post('api/journeys/upload', 
                 data, 
                 {
                     headers: {
-                        'Content-Type': 'application/octet-stream'
+                        'Content-Type': 'multipart/form-data'
                     }
                 })
                 .then(response => {
