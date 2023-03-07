@@ -3,26 +3,20 @@ import fs from "fs";
 export default defineEventHandler(async (event) => {
   let journeyName = event.context.params?.journey
   
-  let content = await event.node.req.read()
   if (event.node.req.method === 'POST') {
-    let folderName = "wiglobe/images/"
-    if (!fs.existsSync("wiglobe/")){
-        debugger
-        fs.mkdirSync("wiglobe")
-        if (!fs.existsSync("wiglobe/images/")){
-          debugger
-          fs.mkdirSync("wiglobe/images")
-      }
-  
-    }
+    let folderName = "D:/tues/thesis/thesis-frontend/wiglobe/images/"
+    // if (!fs.existsSync(folderName)){
+    //     fs.mkdirSync(folderName)
+    // }
+    console.log(folderName + generateUUID() + ".JPG")
 
-    fs.writeFile(folderName + generateUUID() + ".png", content, 'binary', (err) => {
+    fs.writeFile(folderName + generateUUID() + ".jpg", event.node.req.read(), 'binary', (err) => {
       // In case of an error throw err.
       if (err) throw err
     })
   }
   //if error is thrown, it will not be accessible here, since writeFile is asynchronous
-  return content
+  return "ok"
 })
 
 function generateUUID() { // Public Domain/MIT

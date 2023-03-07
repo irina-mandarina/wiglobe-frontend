@@ -32,32 +32,32 @@
     })
     let creatorOpen = ref(false)
 
-    function handleFileUpload(event) {
+    async function handleFileUpload(event) {
         const file = event.target.files[event.target.files.length - 1]
-        images.value.push(file)
-        console.log(images.value)
+        // images.value.push(file)
+        // console.log(images.value)
         
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
+        // const reader = new FileReader();
+        // reader.readAsArrayBuffer(file);
 
-        reader.onload = async () => {
+        // reader.onload = async () => {
             // const data = reader.result;
-            const data = file
+        const data = file
 
-            await axios.post('api/journeys/upload', 
-                data, 
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            }
+        await axios.post('api/journeys/upload', 
+            data, 
+            {
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                }
+            })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            // }
     }
 
     // async function uploadFile(event) {
