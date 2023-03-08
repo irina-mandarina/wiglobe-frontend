@@ -3,7 +3,6 @@
     import { useUserStore } from '~~/stores/UserStore'
     import { addActivityToJourney } from '~~/js/activityRequests'
     import { searchDestinations, getDestination } from '~~/js/destinationRequests'
-    import { postImage } from "~~/js/journeyRequests"
     import axios from 'axios'
 
     const journeyStore = useJourneyStore()
@@ -22,6 +21,7 @@
     let endDate = ref(null)
 
     let images = ref([])
+    let imageFilenames = ref([])
     let visibility = ref('PUBLIC')
     let showVisibilityOptions = ref(false)
     let activities = ref([])
@@ -34,41 +34,28 @@
 
     async function handleFileUpload(event) {
         const file = event.target.files[event.target.files.length - 1]
-        // images.value.push(file)
-        // console.log(images.value)
-        
-        // const reader = new FileReader();
-        // reader.readAsArrayBuffer(file);
+        images.value.push(file)
+    }
 
-        // reader.onload = async () => {
-            // const data = reader.result;
-        const data = file
-
-        await axios.post('api/journeys/upload', 
-            data, 
-            {
-                headers: {
-                    'Content-Type': 'application/octet-stream'
-                }
+    async function uploadImages() {
+        for (let i = 0; i < images.value.length; i++) {
+            let data = images.value[i]
+            await axios.post('api/journeys/upload', 
+                data, 
+                {
+                    headers: {
+                        'Content-Type': 'application/octet-stream'
+                    }
             })
             .then(response => {
                 console.log(response)
+                imageFilenames.value.push(response.data)
             })
             .catch(error => {
                 console.log(error)
             })
-            // }
+        }
     }
-
-    // async function uploadFile(event) {
-    //   console.log(event.target.files)
-    //   const headers = { 'Content-Type': 'multipart/form-data' };
-    //   const response = await axios.post('/api/journeys/upload', event.target.files[0], { headers }).then((res) => {
-    //     res.data.files; // binary representation of the file
-    //     res.status; // HTTP status
-    //   })
-    //   console.log(response)
-    // }
 
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
@@ -96,7 +83,7 @@
 
     async function findDestinations() {
         try {
-            const response = await searchDestinations(destinationKeyword.value)
+            const response = await searchDestinations(destinationKeyword.value, 1, 50)
             destinationSearchResults.value = response.data
         }
         catch(error) {
@@ -115,6 +102,7 @@
     }
 
     async function postToDrafts() {
+        await uploadImages()
         journeyId = (await journeyStore.postJourney({
             id: journeyId,
             startDate: startDate.value,
@@ -130,18 +118,13 @@
             description: description.value,
             activities: activities.value,
             visibility: 'DRAFT',
+            images: imageFilenames.value
         })).id
 
-
-        if (images.value !== null) {
-            for (let i = 0; i < images.value.length; i++) {
-                await postImage(journeyId, images.value[i])
-            }
-        }
     }
 
     async function addActivity(activityRequest) {
-        console.log(activityRequest)
+        
         if (journeyId === null) {
             await postToDrafts()
         }
@@ -155,6 +138,12 @@
     }
 
     async function postJourney(journey) {
+        await uploadImages()
+        if (images.value !== null) {
+            for (let i = 0; i < imageFilenames.value.length; i++) {
+                await postImageName(journeyId, imageFilenames.value[i])
+            }
+        }
         navigateTo('/journeys/' + (await journeyStore.postJourney(journey)).id)
     }
 
@@ -216,6 +205,7 @@
                                     @choose-destination="chooseDestination"
                                     :destination-search-results="destinationSearchResults" />
                             </span>
+                            <!-- <DestinationSearchBar @choose-destination="" /> -->
                             <span v-if="chosenDestination !== null && chosenDestination !== undefined">
                                 <DestinationMini :destination="chosenDestination" />
                             </span>
@@ -279,7 +269,10 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" @change="handleFileUpload" accept="image/png, image/jpeg" class="p-10" />
+                    <input type="file" @change="handleFileUpload" accept="image/png, image/jpeg" multiple class="p-10" />
+                    <!-- <button class="p-2 bg-pthalo rounded-full" @click="uploadImages">
+                        Upload
+                    </button> -->
                 </div>
 
                 <!-- Activity adder -->
@@ -294,7 +287,15 @@
 
         <button v-if="canBePosted"
         class="bg-fawn absolute bottom-4 left-4 p-6 text-lg rounded-full font-heebo font-bold text-white hover:text-gray-100 duration-300"
-        @click="postJourney({id: journeyId, startDate, endDate, destinationId: chosenDestination.id, description, activities, visibility, images})">
+        @click="postJourney({
+            id: journeyId, 
+            startDate, 
+            endDate, 
+            destinationId: chosenDestination.id, 
+            description, activities, 
+            visibility, 
+            images: imageFilenames
+            })">
             Post journey
         </button>
     </div>

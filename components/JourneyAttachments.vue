@@ -6,6 +6,14 @@
     let attachmentOnDisplayId = ref(0)
     let attachmentChange = ref(false)
     let showArrows = ref(false)
+    let folderName = "../assets/wiglobe/images/"
+
+    // onBeforeMount(() => {
+    //     for(let i = 0; i < props.images?.length; i++) {
+    //         // props.images[i] = folderName + props.images[i]
+    //         props.images[i] = require(`@/assets/wiglobe/images/${image}`)
+    //     }
+    // })
 
     function showPreviousAttachment() {
         attachmentChange.value = true
@@ -45,13 +53,20 @@
                 <i class="fa fa-chevron-left text-2xl px-3 align-middle pt-32" />
             </div>
 
-            <div class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
-                :style="{ 'background-image': 'url(' + images[attachmentOnDisplayId] + ')' }"
+            <!-- <div class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
+                :style="{ 'background-image': 'url(' + images[attachmentOnDisplayId] +  ')' }"
                 :class="{
                     'animate-attachment': attachmentChange,
                 }"
             >
-            </div>
+            </div> -->
+
+            <img class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
+            :src="require('@/assets/wiglobe/images/' + images[attachmentOnDisplayId])" 
+            :style="{ 'background-image': 'url(' + images[attachmentOnDisplayId] +  ')' }"
+            :class="{
+                'animate-attachment': attachmentChange,
+            }"/>
             <Activity class="attachment h-[40rem]" v-if="attachmentOnDisplayId >= images.length" :activity="activities[attachmentOnDisplayId - images.length]" :class="{
                 'animate-attachment': attachmentChange
             }" />

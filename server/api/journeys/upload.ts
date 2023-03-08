@@ -1,23 +1,34 @@
 import fs from "fs"; 
 
 export default defineEventHandler(async (event) => {
-  let journeyName = event.context.params?.journey
-  
-  if (event.node.req.method === 'POST') {
-    let folderName = "D:/tues/thesis/thesis-frontend/wiglobe/images/"
-    // if (!fs.existsSync(folderName)){
-    //     fs.mkdirSync(folderName)
-    // }
-    console.log(folderName + generateUUID() + ".JPG")
+  let journeyName, imageType
+  console.log(event);
+  // [journeyName, imageType] = event.context.params?.params?.split('-')
 
-    fs.writeFile(folderName + generateUUID() + ".jpg", event.node.req.read(), 'binary', (err) => {
-      // In case of an error throw err.
-      if (err) throw err
-    })
+  // console.log(journeyName)
+  let bytesRead;
+  let filename;
+  if (event.node.req.method === 'POST') {  
+    let bytes = await readRawBody(event, false);
+    filename = writeImageToDisk(bytes, 'jpg');
+    bytesRead = bytes?.byteLength
   }
-  //if error is thrown, it will not be accessible here, since writeFile is asynchronous
-  return "ok"
+  return filename
 })
+
+async function writeImageToDisk( bytes: Buffer | undefined,
+                                imageType: string | undefined) {
+  let folderName = "D:/tues/thesis/thesis-frontend/assets/wiglobe/images/"
+  if (!fs.existsSync(folderName)) {
+  fs.mkdirSync(folderName);
+  }
+  let fileName = generateUUID() 
+  const imageOutputWriter = fs.createWriteStream(`${folderName}/${fileName}.${imageType}`);
+
+  imageOutputWriter.write(bytes);
+  imageOutputWriter.close();
+  return fileName + '.' + imageType;
+}
 
 function generateUUID() { // Public Domain/MIT
   var d = new Date().getTime();//Timestamp

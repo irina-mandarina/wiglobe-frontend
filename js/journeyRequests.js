@@ -114,19 +114,3 @@ export async function searchJourneys(keyword, pageNumber, pageSize) {
     )
     return response
 }
-
-export async function postImage(journeyId, image) {
-    const response = await axios.post("http://localhost:8080/journeys/" + journeyId + "/images",
-        // image, 
-        {
-            params: {
-                image
-            },
-            headers: {
-                // 'Content-Type': 'multipart/form-data; boundary=ebf9f03029db4c2799ae16b5428b06bd',
-                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
-            }
-        }
-    )
-    return response
-}

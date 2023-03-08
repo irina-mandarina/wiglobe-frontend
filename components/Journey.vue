@@ -62,7 +62,7 @@
 
             <!-- Pictures and activities (right) -->
             <div class="w-1/2">
-                <JourneyAttachments class="" :activities="journey.activities" :images="['https://wiglobeimages.blob.core.windows.net/journey-images/86794874_630307537801870_7801456429851738112_n.jpg', 'https://picsum.photos/1500']" />
+                <JourneyAttachments class="" :activities="journey.activities" :images="journey?.images" />
             </div>
                
         </div>
