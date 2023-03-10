@@ -1,7 +1,10 @@
 import fs from "fs"; 
 
 export default defineEventHandler(async (event) => {
-  let journeyName, imageType
+  console.log(event);
+  // [journeyName, imageType] = event.context.params?.params?.split('-')
+
+  // console.log(journeyName)
   let bytesRead;
   let filename;
   if (event.node.req.method === 'POST') {  
@@ -14,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
 async function writeImageToDisk( bytes: Buffer | undefined,
                                 imageType: string | undefined) {
-  let folderName = "D:/tues/thesis/thesis-frontend/assets/wiglobe/images/"
+  let folderName = "D:/tues/thesis/thesis-frontend/assets/wiglobe/images/activities/"
   if (!fs.existsSync(folderName)) {
   fs.mkdirSync(folderName);
   }

@@ -1,4 +1,5 @@
 <script setup>
+    import axios from 'axios'
     import { getAllActivityTypes } from '~~/js/activityRequests'
 
     const emits = defineEmits([
@@ -11,11 +12,11 @@
 
     const activityTypes = ref(null)
     let activityTypesMenu = ref(false)
-    let title = ref(null)
     let type = ref('OTHER')
-    let location = ref(null)
     let description = ref(null)
     let date = ref(null)
+    let image = ref(null)
+    let imageFilename = ref(null)
 
     onBeforeMount(async () => {
         try {
@@ -26,19 +27,17 @@
         }
     })
 
-    function addActivity() {
+    async function addActivity() {
         let activityRequest = {
-            title: title.value,
             type: type.value,
-            location: location.value,
             description: description.value,
-            date: date.value
+            date: date.value,
+            image: imageFilename.value
         }
         console.log(activityRequest)
+        await uploadImage()
         emits('addActivity', activityRequest)
 
-        title.value = null
-        location.value = null
         description.value = null
         date.value = null
     }
@@ -46,6 +45,29 @@
     let activityOnDisplayId = ref(null)
     let activityChange = ref(false)
     let showArrows = ref(false)
+
+    async function handleFileUpload(event) {
+        const file = event.target.files[event.target.files.length - 1]
+        image.value = (file)
+    }
+
+    async function uploadImage() {
+        let data = image.value
+        await axios.post('api/activities/upload', 
+            data, 
+            {
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                }
+        })
+        .then(response => {
+            console.log(response)
+            imageFilename.value = (response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
 
     function showPreviousActivity() {
         activityChange.value = true
@@ -105,16 +127,6 @@
                     </div>
 
                     <div class="mb-2">
-                        <span>Location: </span>
-                        <input type="text" v-model="location" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
-                    </div>
-
-                    <div class="mb-2">
-                        <span>Title: </span>
-                        <input type="text" v-model="title" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
-                    </div>
-                    
-                    <div class="mb-2">
                         <span>Description: </span>
                         <input type="text" v-model="description" class="p-1 rounded-lg m-2 border-b-2 border-dark-blue focus:outline-none duration-300" />
                     </div>
@@ -142,7 +154,7 @@
 
                     <div class="">
                         <span>Add pictures from this activity: </span>
-                        <input type="file" class="m-2" alt="Pictures" />
+                        <input type="file" @change="handleFileUpload" class="m-2" alt="Pictures" />
                     </div>    
 
                     <div class="mt-4 w-full relative text-center">
