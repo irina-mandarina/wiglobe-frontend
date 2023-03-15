@@ -1,6 +1,7 @@
 <script setup>
     defineProps({
         visibility: String,
+        postedOn: String
         // date of posting
     })
     let openDeletePopup = ref(false)
@@ -13,7 +14,7 @@
                 Details
             </div>
             <div class="my-2"> 
-                Posted on:
+                Posted on: {{ postedOn }}
             </div>
             <div class="my-2">
                 Visible by: 

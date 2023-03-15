@@ -24,14 +24,21 @@
         title.value = ''
         starRating.value = 0
     }
+
+    let profilePicturePath = computed(() => {
+        if (userStore.gender && (userStore.profilePicture === null || userStore.profilePicture === undefined || userStore.profilePicture?.length === 0)) {
+            return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + userStore.gender.toLowerCase() + ".jpg"
+        }
+        else return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + userStore.profilePicture
+    })
 </script>
 
 <template>
-    <div class="shadow-md rounded-lg w-1/3 bg-white p-6 ">
+    <div class="shadow-md bg-white rounded-lg w-1/3 bg-white p-6 ">
         <!-- Review user -->
         <div v-if="username !== null" class="w-full text-center">
             <NuxtLink :to="'/profile/' + username">
-                <img class="mx-auto" src="https://picsum.photos/50"/>
+                <img class="mx-auto w-1/4" :src="profilePicturePath"/>
                 <span class="mx-auto"> 
                     <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
                 </span>
@@ -73,7 +80,7 @@
             <input v-model="title" placeholder="Review title"  class="p-2 my-4 mx-auto focus:outline-none focus:border-b duration-300 rounded-lg"/>
             <textarea v-model="content" class="flex p-2 my-4 mx-auto resize-none focus:outline-none focus:bg-gray-100 rounded-lg font-heebo" placeholder="Review content"></textarea>
             <button @click="emitPost()" class="bg-asparagus px-6 py-2 text-white rounded-full hover:text-gray-200 focus:outline-none mx-auto flex">
-                Post comment
+                Post review
             </button>
         </div>
 

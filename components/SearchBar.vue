@@ -100,7 +100,9 @@
 <template>
     <!-- search bar -->
     <div class="w-1/2 mx-auto flex my-10">
-        <input type="search" v-model="keyword" @keyup.enter="search()" class="w-11/12 mr-3 border-b rounded-lg borde-slate-300 p-3 focus:outline-none focus:border-slate-700" placeholder="Search for anything"/>
+        <input type="search" v-model="keyword" @keyup.enter="search()" 
+        class="w-11/12 mr-3 border-b-2 border-slate-700 rounded-lg borde-slate-300 p-3 bg-transparent focus:outline-none focus:border-slate-700" 
+        placeholder="Search for anything"/>
         <button @click="search()" class="w-1/12 p-2 bg-peach duration-100 rounded-full">
             <i class="fa-solid fa-magnifying-glass" />
         </button>

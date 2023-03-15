@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getTokenFromLocalStorage } from './localStorageUtil'
+import { getLocalStorageUsername, getTokenFromLocalStorage } from './localStorageUtil'
 
 export async function signup(user) {
     const response = await axios.post("http://localhost:8080/users/signup",
@@ -59,19 +59,6 @@ export async function editBio(bio) {
             }
         }
     )
-    // const res = await axios({
-    //     method: 'put',
-    //     url: "http://localhost:8080/users/" + getLocalStorageUsername() + "/bio",
-    //     data: {
-    //         bio
-    //     },
-        
-    //     headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authentication': 'Bearer ' + getTokenFromLocalStorage()
-    //         }
-        
-    // })
     console.log(response)
     return response
 }
@@ -103,8 +90,35 @@ export async function editResidence(destinationId) {
 }
 
 export async function editBirthdate(birthdate) {
+    debugger
     const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/birthdate",
         birthdate,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function editProfilePicture(profilePictureFilename) {
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/profile-picture",
+    profilePictureFilename,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + getTokenFromLocalStorage()
+            }
+        }
+    )
+    return response
+}
+
+export async function editBackgroundPicture(backgroundPictureFilename) {
+    const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/background-picture",
+    backgroundPictureFilename,
         {
             headers: {
                 'Content-Type': 'application/json',

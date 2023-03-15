@@ -6,12 +6,11 @@
     let attachmentOnDisplayId = ref(0)
     let attachmentChange = ref(false)
     let showArrows = ref(false)
-    let folderName = "/_nuxt/assets/wiglobe/images/"
+    let folderName = "/_nuxt/assets/wiglobe/images/journeys/"
 
     onBeforeMount(() => {
         for(let i = 0; i < props.images?.length; i++) {
             props.images[i] = folderName + props.images[i]
-            console.log(props.images[i])
         }
     })
 

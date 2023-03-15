@@ -1,6 +1,7 @@
 <script setup>
-import { getUserDetails } from '~~/js/userRequests';
-import { useFollowStore } from '~~/stores/FollowStore';
+    import { getUserDetails } from '~~/js/userRequests'
+    import { useFollowStore } from '~~/stores/FollowStore'
+    import { getProfilePicturePath } from '~~/js/userPictures'
 
     const props = defineProps({
         username: String
@@ -30,13 +31,15 @@ import { useFollowStore } from '~~/stores/FollowStore';
             relation.value = "They are following you"
         }
     })
+
+    let profilePicturePath = computed(() => getProfilePicturePath(user.value.profilePicture, user.value.gender))
 </script>
 
 <template>
     <div class="shadow-md rounded-md bg-white text-dark-blue text-center">
         <!-- image -->
         <div class="profile-picture">
-            <img class="p-2 mx-auto mt-4" src="https://picsum.photos/400" alt="">
+            <img class="p-2 mx-auto mt-4" :src="profilePicturePath" alt="">
         </div>
 
         <!-- names -->

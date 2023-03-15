@@ -2,14 +2,17 @@
     const props = defineProps({
         activity: Object,
     })
-    const imgStyle = 'bg-[url(/_nuxt/assets/wiglobe/images/activites/' + props?.activity?.image + ')]'
+    let imgStyle = computed(() => {
+        if (props?.activity?.image === null) return null
+         return 'bg-[url(/_nuxt/assets/wiglobe/images/activites/' + props?.activity?.image + ')]'
+    })
 </script>
 
 <template>
     <div v-if="activity !== undefined" class="overflow-hidden w-full" :class="{
         imgStyle: activity?.image
     }"
-    :style="{ 'background-image': 'url(/_nuxt/assets/wiglobe/images/' + activity?.image +  ')' }">
+    :style="{ 'background-image': imgStyle }">
         <div class="bg-white/[0.6] w-min h-min p-3 rounded-md left-16 absolute bottom-10">
             <div class="flex w-max">
                 {{new Date(activity?.date).toLocaleDateString() }} 

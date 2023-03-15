@@ -6,6 +6,7 @@
     import { getLocalStorageUsername } from '~~/js/localStorageUtil'
     import { getJourneysByUser } from '~~/js/journeyRequests'
     import { deleteFollowRequest, sendFollowRequest, unfollow, getFollowers, getFollowing, getFriends, respondToFollowRequest } from '~~/js/followRequests'
+    import { getProfilePicturePath } from '~~/js/userPictures'
 
     const userStore = useUserStore()
     const followStore = useFollowStore()
@@ -63,7 +64,6 @@
     }
 
     onBeforeMount(async () => {
-        await userStore.init()
         if (route.params.username === getLocalStorageUsername()) {
             navigateTo('/profile/me')
         }
@@ -83,6 +83,15 @@
     
     onMounted(() => {
         startAnimation.value = true
+    })
+
+    let profilePicturePath = computed(() => getProfilePicturePath(user?.value?.profilePicture, user?.value?.gender))
+
+    let backgroundPicturePath = computed(() => {
+        if (!user.backgroundPicture || user.backgroundPicture.length === 0) {
+            return "/_nuxt/assets/wiglobe/images/users/background-pictures/default.jpg"
+        }
+        else return "/_nuxt/assets/wiglobe/images/users/background-pictures/" + user.backgroundPicture
     })
 
     async function getJourneys() {
@@ -170,10 +179,14 @@
 </script>
 
 <template>
-    <NuxtLayout name="default" v-if="user !== null">
+    <NuxtLayout name="default" class="bg-white" v-if="user !== null">
 
         <!-- header -->
-        <div class="w-full h-1/2 absolute header-picture">
+        <div class="w-full z-50 h-[300px] absolute header-picture"
+        :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
+        :class="{
+            'expand': startAnimation
+        }">
             <div class="relative w-full h-full">
                 <div class="absolute gradient bottom-0 h-1/3 w-full">
                 </div>
@@ -181,10 +194,10 @@
         </div>
 
         <!-- profile picture -->
-        <img class="z-100 w-1/6 p-8 mx-auto mt-20" src="https://picsum.photos/400" alt="">
+        <img class="z-100 relative w-1/4 p-8 mx-auto mt-20" :src="profilePicturePath" alt="">
 
         <!-- names -->
-        <NuxtLink :to="'/profile/' + user.username" class="z-100 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">
+        <NuxtLink :to="'/profile/' + user.username" class="z-50 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">
             <p>{{ user.firstName }} {{ user.lastName }}</p>
             <p class="text-2xl p-4 font-metrophobic">@{{ user.username }}</p>
         </NuxtLink> 
@@ -292,7 +305,7 @@
             You have sent {{ user.firstName }} a follow request
         </div>
 
-        <div v-else class="text-center text-2xl py-10 font-droid">
+        <div v-if="!isFollowedOrPublic" class="text-center text-2xl py-10 font-droid">
             Follow {{ user.firstName }} to see their journeys
         </div>
 
@@ -301,11 +314,14 @@
 
 <style scoped>
     .header-picture {
-        background-image: url("https://picsum.photos/2500");
         background-size: cover;
-        z-index: -1;
+        z-index: 10;
     }
 
+    .z-100 {
+        z-index: 100;
+    }
+    
     .gradient {
         background: linear-gradient(#ffffff00, #ffffff);
     }

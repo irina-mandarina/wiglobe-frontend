@@ -18,7 +18,9 @@ export const useUserStore = defineStore('userStore', {
       gender: null,
       profilePrivacy: null,
       registrationTimestamp: null,
-      residence: null
+      residence: null,
+      profilePicture: null,
+      backgroundPicture: null
     }
   },
 
@@ -116,6 +118,8 @@ export const useUserStore = defineStore('userStore', {
       this.profilePrivacy = data.profilePrivacy
       this.registrationTimestamp = data.registrationTimestamp
       this.residence = data.residence
+      this.profilePicture = data.profilePicture
+      this.backgroundPicture = data.backgroundPicture
     },
 
     async init() {

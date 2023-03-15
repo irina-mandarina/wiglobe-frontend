@@ -3,6 +3,7 @@
     import { useUserStore } from '~~/stores/UserStore'
     import { addActivityToJourney } from '~~/js/activityRequests'
     import { searchDestinations, getDestination } from '~~/js/destinationRequests'
+    import { getProfilePicturePath } from '~~/js/userPictures'
     import axios from 'axios'
 
     const journeyStore = useJourneyStore()
@@ -140,12 +141,17 @@
     async function postJourney(journey) {
         await uploadImages()
         if (images.value !== null) {
-            for (let i = 0; i < imageFilenames.value.length; i++) {
-                await postImageName(journeyId, imageFilenames.value[i])
-            }
+            // for (let i = 0; i < imageFilenames.value.length; i++) {
+            //     await postImageName(journeyId, imageFilenames.value[i])
+            // }
         }
         navigateTo('/journeys/' + (await journeyStore.postJourney(journey)).id)
     }
+    
+    let profilePicturePath = computed(() => getProfilePicturePath(
+        computed( () => userStore.profilePicture).value,
+        computed( () => userStore.gender).value
+        ))
 
 </script>
 
@@ -161,16 +167,16 @@
             'h-2': !creatorOpen,
             'h-fit': creatorOpen,
             'open': creatorOpen
-        }" class="shadow-md rounded-lg w-11/12 mx-auto m-6 p-6 creator-container border-khaki border-2 relative">
+        }" class="shadow-md rounded-lg bg-white w-11/12 mx-auto m-6 p-6 creator-container border-khaki border-2 relative">
 
             <div class="flex creator" :class="{
                 'visible': creatorOpen
             }">
 
                 <!-- User info -->
-                <div class="float-left w-1/6 text-center h-min">
+                <div class="float-left w-1/6 m-2 text-center h-min">
                     <NuxtLink :to="'/profile/' + username">
-                        <img class="mx-auto" src="https://picsum.photos/50"/>
+                        <img class="mx-auto" :src="profilePicturePath"/>
                         <span class="mx-auto"> 
                             <p class="p-1 font-heebo">{{ firstName }} {{ lastName }}</p>
                         </span>

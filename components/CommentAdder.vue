@@ -1,5 +1,6 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
+    import { getProfilePicturePath } from '~~/js/userPictures'
 
     const emits = defineEmits([
         'postComment'
@@ -10,16 +11,22 @@
     let username = computed(() => userStore.username)
     let firstName = computed(() => userStore.firstName)
     let lastName = computed(() => userStore.lastName)
+    let profilePicture = computed(() => userStore.profilePicture)
     let content = ref(null)
 
     function emitPost() {
         emits('postComment', content.value)
         content.value = null
     }
+
+    let profilePicturePath = computed(() => getProfilePicturePath(
+        profilePicture.value, 
+        (computed( () => userStore.gender)).value)
+        )
 </script>
 
 <template>
-    <div class="shadow-md rounded-xl w-1/3 p-6">
+    <div class="shadow-md rounded-xl w-1/3 p-6 bg-white">
         <!-- Comment options -->
         <div class="float-right">
             <span class="p-2">
@@ -29,7 +36,7 @@
         <!-- Comment user -->
         <div class="p-2">
             <div>
-                <img class="p-2 ml-2 float-left" src="https://picsum.photos/50"/>
+                <img class="p-2 ml-2 float-left w-1/3" :src="profilePicturePath"/>
                 <span class="flex mb-0">  
                     <p class="p-1 font-droid"> {{ firstName }} {{ lastName }}</p>
                 </span>

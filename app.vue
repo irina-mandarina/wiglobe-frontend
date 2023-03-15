@@ -71,6 +71,7 @@
     --peach: #EBBE9B;
     --phtalo: #14342B;
     --dark-blue: #06032b;
+    background-color: rgb(215, 215, 216);
   }
 
   body {

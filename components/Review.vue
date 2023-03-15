@@ -1,7 +1,9 @@
 <script setup>
-    defineProps({
+    import { getProfilePicturePath } from '~~/js/userPictures'
+    const props = defineProps({
         review: Object
     })
+    let profilePicturePath = computed(() => getProfilePicturePath(props?.review?.userNames?.profilePicture, props?.review?.userNames?.gender))
 </script>
 
 <template>
@@ -15,7 +17,7 @@
         <!-- Review user -->
         <div class="w-full text-center">
             <NuxtLink :to="'/profile/' + review.userNames.username">
-                <img class="flex mx-auto" src="https://picsum.photos/50"/>
+                <img class="flex mx-auto w-1/4" :src="profilePicturePath"/>
                 <span class="mx-auto"> 
                     <p class="p-1 font-heebo">{{ review.userNames.firstName }} {{ review.userNames.lastName }}</p>
                 </span>
@@ -51,7 +53,7 @@
                 }"/>
         </div>
         <!-- Review body -->
-        <div class="w-full text-center">
+        <div class="w-full text-center break-words">
             <p class="p-2 pb-8 m-2 font-droid">
                 {{ review.title }}
             </p>

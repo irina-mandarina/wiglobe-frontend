@@ -1,5 +1,7 @@
 <script setup>
+    import { comment } from 'postcss';
     import { deleteComment } from '~~/js/commentRequests'
+    import { getProfilePicturePath } from '~~/js/userPictures'
     import { useUserStore } from '~~/stores/UserStore'
 
     const props = defineProps({
@@ -18,10 +20,12 @@
             console.log(error)
         }
     }
+
+    let profilePicturePath = computed(() => getProfilePicturePath(props?.comment?.userNames?.profilePicture, props?.comment?.userNames?.gender))
 </script>
 
 <template>
-    <div class="shadow-md rounded-xl w-1/3 p-6 relative">
+    <div class="shadow-md bg-white rounded-xl w-1/3 p-6 relative">
         <!-- Comment options -->
         <div v-if="comment?.userNames.username === userStore?.username" class="float-right">
             <span @click="openOptions = !openOptions" class="p-2">
@@ -36,7 +40,7 @@
         <!-- Comment user -->
         <div class="p-2">
             <NuxtLink  :to="'/profile/' + comment?.userNames.username">
-                <img class="p-2 ml-2 float-left" src="https://picsum.photos/50"/>
+                <img class="p-2 ml-2 float-left w-1/4" :src="profilePicturePath"/>
                 <span class="flex mb-0">  
                     <p class="p-1 font-droid"> {{ comment?.userNames.firstName }} {{ comment?.userNames.lastName }}</p>
                 </span>

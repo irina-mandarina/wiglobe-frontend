@@ -3,21 +3,15 @@
     import { useJourneyStore } from '~~/stores/JourneyStore'
     import { useFollowStore } from '~~/stores/FollowStore'
     import { unfollow } from '~~/js/followRequests'
-    import { editGender, editBirthdate, editResidence, editBio } from '~~/js/userRequests'
+    import { editGender, editBirthdate, editResidence, editBio, editProfilePicture, editBackgroundPicture } from '~~/js/userRequests'
+    import axios from "axios"
+    import { getProfilePicturePath, getBackgroundPicturePath } from '~~/js/userPictures'
 
     const userStore = useUserStore()
     const journeyStore = useJourneyStore()
     const followStore = useFollowStore()
 
-    onBeforeMount(async () => {
-        await journeyStore.getLoggedUserJourneys()
-    })
-
     let startAnimation = ref(false)
-
-    onMounted(() => {
-        startAnimation.value = true
-    })
 
     const username = computed(() => userStore.username)
     const firstName = computed(() => userStore.firstName)
@@ -28,6 +22,12 @@
     const biography = computed(() => userStore.biography)
     const residence = computed(() => userStore.residence)
     const profilePrivacy = computed(() => userStore.profilePrivacy)
+    let profilePicture = computed(() => userStore.profilePicture)
+    let backgroundPicture = computed(() => userStore.backgroundPicture)
+
+    let profilePicturePath = computed( () => getProfilePicturePath(profilePicture.value, gender.value))
+
+    let backgroundPicturePath = computed(() => getBackgroundPicturePath(backgroundPicture.val))
 
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
@@ -40,6 +40,17 @@
     let newGender = ref(null)
     let newBio = ref(biography.value)
     let newResidence = ref(null)
+    let newProfilePicture = ref(null)
+    let newBackgroundPicture = ref(null)
+    
+    onBeforeMount(async () => {
+        await journeyStore.getLoggedUserJourneys()
+    })
+
+    onMounted(() => {
+        startAnimation.value = true
+    })
+
 
     async function unfollowUser(username) {
         try {
@@ -56,7 +67,7 @@
             await editBirthdate(newBirthdate.value)
         }
         catch (error) {
-
+            console.warn(error)
         }
     }
 
@@ -65,6 +76,7 @@
             await editGender(newGender.value)
         }
         catch (error) {
+            console.warn(error)
 
         }
     }
@@ -74,6 +86,7 @@
             await editResidence(newResidence.value)
         }        
         catch (error) {
+            console.warn(error)
             
         }
     }
@@ -83,8 +96,45 @@
             await editBio(newBio.value)
         }        
         catch (error) {
+            console.warn(error)
             
         }
+    }
+
+    async function changeProfilePicture() {
+        const response = await axios.post('/api/users/profile-picture/upload', 
+            newProfilePicture.value, 
+            {
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                }
+            }
+        )
+        .then(async response => {
+            console.log(response)  
+            await editProfilePicture(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    async function changeBackgroundPicture() {
+        const response = await axios.post('/api/users/background-picture/upload', 
+            newBackgroundPicture.value, 
+            {
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                }
+            }
+        )
+        .then(async response => {
+            console.log(response)  
+            await editBackgroundPicture(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     function setNewBirthdate(val) {
@@ -96,39 +146,46 @@
     }
 
     function setNewResidence(val) {
-        console.log('set dest : ' + val)
         newResidence.value = val
     }
 
     async function toggleEditMode() {
+        debugger
         if (editMode.value) {
             if (newGender.value !== null && gender.value !== newGender.value) {
-                console.log("new gen")
                 await changeGender()
             }
             if (newResidence.value !== null && residence.value?.id !== residence.value?.id) {
-                console.log("new res")
                 await changeResidence()
             }
             if (newBirthdate.value !== null && birthdate.value !== newBirthdate.value) {
-                console.log("new birt")
                 await changeBirthdate()
             }
             if (newBio.value !== null && biography.value !== newBio.value) {
-                console.log("new bio ")
                 await changeBiography()
+            }
+            if (newProfilePicture.value !== null) {
+                await changeProfilePicture()
+            }
+            if (newBackgroundPicture.value !== null) {
+                await changeBackgroundPicture()
             }
             await userStore.init()
         }
         editMode.value = !editMode.value
     }
+
+    async function handleFileUpload(event) {
+        newProfilePicture.value = event.target.files[0]
+    }
 </script>
 
 <template>
-    <NuxtLayout name="default">
+    <NuxtLayout name="default" class="bg-white">
 
         <!-- edit profile button -->
-        <button @click="toggleEditMode()" class="absolute m-6 bg-asparagus rounded-full shadow-inner">
+        <button @click="toggleEditMode()" 
+        class="absolute z-100 m-6 bg-asparagus rounded-full shadow-inner">
             <span v-if="editMode" class="p-2 text-xl text-white font-heebo">
                 Save changes
             </span>
@@ -136,34 +193,47 @@
         </button>
 
         <!-- header -->
-        <div class="w-full h-1/2 absolute header-picture"
-            :class="{
-                'expand': startAnimation
-            }">
+        <div class="w-full z-50 h-[300px] absolute header-picture"
+        :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
+        :class="{
+            'expand': startAnimation
+        }">
             <div class="relative w-full h-full">
                 <div class="absolute gradient bottom-0 h-1/3 w-full">
                 </div>
             </div>
         </div>
-
+        
         <!-- profile picture -->
-        <img class="z-100 w-1/6 p-8 mx-auto mt-20" src="https://picsum.photos/400" alt="">
+        <div class="z-100 mx-auto relative bg-slate-100 w-1/12">
+            <img 
+            class="w-full h-full mx-auto mt-20 block" 
+            :src="profilePicturePath" 
+            alt="Profile picture" 
+            referrerpolicy="no-referrer">
+            <i v-if="editMode" class="fa fa-pen absolute top-0 right-0 p-2 bg-white rounded-bl-xl" />
+            <input v-if="editMode" type="file" @change="handleFileUpload" class="opacity-0 absolute top-0 right-0 w-full h-full" />
+        </div>
 
         <!-- names -->
-        <div class="z-100 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">
-            <p>{{ firstName }} {{ lastName }}</p>
+        <div class="z-50 mx-auto w-full p-4 text-3xl font-heebo font-bold text-center absolute tracking-wide">
+            <p class="z-50">
+                {{ firstName }} {{ lastName }}
+            </p>
             <p class="text-2xl p-4 font-metrophobic">@{{ username }}</p>
         </div> 
 
         <!-- bio -->
-        <p v-if="!editMode" class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
+        <p v-if="!editMode" class="text-center mx-auto py-8 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
             {{ biography }}
         </p>
-        <input v-else  class="rounded-full border-b bg-white mx-auto p-2 text-center w-fit flex focus:outline-none focus:border-slate-500" placeholder="Something about you" v-model="newBio"/>
+        <input v-else 
+        class="rounded-full border-b bg-white mx-auto p-2 text-center w-fit flex focus:outline-none focus:border-slate-500" 
+        placeholder="Something about you" v-model="newBio" />
 
-        <div class="w-full flex h-max relative">
+        <div class="w-full flex h-max relative bg-white mt-20">
             <!-- details -->
-            <div class="mx-auto flex flex-wrap w-1/2 my-6 p-6">
+            <div class="mx-auto flex flex-wrap w-1/2 mb-10 p-6">
 
                 <!-- gender and pronouns -->
                 <DetailBox class="delay-[1500ms] details-box" 
@@ -174,8 +244,12 @@
                 }"/>
 
                 <!-- birthday and age -->
-                <DetailBox v-if="birthdate || editMode" class="delay-[1500ms] details-box"
-                :detail="birthdate" detailType="birthdate" :editMode="editMode"
+                <DetailBox 
+                v-if="birthdate || editMode" 
+                class="delay-[1500ms] details-box"
+                :detail="birthdate" 
+                detailType="birthdate" 
+                :editMode="editMode"
                 @save="setNewBirthdate" 
                 :class="{
                     'slide-up': startAnimation
@@ -200,12 +274,13 @@
             <!-- end of details -->
 
              <!-- follow -->
-             <FollowList :followers="followers" :following="following" :friends="friends" :username="username" @unfollowUser="unfollowUser" />
+             <FollowList :followers="followers" :following="following" :friends="friends" :username="username" 
+             @unfollowUser="unfollowUser" />
         </div>
 
         <!-- journeys -->
-        <div class="my-20">
-            <div class="text-center text-2xl font-droid">Your journeys</div>
+        <div class="my-20 bg-slate-300">
+            <div class="text-center text-2xl font-droid py-8">Your journeys</div>
             <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
         </div>
 
@@ -214,13 +289,16 @@
 
 <style scoped>
     .header-picture {
-        background-image: url("https://picsum.photos/2500");
         background-size: cover;
-        z-index: -1;
+        z-index: 20;
     }
 
     .gradient {
         background: linear-gradient(#ffffff00, #ffffff);
+    }
+
+    .z-100 {
+        z-index: 100;
     }
 
     .expand {

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   let filename;
   if (event.node.req.method === 'POST') {  
     let bytes = await readRawBody(event, false);
-    filename = writeImageToDisk(bytes, 'jpg', "D:/tues/thesis/thesis-frontend/assets/wiglobe/images/activities/");
+    filename = writeImageToDisk(bytes, 'jpg', "D:/tues/thesis/thesis-frontend/assets/wiglobe/images/users/background-pictures");
     bytesRead = bytes?.byteLength
   }
   return filename

@@ -19,8 +19,8 @@
         <div class="w-full text-green-900 p-6 text-center relative">
             <div class="mx-auto w-full font-droid">
                 <span v-if="destination.reviewCount > 0" class="relative">
-                    <i class="fa fa-star text-fawn" v-for="star in destination.averageRating"/>
-                    <i class="fa fa-star" v-for="star in 5 - destination.averageRating"/>
+                    <i class="fa fa-star text-fawn" v-for="star in (destination.averageRating - destination.averageRating % 1)"/>
+                    <i class="fa fa-star" v-for="star in 5 - (destination.averageRating - destination.averageRating % 1)"/>
                 </span>
                 <p v-if="destination.reviewCount > 0">
                     Average rating: {{ destination.averageRating }} ({{ destination.reviewCount }} reviews)
