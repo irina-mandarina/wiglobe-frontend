@@ -175,4 +175,8 @@
   .font-oblique {
     font-style: oblique;
   }
+
+  html, body, #__nuxt {
+    height: 100%;
+  }
 </style>

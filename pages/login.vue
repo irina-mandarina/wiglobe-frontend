@@ -3,12 +3,17 @@
     import { GoogleSignInButton } from "vue3-google-signin"
     import { decodeCredential } from "vue3-google-signin"
 
-    let userStore = useUserStore()
-
     definePageMeta({
-        middleware: "auth"
+      middleware: "auth"
     })
 
+    let userStore = useUserStore()
+
+    let logInResponseCode = ref(userStore.logInResponseCode)
+    function setLoginResponseCode() {
+      debugger
+      logInResponseCode.value = userStore.logInResponseCode
+    }
     let startAnimation = ref(false)
     let username = ref(null)
     let password = ref(null)
@@ -16,7 +21,7 @@
     // set log in credentials. these are set when the username and password ref are ready to be used to send a request.
     // this object is also used to update error messages
     let logInCredentials = {
-        username: null,
+        userIdentifier: null,
         password: null
     }
     
@@ -28,7 +33,7 @@
         if (!password.value) {
             return "password cannot be blank"
         }
-        else if (userStore.logInResponseCode === 401) {
+        else if (logInResponseCode.value === 401) {
             // if the password has changed since the last log in request
             if (logInCredentials.password !== password.value) {
                 return ""
@@ -40,6 +45,7 @@
             return ""
         }
     })
+
     let usernameError = computed (() => {
         if (username.value === null) {
             // username isn't updated yet
@@ -51,13 +57,14 @@
         else if (!(/^[A-Za-z][A-Za-z0-9_]/.test(username.value))) {
             return "The username you entered is invalid"
         }
-        else if (userStore.logInResponseCode === 404) {
+        else if (logInResponseCode.value === 404) {
             // if the username has changed since the last log in request
-            if (logInCredentials.username !== username.value) {
+
+            if (logInCredentials.userIdentifier !== username.value) {
                 return ""
             }
             // if it hasn't changed, don't allow sending more requests
-            return "The username you entered is not registered yet"
+            return "The user identifier you entered is not registered yet"
         }
         else {
             return ""
@@ -84,7 +91,7 @@
 
         await userStore.authenticationWithGoogle(credential, userData)
         
-        if (userStore.logInResponseCode === 200) {
+        if (logInResponseCode.value === 200) {
             navigateTo('/')
         }
     };
@@ -105,15 +112,15 @@
         }
 
         await userStore.logIn(logInCredentials)
-        
-        if (userStore.logInResponseCode === 200) {
+        setLoginResponseCode()
+        if (logInResponseCode.value === 200) {
             navigateTo('/')
         }
     }
 </script>
 
 <template>
-    <div class="flex w-2/3 h-2/3 mt-20 mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
+    <div class="flex w-2/3 h-11/12 inset-y-0.5 my-auto mx-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
         <div class="bg-white p-6 w-1/2 input-container"
             :class="{
                 'in-view': startAnimation
@@ -133,15 +140,21 @@
                     <label for="username">
                         <i class="fa fa-user p-6 text-xl"/>
                     </label>
-                    <input v-model="username" name="username" type="text" class="rounded-full p-2 my-4 focus:outline-none border-asparagus hover-border-khaki duration-300 border-b-4 bg-white"/>
+                    <input v-model="username" name="username" type="text"
+                           placeholder="username or email"
+                           class="rounded-full p-2 my-4 focus:outline-none border-asparagus hover-border-khaki duration-300 border-b-4 bg-white"/>
                     <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500"> {{ usernameError }}</div>
                 </div>
                 <div class="w-fit mx-auto">
                     <label for="password">
                         <i class="fa fa-lock p-6 text-xl"/>
                     </label>
-                    <input v-model="password" name="password" type="password" class="rounded-full p-2 my-4 focus:outline-none border-asparagus hover-border-khaki duration-300 border-b-4 bg-white"/>
-                    <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500"> {{ passwordError }}</div>
+                    <input v-model="password" name="password" type="password"
+                           placeholder="password"
+                           class="rounded-full p-2 my-4 focus:outline-none border-asparagus hover-border-khaki duration-300 border-b-4 bg-white"/>
+                    <div class="text-center text-sm text-red-700 hover:drop-shadow duration-500">
+                      {{ passwordError }}
+                    </div>
                 </div>
                 <button @click="logIn()" class="flex mx-auto my-6 bg-khaki font-bold tracking-wider py-2 px-6 rounded-full mx-auto duration-300 focus:outline-none">
                     Log in
