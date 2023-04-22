@@ -50,7 +50,7 @@
 
 </script>
 <template>
-    <div class="z-50">
+    <div>
         <span v-if="chosenDestination === null || chosenDestination === undefined">
             <input v-model="destinationKeyword"
             class="mx-auto px-4 border-b-2 border-dark-blue p-2 rounded-full focus:outline-none"

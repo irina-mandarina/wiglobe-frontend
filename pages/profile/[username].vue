@@ -40,28 +40,33 @@
 
     let followersListOpen = ref(false)
     let followingListOpen = ref(false)
-    let isFollowedByLoggedUser = ref(false)
-    let hasReceivedAFollowReq = ref(false)
-    let hasSentAFollowReq = ref(false)
+    let isFollowedByLoggedUser = computed(() => (followStore.following.filter ((it) =>
+                                            it.username === user.value.username
+                                            ).length !== 0))
+    let hasReceivedAFollowReq = computed(() => (followStore.sentFollowRequests.filter((it) =>
+                                            it.receiver.username === user.value.username
+                                            ).length !== 0))
+    let hasSentAFollowReq = computed(() => (followStore.receivedFollowRequests.filter((it) =>
+                                            it.requester.username === user.value.username
+                                            ).length !== 0))
     let startAnimation = ref(false)
 
-    let isFollowedOrPublic = ref(false)
+    let isFollowedOrPublic = computed(() => (isFollowedByLoggedUser.value || user.value.profilePrivacy === "PUBLIC") )
 
-    function setFollowRelationships() {
-        isFollowedByLoggedUser.value = (followStore.following.filter ((it) =>
-                it.username === user.value.username
-            ).length !== 0)
-
-        hasReceivedAFollowReq.value = (followStore.sentFollowRequests.filter((it) =>
-                it.receiver.username === user.value.username
-            ).length !== 0)
-
-        hasSentAFollowReq.value = (followStore.receivedFollowRequests.filter((it) =>
-                it.requester.username === user.value.username
-            ).length !== 0)
-
-        isFollowedOrPublic.value = (isFollowedByLoggedUser.value || user.profilePrivacy === "PUBLIC")
-    }
+    // function setFollowRelationships() {
+    //     isFollowedByLoggedUser.value = (followStore.following.filter ((it) =>
+    //             it.username === user.value.username
+    //         ).length !== 0)
+    //
+    //     hasReceivedAFollowReq.value = (followStore.sentFollowRequests.filter((it) =>
+    //             it.receiver.username === user.value.username
+    //         ).length !== 0)
+    //
+    //     hasSentAFollowReq.value = (followStore.receivedFollowRequests.filter((it) =>
+    //             it.requester.username === user.value.username
+    //         ).length !== 0)
+    //
+    // }
 
     onBeforeMount(async () => {
         if (route.params.username === getLocalStorageUsername()) {
@@ -77,7 +82,6 @@
         await followStore.init()
         await getFollows()
         await getJourneys()
-        setFollowRelationships()
 
     })
     
@@ -126,7 +130,6 @@
         catch (error) {
             console.log(error)
         }
-        setFollowRelationships()
     }
 
     async function follow() {
@@ -139,7 +142,6 @@
         }
         await followStore.getSentFollowRequests()
         await followStore.getFollowing()
-        setFollowRelationships()
     }
 
     async function cancelRequest() {
@@ -151,7 +153,6 @@
             console.log(error)
         }
         await followStore.getSentFollowRequests()
-        setFollowRelationships()
     }
 
     async function unfollowUser() {
@@ -162,7 +163,6 @@
             console.log(error)
         }
         await followStore.getFollowing()
-        setFollowRelationships()
     }
 
     async function respondWith(requester, isApproved) {
@@ -174,38 +174,73 @@
             console.log(error)
         }
         await followStore.getFollowing()
-        setFollowRelationships()
     }
 </script>
 
 <template>
     <NuxtLayout name="default" class="bg-white" v-if="user !== null">
-
         <!-- header -->
-        <div class="w-full z-50 h-[300px] absolute header-picture"
-        :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
-        :class="{
-            'expand': startAnimation
+        <div class="w-full h-1/3 duration-300 bg-cover shadow-lg relative"
+         :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
+         :class="{
+            'opacity-1': startAnimation,
+            'opacity-0': !startAnimation,
         }">
-            <div class="relative w-full h-full">
-                <div class="absolute gradient bottom-0 h-1/3 w-full">
-                </div>
+            <!-- filler-->
+            <div class="h-5/6"></div>
+
+            <!-- profile picture-->
+            <div
+            class="relative h-1/6 mx-auto w-[10%]">
+                <img :src="profilePicturePath"
+                     alt="Profile picture"
+                     class="mx-auto w-full max-w-[150px]"
+                     referrerpolicy="no-referrer"
+                />
             </div>
+
         </div>
 
-        <!-- profile picture -->
-        <img class="z-100 relative w-1/4 p-8 mx-auto mt-20" :src="profilePicturePath" alt="">
-
         <!-- names -->
-        <NuxtLink :to="'/profile/' + user.username" class="z-50 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">
-            <p>{{ user.firstName }} {{ user.lastName }}</p>
-            <p class="text-2xl p-4 font-metrophobic">@{{ user.username }}</p>
-        </NuxtLink> 
+        <div class="mx-auto w-full mt-20 p-4 text-3xl text-center tracking-wide">
+            <p class="font-droid">
+                {{ user.firstName }} {{ user.lastName }}
+            </p>
+            <p class="text-2xl p-4 font-metrophobic">
+                @{{ user.username }}
+            </p>
+        </div>
 
         <!-- bio -->
-        <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">
+        <p
+        class="text-center mx-auto py-4 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
             {{ user.biography }}
         </p>
+<!--        &lt;!&ndash; header &ndash;&gt;-->
+<!--        <div class="w-full z-50 h-[300px] absolute header-picture"-->
+<!--        :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"-->
+<!--        :class="{-->
+<!--            'expand': startAnimation-->
+<!--        }">-->
+<!--            <div class="relative w-full h-full">-->
+<!--                <div class="absolute gradient bottom-0 h-1/3 w-full">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; profile picture &ndash;&gt;-->
+<!--        <img class="z-100 relative w-1/4 p-8 mx-auto mt-20" :src="profilePicturePath" alt="">-->
+
+<!--        &lt;!&ndash; names &ndash;&gt;-->
+<!--        <NuxtLink :to="'/profile/' + user.username" class="z-50 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">-->
+<!--            <p>{{ user.firstName }} {{ user.lastName }}</p>-->
+<!--            <p class="text-2xl p-4 font-metrophobic">@{{ user.username }}</p>-->
+<!--        </NuxtLink> -->
+
+<!--        &lt;!&ndash; bio &ndash;&gt;-->
+<!--        <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">-->
+<!--            {{ user.biography }}-->
+<!--        </p>-->
 
         
         <div class="flex w-1/2 mx-auto text-center">
@@ -296,7 +331,7 @@
         </div>
 
         <!-- journeys -->
-        <div v-if="isFollowedOrPublic" class="my-20">
+        <div v-if="isFollowedOrPublic" class="py-20">
             <div class="text-center text-2xl font-droid">{{ user.firstName}}'s journeys</div>
             <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
         </div>

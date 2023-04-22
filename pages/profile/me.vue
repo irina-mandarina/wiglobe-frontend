@@ -65,81 +65,79 @@
         }
         await followStore.getFollowing()
     }
-
-    async function changeBirthdate(){
-        try {
-            await editBirthdate(newBirthdate.value)
-        }
-        catch (error) {
-            console.warn(error)
-        }
-    }
-
-    async function changeGender() {
-        try {
-            await editGender(newGender.value)
-        }
-        catch (error) {
-            console.warn(error)
-
-        }
-    }
-
-    async function changeResidence() {
-        try {
-            await editResidence(newResidence.value)
-        }        
-        catch (error) {
-            console.warn(error)
-            
-        }
-    }
-
-    async function changeBiography() {
-        try {
-            await editBio(newBio.value)
-        }        
-        catch (error) {
-            console.warn(error)
-            
-        }
-    }
-
-    async function changeProfilePicture() {
-        const response = await axios.post('/api/users/profile-picture/upload', 
-            newProfilePicture.value, 
-            {
-                headers: {
-                    'Content-Type': 'application/octet-stream'
-                }
-            }
-        )
-        .then(async response => {
-            console.log(response)  
-            await editProfilePicture(response.data)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    }
-
-    async function changeBackgroundPicture() {
-        const response = await axios.post('/api/users/background-picture/upload', 
-            newBackgroundPicture.value, 
-            {
-                headers: {
-                    'Content-Type': 'application/octet-stream'
-                }
-            }
-        )
-        .then(async response => {
-            console.log(response)  
-            await editBackgroundPicture(response.data)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    }
+    //
+    // async function changeBirthdate(){
+    //     try {
+    //         await editBirthdate(newBirthdate.value)
+    //     }
+    //     catch (error) {
+    //         console.warn(error)
+    //     }
+    // }
+    //
+    // async function changeGender() {
+    //     try {
+    //         await editGender(newGender.value)
+    //     }
+    //     catch (error) {
+    //         console.warn(error)
+    //
+    //     }
+    // }
+    //
+    // async function changeResidence() {
+    //     try {
+    //         await editResidence(newResidence.value)
+    //     }
+    //     catch (error) {
+    //         console.warn(error)
+    //
+    //     }
+    // }
+    //
+    // async function changeBiography() {
+    //     try {
+    //         await editBio(newBio.value)
+    //     }
+    //     catch (error) {
+    //         console.warn(error)
+    //
+    //     }
+    // }
+    //
+    // async function changeProfilePicture() {
+    //     const response = await axios.post('/api/users/profile-picture/upload',
+    //         newProfilePicture.value,
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/octet-stream'
+    //             }
+    //         }
+    //     )
+    //     .then(async response => {
+    //         await editProfilePicture(response.data)
+    //     })
+    //     .catch(error => {
+    //         console.log(error)
+    //     })
+    // }
+    //
+    // async function changeBackgroundPicture() {
+    //     const response = await axios.post('/api/users/background-picture/upload',
+    //         newBackgroundPicture.value,
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/octet-stream'
+    //             }
+    //         }
+    //     )
+    //     .then(async response => {
+    //         await editBackgroundPicture(response.data)
+    //     })
+    //     .catch(error => {
+    //         console.log(error)
+    //     })
+    // }
 
     function setNewBirthdate(val) {
         newBirthdate.value = val
@@ -156,31 +154,35 @@
     async function toggleEditMode() {
         if (editMode.value) {
             if (newGender.value !== null && gender.value !== newGender.value) {
-                await changeGender()
+                await userStore.changeGender(newGender.value)
             }
             if (newResidence.value !== null && residence.value?.id !== residence.value?.id) {
-                await changeResidence()
+                await userStore.changeResidence(newResidence.value)
             }
             if (newBirthdate.value !== null && birthdate.value !== newBirthdate.value) {
-                await changeBirthdate()
+                await userStore.changeBirthdate(newBirthdate.value)
             }
             if (newBio.value !== null && biography.value !== newBio.value) {
-                await changeBiography()
+                await userStore.changeBiography(newBio.value)
             }
             if (newProfilePicture.value !== null) {
-                await changeProfilePicture()
+                await userStore.changeProfilePicture(newProfilePicture.value)
             }
             if (newBackgroundPicture.value !== null) {
-                await changeBackgroundPicture()
+                await userStore.changeBackgroundPicture(newBackgroundPicture.value)
             }
-            await userStore.init()
         }
         editMode.value = !editMode.value
     }
 
-    function handleFileUpload(event) {
+    function handleProfilePictureUpload(event) {
         newProfilePicture.value = event.target.files[0]
     }
+
+    function handleBackgroundPictureUpload(event) {
+        newBackgroundPicture.value = event.target.files[0]
+    }
+
 </script>
 
 <template>
@@ -198,21 +200,32 @@
         </button>
 
         <!-- header -->
-        <div class="w-full h-1/3 duration-300 bg-cover shadow-lg"
+        <div class="w-full h-1/3 duration-300 bg-cover shadow-lg relative"
         :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
         :class="{
             'opacity-1': startAnimation,
-            'opacity-0': !startAnimation
+            'opacity-0': !startAnimation,
         }">
+            <div class="absolute top-0 right-0 w-full">
+                <i v-if="editMode"
+               class="fa fa-pen p-2 bg-white rounded-bl-xl float-right cursor-pointer" />
+
+                <input v-if="editMode"
+               type="file"
+               accept="image/png, image/jpeg"
+               @change="handleBackgroundPictureUpload"
+               class="focus:outline-none border-0 opacity-0 cursor-pointer absolute top-0 right-0" />
+            </div>
+
             <!-- filler-->
             <div class="h-5/6"></div>
 
             <!-- profile picture-->
             <div
-            class="relative h-1/6 mx-auto w-fit">
+            class="relative h-1/6 mx-auto w-[10%]">
                 <img :src="profilePicturePath"
                      alt="Profile picture"
-                     class=""
+                     class="mx-auto w-full max-w-[150px]"
                      referrerpolicy="no-referrer"
                 />
                 <!--profile picture input-->
@@ -222,14 +235,14 @@
                 <input v-if="editMode"
                 type="file"
                 accept="image/png, image/jpeg"
-                @change="handleFileUpload"
+                @change="handleProfilePictureUpload"
                 class="absolute top-0 right-0 focus:outline-none border-0 opacity-0 w-full h-full cursor-pointer" />
             </div>
 
         </div>
 
         <!-- names -->
-        <div class="z-50 mx-auto w-full mt-12 p-4 text-3xl text-center tracking-wide">
+        <div class="mx-auto w-full mt-20 p-4 text-3xl text-center tracking-wide">
             <p class="font-droid">
                 {{ firstName }} {{ lastName }}
             </p>
@@ -242,23 +255,25 @@
         <p v-if="!editMode"
         class="text-center mx-auto py-4 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
             {{ biography }}
-            fdug orwhfo wfoihwh foiwhre oiw phf sohsoihfoihfsoi soihofsi sfoih fosh
         </p>
-        <input v-else 
-        class="rounded-full border-b bg-white mx-auto p-2 text-center w-fit flex focus:outline-none focus:border-slate-500" 
-        placeholder="Something about you" v-model="newBio" />
+        <textarea v-else
+        class="rounded-md resize-none border-x-2 mx-auto p-2 text-center w-1/2 bg-slate-200 focus:bg-slate-200 flex focus:outline-none focus:border-slate-500"
+        placeholder="Something about you"
+        v-model="newBio">
+        </textarea>
 
-        <div class="w-full flex h-max relative bg-white mt-20">
+        <div class="w-full flex h-max relative bg-white">
             <!-- details -->
             <div class="mx-auto flex flex-wrap w-1/2 mb-10 p-6">
-
                 <!-- gender and pronouns -->
                 <DetailBox class="delay-[1500ms] details-box" 
-                v-if="gender?.length || editMode" :detail="gender" detailType="gender" :editMode="editMode"
-                @save="setNewGender" 
+                v-if="gender?.length || editMode" :detail="gender"
+                detailType="gender"
+                :editMode="editMode"
+                @set-value="setNewGender"
                 :class="{
                     'slide-up': startAnimation
-                }"/>
+                }" />
 
                 <!-- birthday and age -->
                 <DetailBox 
@@ -267,22 +282,28 @@
                 :detail="birthdate" 
                 detailType="birthdate" 
                 :editMode="editMode"
-                @save="setNewBirthdate" 
+                @set-value="setNewBirthdate"
                 :class="{
                     'slide-up': startAnimation
-                }"/>
+                }" />
 
                 <!-- location -->
-                <DetailBox v-if="residence || editMode" class="delay-[1700ms] details-box"
-                :detail="residence" detailType="residence" :editMode="editMode"
-                @save="setNewResidence" 
+                <DetailBox v-if="residence || editMode"
+                class="delay-[1700ms] details-box"
+                :detail="residence"
+                detailType="residence"
+                :editMode="editMode"
+                @set-value="setNewResidence"
                 :class="{
                     'slide-up': startAnimation
                 }"/>
 
                 <!-- joined on -->
-                <DetailBox v-if="registrationTimestamp" class="delay-[2000ms] details-box"
-                :detail="registrationTimestamp" detailType="registrationTimestamp" :editMode="editMode"
+                <DetailBox v-if="registrationTimestamp"
+                class="delay-[2000ms] details-box"
+                :detail="registrationTimestamp"
+                detailType="registrationTimestamp"
+                :editMode="editMode"
                 :class="{
                     'slide-up': startAnimation
                 }"/>
@@ -291,12 +312,16 @@
             <!-- end of details -->
 
              <!-- follow -->
-             <FollowList :followers="followers" :following="following" :friends="friends" :username="username" 
+             <FollowList
+                :followers="followers"
+                :following="following"
+                :friends="friends"
+                :username="username"
              @unfollowUser="unfollowUser" />
         </div>
 
         <!-- journeys -->
-        <div class="my-20">
+        <div class="py-20">
             <div class="text-center text-2xl font-droid py-8">Your journeys</div>
             <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
         </div>

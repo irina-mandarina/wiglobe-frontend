@@ -1,6 +1,15 @@
-import { login, signup, getUserDetails, authenticateWithGoogle } from "~~/js/userRequests"
+import {
+  login,
+  signup,
+  getUserDetails,
+  authenticateWithGoogle,
+  editBio,
+  deleteAccount,
+  editProfilePicture, editBackgroundPicture, editBirthdate, editGender, editResidence
+} from "~~/js/userRequests"
 import { cleanLocalStorage, getLocalStorageUsername } from "~~/js/localStorageUtil"
 import { defineStore } from "pinia"
+import axios from "axios";
 
 export const useUserStore = defineStore('userStore', {
   state: () => {
@@ -95,16 +104,6 @@ export const useUserStore = defineStore('userStore', {
         console.log(error)
       }
     },
-    
-    async editBio() {
-      try {
-        const response = await editBio(this.user.username, bio) 
-        console.log(response)
-      }
-      catch (error) {
-        console.log(error)
-      }
-    },
 
     setUserDetails(data) {
       this.username = data.username
@@ -135,6 +134,83 @@ export const useUserStore = defineStore('userStore', {
       else if (getLocalStorageUsername() === null) (
         navigateTo('/login')
       )
+    },
+
+    async changeBiography(bio) {
+      try {
+        const response = await editBio(bio)
+        this.biography = response.data.biography
+      }
+      catch (error) {
+        console.log(error)
+      }
+    },
+
+    async changeProfilePicture(newProfilePicture) {
+      const response = await axios.post('/api/users/profile-picture/upload',
+          newProfilePicture,
+          {
+            headers: {
+              'Content-Type': 'application/octet-stream'
+            }
+          }
+      )
+          .then(async response => {
+            await editProfilePicture(response.data)
+            this.profilePicture = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    async changeBackgroundPicture(newBackgroundPicture) {
+      const response = await axios.post('/api/users/background-picture/upload',
+          newBackgroundPicture,
+          {
+            headers: {
+              'Content-Type': 'application/octet-stream'
+            }
+          }
+      )
+          .then(async response => {
+            await editBackgroundPicture(response.data)
+            this.backgroundPicture = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    async changeBirthdate(newBirthdate) {
+      try {
+        const response = await editBirthdate(newBirthdate)
+        this.birthdate = response.data.birthdate
+      }
+      catch (error) {
+        console.warn(error)
+      }
+    },
+
+    async changeGender(newGender) {
+      try {
+        const response = await editGender(newGender)
+        this.gender = response.data.gender
+      }
+      catch (error) {
+        console.warn(error)
+
+      }
+    },
+
+    async changeResidence(newResidence) {
+      try {
+        const response = await editResidence(newResidence)
+        this.residence = response.data.residence
+      }
+      catch (error) {
+        console.warn(error)
+      }
     }
     
   }
