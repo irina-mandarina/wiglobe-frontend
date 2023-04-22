@@ -12,8 +12,9 @@
             <i class="fa fa-users hover:text-md duration-100"  v-if="visibility === 'FRIEND_ONLY'"/>
         </span>
 
-        <span v-if="editPermission" class="p-2" @click="$emit('manageJourney')">
-            <i class="fa fa-th hover:text-md duration-100" />
+        <span v-if="editPermission" class="p-2"
+        @click="$emit('manageJourney')">
+            <i class="fa fa-circle-info hover:text-md duration-100" />
         </span>
 
     </div>

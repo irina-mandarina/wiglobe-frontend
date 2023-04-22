@@ -182,5 +182,10 @@
 
   nuxt-link {
       cursor: pointer;
+      outline-width: 0;
+  }
+
+  nuxt-link:focus {
+      outline-width: 0;
   }
 </style>

@@ -29,7 +29,7 @@
     })
 </script>
 <template>
-    <div class="w-full h-20 z-50 focus:outline-none">
+    <div class="w-full h-20 z-200 focus:outline-none">
         <nav class="fixed w-full z-50 duration-300 ease-in-out" :class="{
             'translate-y-0': showNav,
             '-translate-y-full': !showNav
@@ -48,7 +48,8 @@
                 </div>
 
                 <!-- menu button -->
-                <div class="w-1/12 float-right" @click="hide = !hide">
+                <div class="w-1/12 float-right cursor-pointer"
+                 @click="hide = !hide">
                     <i class="fa fa-bars py-6 px-8 float-right text-2xl bg-slate-100" />
                 </div>
             </div>
@@ -56,42 +57,13 @@
             <Transition>
                 <ul v-if="!hide"
                 class="overflow-hidden float-right bg-slate-50 bg-white rounded-lg shadow-lg m-1">
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100"
-                    :class="{
-                        'bg-slate-200': route && route.path === '/profile/me'
-                    }">
-                        <NuxtLink to="/profile/me" class="text-lg">
-                            <i class="fa fa-user"/>
-                            <span class="px-2"> Profile </span>
-                        </NuxtLink>
-                    </li>
-                    
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
-                        'bg-slate-200': route && route.path === '/drafts'
-                    }">
-                        <NuxtLink to="/drafts" class="text-lg">
-                            <i class="fa fa-file"/>
-                            <span class="px-2"> Drafts </span>
-                        </NuxtLink>
-                    </li>
 
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
-                        'bg-slate-200': route && route.path === '/friends'
-                    }">
-                        <NuxtLink to="/friends" class="text-lg">
-                            <i class="fa fa-address-book"/>
-                            <span class="px-2"> Friends </span>
-                        </NuxtLink>
-                    </li>
+                    <MenuItem path="/profile/me" text="Profile" icon="fa-user" />
+                    <MenuItem path="/follow-requests" text="Follow requests" icon="fa-users" />
+                    <MenuItem path="/friends" text="Friends" icon="fa-address-book" />
+                    <MenuItem path="/drafts" text="Drafts" icon="fa-file" />
+                    <MenuItem path="/settings" text="Settings" icon="fa-gears" />
 
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
-                        'bg-slate-200': route && route.path === '/follow-requests'
-                    }">
-                        <NuxtLink to="/follow-requests" class="text-lg">
-                            <i class="fa fa-users"/>
-                            <span class="px-2"> Follow requests </span>
-                        </NuxtLink>
-                    </li>
 
                     <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100 cursor-pointer">
                         <div @click="userStore.logOut()" class="text-lg">
@@ -100,15 +72,6 @@
                         </div>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4 block hover:bg-slate-100 duration-100"
-                    :class="{
-                        'bg-slate-200': route && route.path === '/settings'
-                    }">
-                        <NuxtLink to="/settings" class="text-lg">
-                            <i class="fa fa-gears"/>
-                            <span class="px-2"> Settings </span>
-                        </NuxtLink>
-                    </li>
                 </ul>
             </Transition>
         </nav>
@@ -138,5 +101,9 @@
 
     .fa:hover {
         color: var(--phtalo);
+    }
+
+    .z-200 {
+        z-index: 200;
     }
 </style>

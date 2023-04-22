@@ -187,51 +187,62 @@
     <NuxtLayout name="default" class="bg-white">
 
         <!-- edit profile button -->
-        <button @click="toggleEditMode()" 
-        class="absolute z-100 m-6 bg-asparagus rounded-full shadow-inner">
-            <span v-if="editMode" class="p-2 text-xl text-white font-heebo">
+        <button @click="toggleEditMode()"
+        class="absolute z-100 m-6 p-2 bg-asparagus rounded-full shadow-inner">
+            <span v-if="editMode"
+            class="p-2 text-xl text-white font-heebo">
                 Save changes
             </span>
-            <i v-else class="fa fa-gear text-4xl py-2 px-3 hover:text-gray-700 duration-500 hover:rotate-180" />
+            <i v-else
+           class="fa fa-gear text-xl py-1 px-2 hover:text-gray-700 duration-500 hover:rotate-180" />
         </button>
 
         <!-- header -->
-        <div class="w-full z-50 h-[300px] absolute header-picture"
+        <div class="w-full h-1/3 duration-300 bg-cover shadow-lg"
         :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"
         :class="{
-            'expand': startAnimation
+            'opacity-1': startAnimation,
+            'opacity-0': !startAnimation
         }">
-            <div class="relative w-full h-full">
-                <div class="absolute gradient bottom-0 h-1/3 w-full">
-                </div>
+            <!-- filler-->
+            <div class="h-5/6"></div>
+
+            <!-- profile picture-->
+            <div
+            class="relative h-1/6 mx-auto w-fit">
+                <img :src="profilePicturePath"
+                     alt="Profile picture"
+                     class=""
+                     referrerpolicy="no-referrer"
+                />
+                <!--profile picture input-->
+                <i v-if="editMode"
+                class="fa fa-pen absolute top-0 right-0 p-2 bg-white rounded-bl-xl" />
+
+                <input v-if="editMode"
+                type="file"
+                accept="image/png, image/jpeg"
+                @change="handleFileUpload"
+                class="absolute top-0 right-0 focus:outline-none border-0 opacity-0 w-full h-full cursor-pointer" />
             </div>
-        </div>
-        
-        <!-- profile picture -->
-        <div class="z-100 mx-auto relative bg-slate-100 w-1/12">
-            <img 
-            class="w-full h-full mx-auto mt-20 block"
-            :src="profilePicturePath"
-            alt="Profile picture" 
-            referrerpolicy="no-referrer">
 
-            <i v-if="editMode" class="fa fa-pen absolute top-0 right-0 p-2 bg-white rounded-bl-xl" />
-
-            <input v-if="editMode" type="file" @change="handleFileUpload"
-            class="opacity-0 absolute top-0 right-0 w-full h-full" />
         </div>
 
         <!-- names -->
-        <div class="z-50 mx-auto w-full p-4 text-3xl font-heebo font-bold text-center absolute tracking-wide">
-            <p class="z-50">
+        <div class="z-50 mx-auto w-full mt-12 p-4 text-3xl text-center tracking-wide">
+            <p class="font-droid">
                 {{ firstName }} {{ lastName }}
             </p>
-            <p class="text-2xl p-4 font-metrophobic">@{{ username }}</p>
-        </div> 
+            <p class="text-2xl p-4 font-metrophobic">
+                @{{ username }}
+            </p>
+        </div>
 
         <!-- bio -->
-        <p v-if="!editMode" class="text-center mx-auto py-8 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
+        <p v-if="!editMode"
+        class="text-center mx-auto py-4 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
             {{ biography }}
+            fdug orwhfo wfoihwh foiwhre oiw phf sohsoihfoihfsoi soihofsi sfoih fosh
         </p>
         <input v-else 
         class="rounded-full border-b bg-white mx-auto p-2 text-center w-fit flex focus:outline-none focus:border-slate-500" 
@@ -329,5 +340,9 @@
 
     .hover-border-asparagus:hover {
         border-bottom: 4px solid var(--khaki);
+    }
+
+    .font-bolder {
+        font-weight: 900;
     }
 </style>
