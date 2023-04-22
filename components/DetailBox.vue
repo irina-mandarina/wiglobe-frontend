@@ -18,7 +18,7 @@
 </script>
 <template>
     <div
-    class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1000ms] details-box bg-white">
+    class="rounded-2xl my-4 shadow-lg w-3/4 mx-auto border-khaki border-2 text-center delay-[1000ms] details-box bg-white h-fit">
         <div v-if="!editMode">
             <p v-if="detail === 'FEMALE' && detailType === 'gender'" class="text-center p-6">
                 She / Her

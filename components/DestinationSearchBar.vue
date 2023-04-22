@@ -5,7 +5,7 @@
     let destinationSearchResults = ref(null)
     let chosenDestination = ref(null)
     const emits = defineEmits(['chooseDestination'])
-    const pageSize = 10000000
+    const pageSize = 100
     let pageNumber = ref(1)
 
     async function findDestinations() {
@@ -57,7 +57,7 @@
             placeholder="Destination"
             type="search"
             @keypress.enter="findDestinations()"/>    
-            <DestinationSearchResult class="absolute z-50" v-if="destinationSearchResults !== null"
+            <DestinationSearchResult class="absolute z-[100]" v-if="destinationSearchResults !== null"
                 @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
                 @choose-destination="chooseDestination"
                 :destination-search-results="destinationSearchResults" 

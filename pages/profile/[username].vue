@@ -6,7 +6,7 @@
     import { getLocalStorageUsername } from '~~/js/localStorageUtil'
     import { getJourneysByUser } from '~~/js/journeyRequests'
     import { deleteFollowRequest, sendFollowRequest, unfollow, getFollowers, getFollowing, getFriends, respondToFollowRequest } from '~~/js/followRequests'
-    import { getProfilePicturePath } from '~~/js/userPictures'
+    import {getBackgroundPicturePath, getProfilePicturePath} from '~~/js/userPictures'
 
     const userStore = useUserStore()
     const followStore = useFollowStore()
@@ -53,21 +53,6 @@
 
     let isFollowedOrPublic = computed(() => (isFollowedByLoggedUser.value || user.value.profilePrivacy === "PUBLIC") )
 
-    // function setFollowRelationships() {
-    //     isFollowedByLoggedUser.value = (followStore.following.filter ((it) =>
-    //             it.username === user.value.username
-    //         ).length !== 0)
-    //
-    //     hasReceivedAFollowReq.value = (followStore.sentFollowRequests.filter((it) =>
-    //             it.receiver.username === user.value.username
-    //         ).length !== 0)
-    //
-    //     hasSentAFollowReq.value = (followStore.receivedFollowRequests.filter((it) =>
-    //             it.requester.username === user.value.username
-    //         ).length !== 0)
-    //
-    // }
-
     onBeforeMount(async () => {
         if (route.params.username === getLocalStorageUsername()) {
             navigateTo('/profile/me')
@@ -91,12 +76,7 @@
 
     let profilePicturePath = computed(() => getProfilePicturePath(user?.value?.profilePicture, user?.value?.gender))
 
-    let backgroundPicturePath = computed(() => {
-        if (!user.backgroundPicture || user.backgroundPicture.length === 0) {
-            return "/_nuxt/assets/wiglobe/images/users/background-pictures/default.jpg"
-        }
-        else return "/_nuxt/assets/wiglobe/images/users/background-pictures/" + user.backgroundPicture
-    })
+    let backgroundPicturePath = computed(() => getBackgroundPicturePath(user?.value?.backgroundPicture))
 
     async function getJourneys() {
         try {
@@ -168,7 +148,7 @@
     async function respondWith(requester, isApproved) {
         try {
             const response = await respondToFollowRequest(requester, isApproved)
-            followStore.getReceivedFollowRequests()
+            await followStore.getReceivedFollowRequests()
         }
         catch (error) {
             console.log(error)
@@ -216,32 +196,6 @@
         class="text-center mx-auto py-4 bg-white px-20 bg-transparent text-xl text-phtalo font-droid">
             {{ user.biography }}
         </p>
-<!--        &lt;!&ndash; header &ndash;&gt;-->
-<!--        <div class="w-full z-50 h-[300px] absolute header-picture"-->
-<!--        :style="{ 'background-image': 'url(' + backgroundPicturePath +  ')' }"-->
-<!--        :class="{-->
-<!--            'expand': startAnimation-->
-<!--        }">-->
-<!--            <div class="relative w-full h-full">-->
-<!--                <div class="absolute gradient bottom-0 h-1/3 w-full">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; profile picture &ndash;&gt;-->
-<!--        <img class="z-100 relative w-1/4 p-8 mx-auto mt-20" :src="profilePicturePath" alt="">-->
-
-<!--        &lt;!&ndash; names &ndash;&gt;-->
-<!--        <NuxtLink :to="'/profile/' + user.username" class="z-50 mx-auto w-fit px-4 text-3xl font-heebo font-bold text-center tracking-wide">-->
-<!--            <p>{{ user.firstName }} {{ user.lastName }}</p>-->
-<!--            <p class="text-2xl p-4 font-metrophobic">@{{ user.username }}</p>-->
-<!--        </NuxtLink> -->
-
-<!--        &lt;!&ndash; bio &ndash;&gt;-->
-<!--        <p class="text-center mx-auto my-8 px-20 text-xl text-phtalo font-droid">-->
-<!--            {{ user.biography }}-->
-<!--        </p>-->
-
         
         <div class="flex w-1/2 mx-auto text-center">
             <button v-if="isFollowedByLoggedUser" class="p-4 mx-auto rounded-full bg-fawn duration-300 hover:shadow-lg" @click="unfollowUser()">
@@ -266,7 +220,6 @@
                 <!-- gender and pronouns -->
                 <DetailBox class="delay-[1500ms] details-box" 
                 v-if="user?.gender?.length" :detail="user?.gender" detailType="gender" :editMode="false"
-                @save="setNewGender" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
@@ -274,7 +227,6 @@
                 <!-- birthday and age -->
                 <DetailBox v-if="user?.birthdate" class="delay-[1500ms] details-box"
                 :detail="user?.birthdate" detailType="birthdate" :editMode="false"
-                @save="setNewBirthdate" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
@@ -282,7 +234,6 @@
                 <!-- location -->
                 <DetailBox v-if="user?.residence" class="delay-[1700ms] details-box"
                 :detail="user?.residence" detailType="residence" :editMode="false"
-                @save="setNewResidence" 
                 :class="{
                     'slide-up': startAnimation
                 }"/>
@@ -332,8 +283,18 @@
 
         <!-- journeys -->
         <div v-if="isFollowedOrPublic" class="py-20">
-            <div class="text-center text-2xl font-droid">{{ user.firstName}}'s journeys</div>
-            <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
+            <div v-if="journeys?.length > 0"
+             class="text-center text-2xl font-droid">
+                {{ user.firstName}}'s journeys
+            </div>
+            <div v-else
+             class="text-center text-2xl font-droid">
+                {{ user.firstName}} has not posted any journeys yet
+            </div>
+            <Journey v-if="journeys"
+             v-for="journey in journeys"
+             :journey="journey"
+             class="my-10"/>
         </div>
 
         <div v-if="hasReceivedAFollowReq" class="text-center text-2xl py-10 font-droid">

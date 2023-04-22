@@ -1,4 +1,5 @@
 export function getProfilePicturePath(profilePicture, gender) {
+    profilePicture = profilePicture?.replaceAll('"', '')
     if ( profilePicture !== undefined && profilePicture !== null && profilePicture.length !== 0 ) {
         if (profilePicture.includes("http")) {
             return profilePicture
@@ -7,7 +8,7 @@ export function getProfilePicturePath(profilePicture, gender) {
             return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + profilePicture
         }
     }
-    else if (gender !== undefined && gender !== null && gender.length !== 0) {
+    else if (gender) {
         return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + gender.toLowerCase() + ".jpg"
     }
     else {
@@ -16,6 +17,7 @@ export function getProfilePicturePath(profilePicture, gender) {
 }
 
 export function getBackgroundPicturePath(backgroundPicture) {
+    backgroundPicture = backgroundPicture?.replaceAll('"', '')
     if (!backgroundPicture || backgroundPicture.length === 0) {
         return "/_nuxt/assets/wiglobe/images/users/background-pictures/default.jpg"
     }

@@ -1,7 +1,8 @@
 <script setup>
-    import { deleteJourney } from '~~/js/journeyRequests'
+    import { deleteJourney, editJourney } from '~~/js/journeyRequests'
     import { useUserStore } from '~~/stores/UserStore'
     import { getProfilePicturePath } from '~~/js/userPictures'
+    import DestinationSearchBar from "~/components/DestinationSearchBar.vue";
 
     const userStore = useUserStore()
     const router = useRouter()
@@ -10,7 +11,7 @@
         journey: Object
     })
 
-    let manageJourney = ref(false)
+    let editingJourney = ref(false)
 
     async function deleteJ() {
         try {
@@ -34,15 +35,26 @@
       else return `Posted on ${date.toDateString()} at ${date.toLocaleTimeString()}`
     })
 
+    let showVisibilityOptions = ref(false)
+
+    let editedJourney = ref(props.journey)
+    editedJourney.value.destinationId = props.journey?.destination?.id
+
+    let editingDestination = ref(false)
+
+    async function saveChanges() {
+        try {
+            const response = await editJourney(editedJourney.value)
+            editingJourney.value = false
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 </script>
 <template>
     <div v-if="journey"
     class="shadow-xl bg-white rounded-lg w-4/5 mx-auto relative overflow-hidden max-h-screen text-md flex flex-col">
-        <JourneyManager
-        v-if="manageJourney"
-        :visibility="journey?.visibility"
-        :posted-on="journey?.postedOn"
-        @delete-journey="deleteJ" />
 
         <div class="flex h-full">
 
@@ -51,11 +63,46 @@
             @click="navigateTo('/journeys/' + journey?.id)">
 
                 <div class="absolute top-4 left-4">
-                    <JourneyMenu @manage-journey="manageJourney = !manageJourney"
+                    <JourneyMenu
+                    v-if="!editingJourney"
+                    @edit-journey="editingJourney = true"
                     :visibility="journey?.visibility"
-                    :edit-permission="journey?.userNames.username === userStore.username" />
-
+                    :edit-permission="journey?.userNames.username === userStore.username"
+                     />
                 </div>
+
+                <div v-if="editingJourney"
+                class="absolute top-2 left-2 text-black">
+                    <i class="fa fa-unlock p-2"
+                    :class="{
+                            'text-slate-400': editedJourney.visibility !== 'PUBLIC',
+                            'text-slate-900': editedJourney.visibility === 'PUBLIC',
+                    }"
+                    @click="editedJourney.visibility='PUBLIC'" />
+
+                    <i class="fa fa-lock p-2"
+                    :class="{
+                        'text-slate-400': editedJourney.visibility !== 'PRIVATE',
+                        'text-slate-900': editedJourney.visibility === 'PRIVATE',
+                    }"
+                    @click="editedJourney.visibility='PRIVATE'" />
+
+                    <i class="fa fa-file p-2"
+                    :class="{
+                            'text-slate-400': editedJourney.visibility !== 'DRAFT',
+                            'text-slate-900': editedJourney.visibility === 'DRAFT',
+                    }"
+                    @click="editedJourney.visibility='DRAFT'" />
+
+                    <i class="fa fa-users p-2"
+                    :class="{
+                        'text-slate-400': editedJourney.visibility !== 'FRIEND_ONLY',
+                        'text-slate-900': editedJourney.visibility === 'FRIEND_ONLY',
+                    }"
+                    @click="editedJourney.visibility='FRIEND_ONLY'" />
+                </div>
+
+
                 <!-- User info -->
                 <div class="w-full text-center p-6 h-1/6">
                     <NuxtLink :to="'/profile/' + journey?.userNames.username"
@@ -69,22 +116,51 @@
                 </div>
 
                 <!-- date -->
-                <p v-if="journey?.startDate !== undefined && journey?.startDate !== null && journey?.endDate !== undefined && journey?.endDate !== null"
+                <p v-if="!editingJourney && (journey?.startDate !== undefined && journey?.startDate !== null && journey?.endDate !== undefined && journey?.endDate !== null)"
                 class="w-full text-center p-4 h-1/12">
                     From {{ new Date(journey?.startDate).toLocaleDateString() }} to {{ new Date(journey?.endDate).toLocaleDateString() }} at:
                 </p>
 
+                <p v-if="editingJourney"
+                   class="w-full text-center p-4 h-1/12">
+                    From
+                    <input v-model="editedJourney.startDate" type="date" class="p-2 h-2/3 border-b-2 border-dark-blue rounded-lg focus:outline-none"/>
+                    to
+                    <input v-model="editedJourney.endDate" type="date" class="p-2 h-2/3 border-b-2 border-dark-blue rounded-lg focus:outline-none"/>
+                    at:
+                </p>
+
                 <!-- destination -->
-                <DestinationMini
-                class="h-1/12"
-                v-if="journey?.destination !== undefined && journey?.destination !== null"
-                :destination="journey?.destination" />
+                <div
+                    class="h-1/12 flex">
+
+                    <DestinationMini
+                        v-if="!editingJourney || !editingDestination"
+                        :destination="journey?.destination" />
+
+                    <i class="fa fa-times inline p-3"
+                       v-if="editingJourney && !editingDestination && journey.destination"
+                       @click="editingDestination = true"/>
+
+                </div>
+
+                <DestinationSearchBar
+                v-if="(editingDestination || !(journey.destination)) && editingJourney"
+                class="mx-auto"
+                @choose-destination="(val) => {debugger; editedJourney.destinationId = val.id}" />
 
                 <!-- Journey description -->
-                <p class="h-1/3 p-4 first-letter:font-bold first-letter:text-3xl first-letter-font-droid text-ellipsis overflow-hidden">
-                    &nbsp; &nbsp; &nbsp; {{ journey?.description }}
+                <p v-if="!editingJourney"
+               class="h-1/3 p-4 first-letter:font-bold first-letter:text-3xl first-letter-font-droid text-ellipsis overflow-hidden">
+                    {{ journey?.description }}
                 </p>
-              <div class="font-oblique text-sm font-droid h-1/6 bg-white px-4">
+
+                <textarea v-if="editingJourney"
+                v-model="editedJourney.description"
+                class="px-4 py-2 flex border-b-2 border-dark-blue resize-none rounded-lg w-3/4 h-min shadow-inner focus:outline-none mx-auto my-4">
+                </textarea>
+
+              <div class="font-oblique text-sm font-droid h-1/6 p-2 bg-white px-4 select-none">
                 {{ postedOnText }}
               </div>
             </div>
@@ -94,6 +170,17 @@
                 <JourneyAttachments
                 v-if="journey?.activities || journey?.images"
                 :activities="journey?.activities" :images="journey?.images" />
+            </div>
+            <div v-if="editingJourney"
+                 class="absolute right-6 top-6">
+                <button class="bg-slate-600 text-white rounded-lg hover:bg-slate-700 duration-75 p-2 m-2 cursor-pointer"
+                        @click="saveChanges()">
+                    Save
+                </button>
+                <button class="bg-slate-200 rounded-lg hover:bg-slate-300 duration-75 p-2 m-2 cursor-pointer"
+                        @click="editingJourney = false; editingDestination = false">
+                    Cancel
+                </button>
             </div>
 
         </div>
