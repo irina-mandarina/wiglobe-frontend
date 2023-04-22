@@ -1,5 +1,6 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
+    import {getProfilePicturePath} from "~/js/userPictures";
 
     const emits = defineEmits([
         'postReview'
@@ -10,6 +11,7 @@
     let username = computed(() => userStore.username)
     let firstName = computed(() => userStore.firstName)
     let lastName = computed(() => userStore.lastName)
+    let profilePicture = computed(() => userStore.profilePicture)
     let title = ref("")
     let content = ref("")
     let starRating = ref(0)
@@ -25,12 +27,10 @@
         starRating.value = 0
     }
 
-    let profilePicturePath = computed(() => {
-        if (userStore.gender && (userStore.profilePicture === null || userStore.profilePicture === undefined || userStore.profilePicture?.length === 0)) {
-            return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + userStore.gender.toLowerCase() + ".jpg"
-        }
-        else return "/_nuxt/assets/wiglobe/images/users/profile-pictures/" + userStore.profilePicture
-    })
+    let profilePicturePath = computed(() => getProfilePicturePath(
+        profilePicture.value,
+        (computed( () => userStore.gender)).value)
+    )
 </script>
 
 <template>

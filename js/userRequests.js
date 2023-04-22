@@ -90,7 +90,6 @@ export async function editResidence(destinationId) {
 }
 
 export async function editBirthdate(birthdate) {
-    debugger
     const response = await axios.post("http://localhost:8080/users/" + getLocalStorageUsername() + "/birthdate",
         birthdate,
         {

@@ -12,20 +12,20 @@
         if (props.followers === null)
             return 0
         else
-            return props.followers.length
+            return props.followers?.length
     })
     let followingCount = computed(() => {
         if (props.following === null)
             return 0
         else
-            return props.following.length
+            return props.following?.length
     })
     
     let friendCount = computed(() => {
         if (props.friends === null)
             return 0
         else
-            return props.friends.length
+            return props.friends?.length
     })
 
     let friendPage = ref(0)

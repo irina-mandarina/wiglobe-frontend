@@ -9,10 +9,10 @@
                 X
         </div>
         <ul class="relative max-h-44 max-w-[100%] overflow-y-scroll rounded-md bg-white border border-gray-300 z-50">
-            <li v-if="destinationSearchResults === null || destinationSearchResults.length === 0" class="py-2 px-6 text-md">
+            <li v-if="destinationSearchResults === null || destinationSearchResults?.length === 0" class="py-2 px-6 text-md">
                 Destination was not found.
             </li>
-            <li v-if="destinationSearchResults !== null && destinationSearchResults.length > 0"
+            <li v-if="destinationSearchResults !== null && destinationSearchResults?.length > 0"
                 v-for="destination in destinationSearchResults"
                 @click="$emit('chooseDestination', destination.destinationId)"
                 class="p-2 text-md border-b border-gray-400">

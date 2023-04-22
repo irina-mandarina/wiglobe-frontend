@@ -21,18 +21,18 @@
 
         const followStore = useFollowStore()
         // debugger
-        if (followStore.friends.filter((f) => f.username === user.value.username).length > 0) {
+        if (followStore.friends.filter((f) => f.username === user.value?.username).length > 0) {
             relation.value = "You are friends"
         }
-        else if (followStore.following.filter((f) => f.username === user.value.username).length > 0) {
+        else if (followStore.following.filter((f) => f.username === user.value?.username).length > 0) {
             relation.value = "You are following"
         }
-        else if (followStore.followers.filter((f) => f.username === user.value.username).length > 0) {
+        else if (followStore.followers.filter((f) => f.username === user.value?.username).length > 0) {
             relation.value = "They are following you"
         }
     })
 
-    let profilePicturePath = computed(() => getProfilePicturePath(user.value.profilePicture, user.value.gender))
+    let profilePicturePath = computed(() => getProfilePicturePath(user.value?.profilePicture, user.value?.gender))
 </script>
 
 <template>

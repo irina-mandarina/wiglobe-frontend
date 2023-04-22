@@ -60,7 +60,7 @@
     <Link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />  </Head>
     <!-- <Script src="/dist/client.js" defer allow-file-access-from-files /> -->
 
-  <NuxtPage />
+  <NuxtPage class="h-full" />
 </template>
 <style>
   :root {
@@ -74,7 +74,7 @@
     background-color: rgb(215, 215, 216);
   }
 
-  body {
+  body, html {
     color: var(--dark-blue)
   }
 
@@ -178,5 +178,9 @@
 
   html, body, #__nuxt {
     height: 100%;
+  }
+
+  nuxt-link {
+      cursor: pointer;
   }
 </style>

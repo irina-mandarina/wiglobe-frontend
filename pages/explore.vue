@@ -45,19 +45,27 @@
         <SearchBar />
 
         <!-- container -->
-        <div v-if="destinationRecommendations?.length > 0" class="w-full relative">
+        <div v-if="destinationRecommendations?.length > 0" class="w-full flex flex-col h-1/2 relative">
             <p class="font-heebo font-bold text-3xl p-6">
                 We think you'd like
             </p>
             <!-- carousel -->
-            <div v-if="destinationsOnDisplay !== undefined" class="flex justify-evenly w-full">
-                <i @click="previousDestination()" class="fa fa-chevron-left bg-gray-200 w-10 py-6 px-2"/>
+            <div v-if="destinationsOnDisplay !== undefined" class="flex h-full justify-between w-full">
+                <div
+                    class="bg-gray-900/[.2] rounded-r-lg flex h-full w-[3%] px-2 cursor-pointer">
+                  <i @click="previousDestination()"
+                     class="fa fa-chevron-left my-auto font-bold text-white"/>
+                </div>
 
-                <Destination :destination="destinationsOnDisplay[0]" class="w-1/4 rounded-md m-4" />
-                <Destination :destination="destinationsOnDisplay[1]" class="w-1/3 rounded-md m-4" />
-                <Destination :destination="destinationsOnDisplay[2]" class="w-1/4 rounded-md m-4" />
+                <Destination :destination="destinationsOnDisplay[0]" class="w-1/4 rounded-md" />
+                <Destination :destination="destinationsOnDisplay[1]" class="w-1/3 rounded-md" />
+                <Destination :destination="destinationsOnDisplay[2]" class="w-1/4 rounded-md" />
 
-                <i @click="firstDisplayedDestIndex++" class="fa fa-chevron-right bg-gray-200 w-10 py-6 px-2"/>
+              <div
+              class="bg-gray-900/[.2] rounded-l-lg flex h-full w-[3%] px-2 cursor-pointer">
+                <i @click="firstDisplayedDestIndex++"
+                class="fa fa-chevron-right my-auto font-bold text-white"/>
+              </div>
             </div>
         </div>
     </NuxtLayout>

@@ -48,14 +48,13 @@ export const useUserStore = defineStore('userStore', {
         }
       }
       catch (error) {
-        this.logInResponseCode = error.response.status
+        this.logInResponseCode = error?.response?.status
       }
     },
     
     async authenticationWithGoogle(token, userData) {
       try {
         const response = await authenticateWithGoogle(token, userData)
-        console.log(response)
         if (response.status === 200) {
           this.setUserDetails(response.data.userDetails)
           localStorage.setItem('username', this.username)

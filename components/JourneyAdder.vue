@@ -34,12 +34,12 @@
     let creatorOpen = ref(false)
 
     async function handleFileUpload(event) {
-        const file = event.target.files[event.target.files.length - 1]
+        const file = event.target.files[event.target.files?.length - 1]
         images.value.push(file)
     }
 
     async function uploadImages() {
-        for (let i = 0; i < images.value.length; i++) {
+        for (let i = 0; i < images.value?.length; i++) {
             let data = images.value[i]
             await axios.post('api/journeys/upload', 
                 data, 
@@ -61,19 +61,19 @@
     watch(() => destinationKeyword.value,
         (modifiedKeyword) => {
             if (chosenDestination.value === null &&
-             (modifiedKeyword === null || modifiedKeyword.length < keywordLength)) {
+             (modifiedKeyword === null || modifiedKeyword?.length < keywordLength)) {
                 destinationSearchResults.value = null
             }
             else if (chosenDestination.value === null && 
             (destinationSearchResults.value !== null && 
-            modifiedKeyword.length > keywordLength)) {
+            modifiedKeyword?.length > keywordLength)) {
                 // show more accurate results
                 destinationSearchResults.value = destinationSearchResults.value.filter ((it) => 
                     it.name.toLowerCase().startsWith(modifiedKeyword.toLowerCase()) ||
                      it.country.toLowerCase().startsWith(modifiedKeyword.toLowerCase())
                 )
             }
-            keywordLength = destinationKeyword.value.length
+            keywordLength = destinationKeyword.value?.length
     })
 
     watch( 
@@ -104,18 +104,18 @@
 
     async function postToDrafts() {
         await uploadImages()
+        let destinationId
+        if (chosenDestination.value === null) {
+          destinationId = null
+        }
+        else {
+          destinationId = chosenDestination.value.id
+        }
         journeyId = (await journeyStore.postJourney({
             id: journeyId,
             startDate: startDate.value,
             endDate: endDate.value,
-            destinationId: () => {
-                if (chosenDestination.value === null) {
-                    return null
-                }
-                else {
-                    return chosenDestination.value.id
-                }
-            },
+            destinationId,
             description: description.value,
             activities: activities.value,
             visibility: 'DRAFT',
@@ -151,13 +151,13 @@
     let profilePicturePath = computed(() => getProfilePicturePath(
         computed( () => userStore.profilePicture).value,
         computed( () => userStore.gender).value
-        ))
+    ))
 
 </script>
 
 <template>
-    <div class="w-full relative my-6">
-        <div v-if="!creatorOpen" class="p-6 text-2xl mx-auto bg-gray-100 text-center rounded-lg shadow-md w-1/4" @click="creatorOpen = true">
+    <div class="w-full relative py-6">
+        <div v-if="!creatorOpen" class="p-6 mt-20 text-2xl mx-auto bg-gray-100 text-center rounded-lg shadow-md w-1/4" @click="creatorOpen = true">
             <span class="font-heebo font-bold text-4xl hover:text-green-700 duration-300">
                 +
             </span>
@@ -198,20 +198,20 @@
                         </div>
                         
                         <div class="mt-4 w-1/2 py-4 relative">
+<!--                            <DestinationSearchBar @choose-destination="(val) => chosenDestination = val" />-->
                             <span v-if="chosenDestination === null || chosenDestination === undefined">
-                                Select your destination: 
+                                Select your destination:
                                 <!-- more than 3 symbols, ass search button -->
                                 <input v-model="destinationKeyword"
                                 class="mx-auto px-4 border-b-2 border-dark-blue p-2 rounded-full focus:outline-none"
                                 placeholder="Destination"
                                 type="search"
-                                @keypress.enter="findDestinations()"/>    
+                                @keypress.enter="findDestinations()"/>
                                 <DestinationSearchResult v-if="destinationSearchResults !== null"
                                     @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
                                     @choose-destination="chooseDestination"
                                     :destination-search-results="destinationSearchResults" />
                             </span>
-                            <!-- <DestinationSearchBar @choose-destination="" /> -->
                             <span v-if="chosenDestination !== null && chosenDestination !== undefined">
                                 <DestinationMini :destination="chosenDestination" />
                             </span>
@@ -275,7 +275,11 @@
                     <div class="text-center p-2 font-heebo font-bold text-lg">
                         Add pictures from your journey
                     </div>
-                    <input type="file" @change="handleFileUpload" accept="image/png, image/jpeg" multiple class="p-10" />
+                    <input type="file"
+                     @change="handleFileUpload"
+                     accept="image/png, image/jpeg"
+                     multiple
+                     class="p-10" />
                     <!-- <button class="p-2 bg-pthalo rounded-full" @click="uploadImages">
                         Upload
                     </button> -->

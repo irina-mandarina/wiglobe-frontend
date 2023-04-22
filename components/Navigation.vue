@@ -1,5 +1,6 @@
 <script setup>
     import { useUserStore } from '~~/stores/UserStore'
+    import NavigationItem from "~/components/NavigationItem.vue";
     const userStore = useUserStore()
     const route = useRoute()
     let homeHovered = ref(false), notificationsHovered = ref(false), exploreHovered = ref(false), draftsHovered = ref(false)
@@ -11,7 +12,7 @@
     onMounted(() => {
         document.addEventListener("scroll", (event) => {
             currentScrollPosition = window.scrollY
-            if (currentScrollPosition > 700) {
+            if (currentScrollPosition > 900) {
                 showNav.value = false
                 hide.value = true
             }
@@ -41,38 +42,9 @@
 
                 <!-- center: feeds -->
                 <div class="w-fit flex mx-auto font-heebo py-2 overflow-hidden h-20">
-                    <NuxtLink to="/" :class="{
-                        'active': (route !== null && route !== undefined && route.path === '/')
-                        }"
-                        class="text-xl navlink flex flex-wrap"
-                        @mouseover="homeHovered = true" @mouseleave="homeHovered = false">
-                        <i class="fa fa-home h-1/2 mx-auto p-4 pb-0" :class="{
-                            'go-up': homeHovered
-                        }"/>
-                        <span :class="{visible: homeHovered}" class="navlink-text w-full h-1/2 text-center">Home</span>
-                    </NuxtLink>
-
-                    <NuxtLink to="/notifications" :class="{
-                        'active': (route !== null && route !== undefined && route.path === '/notifications')
-                        }"
-                        class="text-xl navlink flex flex-wrap"
-                        @mouseover="notificationsHovered = true" @mouseleave="notificationsHovered = false">
-                        <i class="fa fa-bell h-1/2 mx-auto p-4 pb-0" :class="{
-                            'go-up': notificationsHovered
-                        }"/>
-                        <span :class="{visible: notificationsHovered}" class="navlink-text w-full h-1/2 text-center">Notifications</span>
-                    </NuxtLink>
-
-                    <NuxtLink to="/explore" :class="{
-                            'active': (route !== null && route !== undefined && route.path === '/explore')
-                        }"
-                        class="text-xl navlink flex flex-wrap"
-                        @mouseover="exploreHovered = true" @mouseleave="exploreHovered = false">
-                        <i class="fa fa-search h-1/2 mx-auto p-4 pb-0" :class="{
-                            'go-up': exploreHovered
-                        }"/>
-                        <span :class="{visible: exploreHovered}" class="navlink-text w-full h-1/2 text-center">Explore</span>
-                    </NuxtLink>
+                    <NavigationItem text="Home" path="/" icon="fa-home" />
+                    <NavigationItem text="Notifications" path="/notifications" icon="fa-bell" />
+                    <NavigationItem text="Explore" path="/explore" icon="fa-search" />
                 </div>
 
                 <!-- menu button -->
@@ -82,8 +54,10 @@
             </div>
             <!-- menu -->
             <Transition>
-                <ul v-if="!hide" class="overflow-hidden float-right bg-slate-50 bg-white rounded-lg shadow-lg m-1">
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100" :class="{
+                <ul v-if="!hide"
+                class="overflow-hidden float-right bg-slate-50 bg-white rounded-lg shadow-lg m-1">
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100"
+                    :class="{
                         'bg-slate-200': route && route.path === '/profile/me'
                     }">
                         <NuxtLink to="/profile/me" class="text-lg">
@@ -119,14 +93,15 @@
                         </NuxtLink>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100">
+                    <li class="w-full border-b px-6 py-4 hover:bg-slate-100 duration-100 cursor-pointer">
                         <div @click="userStore.logOut()" class="text-lg">
                             <i class="fa fa-door-open" />
                             <span class="px-2"> Log out </span>
                         </div>
                     </li>
 
-                    <li class="w-full border-b px-6 py-4 block hover:bg-slate-100 duration-100" :class="{
+                    <li class="w-full border-b px-6 py-4 block hover:bg-slate-100 duration-100"
+                    :class="{
                         'bg-slate-200': route && route.path === '/settings'
                     }">
                         <NuxtLink to="/settings" class="text-lg">
@@ -136,9 +111,6 @@
                     </li>
                 </ul>
             </Transition>
-            
-
-            
         </nav>
     </div>
     
@@ -162,16 +134,6 @@
 
     .active {
         color: var(--asparagus);
-    }
-
-    .v-enter-active,
-    .v-leave-active {
-        transition: opacity 0.5s ease;
-    }
-
-    .v-enter-from,
-    .v-leave-to {
-        opacity: 0;
     }
 
     .fa:hover {

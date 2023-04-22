@@ -2,7 +2,7 @@
     import { getJourney } from '~~/js/journeyRequests'
     import { useRoute } from 'vue-router'
     import { useUserStore } from '~~/stores/UserStore'
-    import { commentJourney, getCommentsForJourney } from '~~/js/commentRequests'
+    import {commentJourney, deleteComment, getCommentsForJourney} from '~~/js/commentRequests'
 
     const userStore = useUserStore()
     const route = useRoute()
@@ -40,16 +40,37 @@
         }
         await getComments()
     }
+
+    async function deleteCom(id) {
+      try {
+        const response = await deleteComment(journey.value.id, id)
+        await getComments()
+      }
+      catch(error) {
+        console.log(error)
+      }
+
+    }
 </script>
 
 <template>
-    <NuxtLayout name="default" v-if="journey !== null && userStore?.username !== null">
-        <Journey :journey="journey" class="mt-6" />
-        <CommentAdder class="mx-auto my-6" @post-comment="postComment"/>
-        <Comment 
-        v-if="comments !== null" 
-        v-for="comment in comments" 
-        :comment="comment" 
-        class="mx-40 my-6" />   
+    <NuxtLayout name="default"
+    class="w-full h-full">
+      
+        <Journey v-if="journey"
+        :journey="journey" class="mt-6" />
+
+        <CommentAdder class="mx-auto my-6"
+        @post-comment="postComment"/>
+
+        <div class="p-6 justify-items-center">
+            <Comment
+                v-if="comments !== null"
+                v-for="comment in comments"
+                @delete-com="deleteCom"
+                :comment="comment"
+                class="mx-auto my-4 " />
+        </div>
+
     </NuxtLayout>
 </template>

@@ -5,7 +5,7 @@
     let destinationSearchResults = ref(null)
     let chosenDestination = ref(null)
     const emits = defineEmits(['chooseDestination'])
-    const pageSize = 20
+    const pageSize = 10000000
     let pageNumber = ref(1)
 
     async function findDestinations() {

@@ -14,8 +14,8 @@
 </script>
 
 <template>
-    <div @click="navigateTo('/destinations/' + destination.id)"
-    class="rounded-2xl border w-5/6 mx-auto relative overflow-hidden"
+    <div @click.stop="navigateTo('/destinations/' + destination.id)"
+    class="rounded-2xl border w-5/6 mx-auto relative overflow-hidden cursor-pointer"
     @mouseenter="showFlag = true" @mouseleave="showFlag = false"
     >
         <div class="duration-300 ease-in-out bg-no-repeat bg-center absolute w-full h-full top-0 z-0 blur-sm"

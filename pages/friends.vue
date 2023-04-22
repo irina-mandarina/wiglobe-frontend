@@ -22,7 +22,7 @@
             Friends make the journey of life worth every mile.
         </div>
         <div v-if="friends && friends?.length > 0" class="flex flex-wrap justify-evenly">
-            <UserDetails v-for="friend in friends" :user="friend" class="w-1/4"/>
+            <UserDetails v-for="friend in friends" :user="friend" class="w-1/4 bg-white"/>
         </div>
         <div v-else class="text-center font-droid text-xl">
             You do not have any friends yet.

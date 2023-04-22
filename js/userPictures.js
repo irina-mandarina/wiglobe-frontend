@@ -15,7 +15,7 @@ export function getProfilePicturePath(profilePicture, gender) {
     }
 }
 
-export async function getBackgroundPicturePath(backgroundPicture) {
+export function getBackgroundPicturePath(backgroundPicture) {
     if (!backgroundPicture || backgroundPicture.length === 0) {
         return "/_nuxt/assets/wiglobe/images/users/background-pictures/default.jpg"
     }

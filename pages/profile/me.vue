@@ -25,9 +25,13 @@
     let profilePicture = computed(() => userStore.profilePicture)
     let backgroundPicture = computed(() => userStore.backgroundPicture)
 
-    let profilePicturePath = computed( () => getProfilePicturePath(profilePicture.value, gender.value))
+    let profilePicturePath = computed( () =>
+        getProfilePicturePath(profilePicture.value, gender.value)
+    )
 
-    let backgroundPicturePath = computed(() => getBackgroundPicturePath(backgroundPicture.val))
+    let backgroundPicturePath = computed(() =>
+        getBackgroundPicturePath(backgroundPicture.value)
+    )
 
     const followers = computed(() => followStore.followers)
     const following = computed(() => followStore.following)
@@ -150,7 +154,6 @@
     }
 
     async function toggleEditMode() {
-        debugger
         if (editMode.value) {
             if (newGender.value !== null && gender.value !== newGender.value) {
                 await changeGender()
@@ -175,7 +178,7 @@
         editMode.value = !editMode.value
     }
 
-    async function handleFileUpload(event) {
+    function handleFileUpload(event) {
         newProfilePicture.value = event.target.files[0]
     }
 </script>
@@ -207,12 +210,15 @@
         <!-- profile picture -->
         <div class="z-100 mx-auto relative bg-slate-100 w-1/12">
             <img 
-            class="w-full h-full mx-auto mt-20 block" 
-            :src="profilePicturePath" 
+            class="w-full h-full mx-auto mt-20 block"
+            :src="profilePicturePath"
             alt="Profile picture" 
             referrerpolicy="no-referrer">
+
             <i v-if="editMode" class="fa fa-pen absolute top-0 right-0 p-2 bg-white rounded-bl-xl" />
-            <input v-if="editMode" type="file" @change="handleFileUpload" class="opacity-0 absolute top-0 right-0 w-full h-full" />
+
+            <input v-if="editMode" type="file" @change="handleFileUpload"
+            class="opacity-0 absolute top-0 right-0 w-full h-full" />
         </div>
 
         <!-- names -->
@@ -279,7 +285,7 @@
         </div>
 
         <!-- journeys -->
-        <div class="my-20 bg-slate-300">
+        <div class="my-20">
             <div class="text-center text-2xl font-droid py-8">Your journeys</div>
             <Journey v-for="journey in journeys" :journey="journey" class="my-10"/>
         </div>

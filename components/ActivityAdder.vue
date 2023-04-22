@@ -28,14 +28,13 @@
     })
 
     async function addActivity() {
+        await uploadImage()
         let activityRequest = {
             type: type.value,
             description: description.value,
             date: date.value,
             image: imageFilename.value
         }
-        console.log(activityRequest)
-        await uploadImage()
         emits('addActivity', activityRequest)
 
         description.value = null
@@ -47,7 +46,7 @@
     let showArrows = ref(false)
 
     async function handleFileUpload(event) {
-        const file = event.target.files[event.target.files.length - 1]
+        const file = event.target.files[event.target.files?.length - 1]
         image.value = (file)
     }
 
@@ -76,7 +75,7 @@
                 activityOnDisplayId.value = null
             }
             else if (activityOnDisplayId.value === null) {
-                activityOnDisplayId.value = props.activities.length - 1
+                activityOnDisplayId.value = props.activities?.length - 1
             }
             else {
                 activityOnDisplayId.value--
@@ -88,7 +87,7 @@
     function showNextActivity() {
         activityChange.value = true
         setTimeout(() => {
-            if (activityOnDisplayId.value === props.activities.length - 1) {
+            if (activityOnDisplayId.value === props.activities?.length - 1) {
                 activityOnDisplayId.value = null
             }
             else if (activityOnDisplayId.value === null) {
@@ -105,7 +104,7 @@
 <template>
     <div class="h-fit relative">
         <div v-if="activities">
-            <div class="flex relative" @mouseenter="()=>{if (activities !== null && activities.length !== 0) {showArrows = true; }}" @mouseleave="showArrows = false">
+            <div class="flex relative" @mouseenter="()=>{if (activities !== null && activities?.length !== 0) {showArrows = true; }}" @mouseleave="showArrows = false">
                 <div :class="{
                     'opacity-0': !showArrows,
                     'delay-500': !showArrows,
@@ -115,7 +114,6 @@
                 </div>
 
                 <!-- activity adder -->
-
                 <div class="px-12" v-if="activityOnDisplayId === null">
                     <div class="text-center w-full mx-auto p-2 font-heebo font-bold text-lg">
                         Add activities you engaged in on your journey
@@ -154,7 +152,11 @@
 
                     <div class="">
                         <span>Add pictures from this activity: </span>
-                        <input type="file" @change="handleFileUpload" class="m-2" alt="Pictures" />
+                        <input type="file"
+                         @change="handleFileUpload"
+                           accept="image/png, image/jpeg"
+                         class="m-2 p-4 border-0 rounded-xl"
+                         alt="Pictures" />
                     </div>    
 
                     <div class="mt-4 w-full relative text-center">

@@ -109,6 +109,10 @@
         return !(passwordError.value.length || passwordRepError.value.length || usernameError.value.length || emailError.value.length || birthdateError.value.length)
     })
 
+    let logInResponseCode = ref(userStore.logInResponseCode)
+    function setLoginResponseCode() {
+        logInResponseCode.value = userStore.logInResponseCode
+    }
     let startAnimation = ref(false)
     let formOnDisplay = ref(1)
 
@@ -140,23 +144,30 @@
     }
 
     const handleSignUpSuccess = async (response) => {
-        const { credential } = response
-        let userData = decodeCredential(response.credential)
-        console.log("Access Token: ", credential);
-        console.log(userData)
-
-        signUpCredentials = {
-            firstName: userData.given_name,
-            lastName: userData.family_name,
-            email: userData.email,
-            username: userData.email,
-            password: credential
-        }
-
-        await userStore.signUp(signUpCredentials)
-        console.log(userStore.signUpResponse)
-        
-        if (userStore.signUpResponse === 201) {
+        // const { credential } = response
+        // let userData = decodeCredential(response.credential)
+        // console.log("Access Token: ", credential);
+        // console.log(userData)
+        //
+        // signUpCredentials = {
+        //     firstName: userData.given_name,
+        //     lastName: userData.family_name,
+        //     email: userData.email,
+        //     username: userData.email,
+        //     password: credential
+        // }
+        //
+        // await userStore.signUp(signUpCredentials)
+        //
+        // if (userStore.signUpResponse === 201) {
+        //     navigateTo('/')
+        // }
+        const { credential } = response;
+        let userData = decodeCredential(response.credential);
+        await userStore.authenticationWithGoogle(credential, userData)
+        setLoginResponseCode()
+        console.log(logInResponseCode.value)
+        if (logInResponseCode.value === 200) {
             navigateTo('/')
         }
     }
@@ -167,7 +178,7 @@
 </script>
 
 <template>
-    <div class="w-2/3 h-[700px] my-10 m-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
+    <div class="w-2/3 h-11/12 m-auto shadow-lg rounded-xl relative overflow-hidden font-heebo text-brown bg-image">
         <h1 :class="{
             'visible': startAnimation
         }" class="text-center font-sans text-2xl py-6 w-full font-black tracking-wide text-brown header overflow-y-visible absolute mt-16">
@@ -322,7 +333,7 @@
 
     .form-disappear {
         transform: translateX(200%);
-        transition: all 1s ease-in-out;
+        transition: all 0.5s ease-in-out;
     }
 
     .form-appear {

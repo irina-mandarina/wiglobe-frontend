@@ -9,16 +9,16 @@
     let folderName = "/_nuxt/assets/wiglobe/images/journeys/"
 
     onBeforeMount(() => {
-        for(let i = 0; i < props.images?.length; i++) {
-            props.images[i] = folderName + props.images[i]
-        }
+        // for(let i = 0; i < props.images?.length; i++) {
+        //     props.images[i] = folderName + props.images[i]
+        // }
     })
 
     function showPreviousAttachment() {
         attachmentChange.value = true
         setTimeout(() => {
             if (attachmentOnDisplayId.value === 0) {
-                attachmentOnDisplayId.value = props.activities.length + props.images.length - 1
+                attachmentOnDisplayId.value = props.activities?.length + props.images?.length - 1
             }
             else {
                 attachmentOnDisplayId.value--
@@ -30,7 +30,7 @@
     function showNextAttachment() {
         attachmentChange.value = true
         setTimeout(() => {
-            if (attachmentOnDisplayId.value === props.activities.length + props.images.length - 1) {
+            if (attachmentOnDisplayId.value === props.activities?.length + props.images?.length - 1) {
                 attachmentOnDisplayId.value = 0
             }
             else {
@@ -42,39 +42,36 @@
 </script>
 
 <template>
-    <div>
-        <div class="flex relative" @mouseenter="showArrows = true" @mouseleave="showArrows = false">
+    <div class="h-full">
+        <div class="flex relative h-full"
+        @mouseenter="showArrows = images?.length + activities?.length > 1"
+        @mouseleave="showArrows = false">
             <div :class="{
                 'opacity-0': !showArrows,
-                'delay-500': !showArrows,
                 'opacity-100': showArrows
-            }" class="absolute left-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300" opacity-100 duration-300 @click="showPreviousAttachment()">
+            }" class="absolute delay-500 left-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300 cursor-pointer duration-300"
+            @click="showPreviousAttachment()">
                 <i class="fa fa-chevron-left text-2xl px-3 align-middle pt-32" />
             </div>
 
-            <div class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
-                :style="{ 'background-image': 'url(' + images[attachmentOnDisplayId] +  ')' }"
+            <div class="h-[50rem] w-full" v-if="attachmentOnDisplayId < images?.length"
+                :style="{ 'background-image': 'url(' + folderName + images[attachmentOnDisplayId] +  ')' }"
                 :class="{
                     'animate-attachment': attachmentChange,
                 }"
             >
             </div>
-
-            <!-- <img class="image h-[40rem] w-full" v-if="attachmentOnDisplayId < images.length"
-            :src="require('@/assets/wiglobe/images/' + images[attachmentOnDisplayId])" 
-            :style="{ 'background-image': 'url(' + images[attachmentOnDisplayId] +  ')' }"
-            :class="{
-                'animate-attachment': attachmentChange,
-            }"/> -->
-            <Activity class="attachment h-[40rem]" v-if="attachmentOnDisplayId >= images.length" :activity="activities[attachmentOnDisplayId - images.length]" :class="{
+            <Activity class="attachment h-[40rem]"
+            v-if="attachmentOnDisplayId >= images?.length"
+            :activity="activities[attachmentOnDisplayId - images?.length]" :class="{
                 'animate-attachment': attachmentChange
             }" />
 
             <div :class="{
                 'opacity-0': !showArrows,
-                'delay-500': !showArrows,
                 'opacity-100': showArrows
-            }" class="absolute right-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300" @click="showNextAttachment()">
+            }" class="absolute delay-500 right-0 h-full bg-gray-200/[0.5] overflow-hidden duration-300 cursor-pointer"
+            @click="showNextAttachment()">
                 <i class="fa fa-chevron-right text-2xl px-3 align-middle pt-32" />
             </div>
         </div>
@@ -90,8 +87,4 @@
         opacity: 0;
         transition: opacity 500ms ease-in-out;
     }
-/* 
-    .image {
-        background-image: url('https://picsum.photos/1000');
-    } */
 </style>
