@@ -19,9 +19,15 @@
 
 <template>
     <NuxtLayout name="default">
-        <Notification v-if="notifications?.length > 0" v-for="notification in notifications" :notification="notification" />
-        <div v-else class="text-center text-xl p-6">
-            You have not received any notifications.
+        <div class="my-10">
+            <Notification
+                v-if="notifications?.length > 0"
+                v-for="notification in notifications"
+                :notification="notification" />
+            <div v-else class="text-center text-xl p-6">
+                You have not received any notifications.
+            </div>
         </div>
+
     </NuxtLayout>
 </template>

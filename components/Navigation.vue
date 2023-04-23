@@ -29,7 +29,7 @@
     })
 </script>
 <template>
-    <div class="w-full h-20 z-200 focus:outline-none">
+    <div class="w-full absolute top-0 h-20 z-200 focus:outline-none">
         <nav class="fixed w-full z-50 duration-300 ease-in-out" :class="{
             'translate-y-0': showNav,
             '-translate-y-full': !showNav
@@ -76,7 +76,12 @@
             </Transition>
         </nav>
     </div>
-    
+    <div :class="{
+            'translate-y-0': showNav,
+            '-translate-y-full': !showNav
+        }" class="my-5 select-none">
+        &nbsp;
+    </div>
 </template>
 <style scoped>
     .visible {

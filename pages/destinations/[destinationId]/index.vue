@@ -60,7 +60,7 @@
 <template>        
     <div class="h-full mt-0">
         <NuxtLayout name="default" class="flex flex-col h-full">
-            <Destination class="mx-auto h-[50rem] flex mt-16 w-full mb-0"
+            <Destination class="mx-auto h-1/2 flex mt-16 w-full mb-0"
             v-if="destination"
             :destination="destination" />
             <ReviewAdder @post-review="postReview" class="mx-auto my-6"/>
