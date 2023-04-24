@@ -6,7 +6,7 @@
 
 <template>
     <div v-if="destination"
-    class="shadow-xl h-full flex flex-col overflow-hidden bg-white">
+    class="h-full flex flex-col overflow-hidden bg-white">
         <!-- Destination Header -->
         <NuxtLink :to="'/destinations/' + destination?.id"
         class="w-full text-center h-1/2 cursor-pointer">

@@ -83,8 +83,9 @@
             if (newGender.value !== null && gender.value !== newGender.value) {
                 await userStore.changeGender(newGender.value)
             }
-            if (newResidence.value !== null && residence.value?.id !== residence.value?.id) {
-                await userStore.changeResidence(newResidence.value)
+            if (newResidence.value !== null && residence.value?.id !== newResidence.value?.id) {
+                debugger
+                await userStore.changeResidence(newResidence.value?.id)
             }
             if (newBirthdate.value !== null && birthdate.value !== newBirthdate.value) {
                 await userStore.changeBirthdate(newBirthdate.value)

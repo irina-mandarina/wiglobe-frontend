@@ -57,9 +57,9 @@
                      class="fa fa-chevron-left my-auto font-bold text-white"/>
                 </div>
 
-                <Destination :destination="destinationsOnDisplay[0]" class="w-1/4 rounded-md" />
-                <Destination :destination="destinationsOnDisplay[1]" class="w-1/3 rounded-md" />
-                <Destination :destination="destinationsOnDisplay[2]" class="w-1/4 rounded-md" />
+                <Destination :destination="destinationsOnDisplay[0]" class="w-1/4 rounded-md shadow-xl" />
+                <Destination :destination="destinationsOnDisplay[1]" class="w-1/3 rounded-md shadow-xl" />
+                <Destination :destination="destinationsOnDisplay[2]" class="w-1/4 rounded-md shadow-xl" />
 
               <div
               class="bg-gray-900/[.2] rounded-l-lg flex h-full w-[3%] px-2 cursor-pointer">

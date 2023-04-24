@@ -24,10 +24,19 @@ import { getJourneysByDestination } from '~~/js/journeyRequests';
 
 <template>
     <NuxtLayout name="default">
-        <Destination :destination="destination" />
-        <div class="text-center text-3xl font-droid font-bold my-10">
-            Journeys to {{ destination?.name }}
+        <div
+        class="text-center text-3xl mx-auto font-droid font-bold my-10">
+            Journeys to
+            <span class="cursor-pointer"
+            @click="navigateTo('/destinations/' + destination?.id)">
+                {{ destination?.name }}
+                <img
+                class="inline"
+                :src="'https://flagcdn.com/32x24/' + destination?.country?.countryCode?.toLowerCase() + '.png'"
+                :alt="destination?.country?.countryName">
+            </span>
         </div>
+
         <Journey v-if="journeys?.length > 0 && journeys !== null" v-for="journey in journeys" :journey="journey" class="my-10" />
         <div v-else class="text-center text-xl font-droid">
             There are not any journeys to {{ destination?.name }} yet

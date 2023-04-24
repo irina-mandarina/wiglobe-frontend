@@ -46,7 +46,7 @@
             </p>
 
             <p v-else-if="detailType === 'residence'" class="text-center p-6">
-                From {{ detail?.name }}, {{ detail?.country?.name }}
+                From {{ detail?.name }}, {{ detail?.country?.countryName }}
             </p>
             
         </div>

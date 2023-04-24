@@ -57,7 +57,7 @@
             placeholder="Destination"
             type="search"
             @keypress.enter="findDestinations()"/>    
-            <DestinationSearchResult class="absolute z-[100]" v-if="destinationSearchResults !== null"
+            <DestinationSearchResult class="absolute z-[200]" v-if="destinationSearchResults !== null"
                 @close-search-results="{destinationSearchResults = null; destinationKeyword = null}"
                 @choose-destination="chooseDestination"
                 :destination-search-results="destinationSearchResults" 
