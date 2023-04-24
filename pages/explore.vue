@@ -42,7 +42,7 @@
 
 <template>
     <NuxtLayout name="default">
-        <SearchBar />
+        <SearchBar class="top-20" />
 
         <!-- container -->
         <div v-if="destinationRecommendations?.length > 0" class="w-full flex flex-col h-1/2 relative">

@@ -10,15 +10,15 @@
         <!-- Destination Header -->
         <NuxtLink :to="'/destinations/' + destination?.id"
         class="w-full text-center h-1/2 cursor-pointer">
-            <div class="text-center w-full h-full bg-img flex"
-                :style="{ 'background-image': 'url(https://flagcdn.com/w640/' + destination?.country?.countryCode?.toLowerCase() + '.png)' }">
+            <div class="text-center w-full h-full bg-img flex bg-center bg-cover"
+            :style="{ 'background-image': 'url(https://flagcdn.com/w640/' + destination?.country?.countryCode?.toLowerCase() + '.png)' }">
                 <h1 class="font-bold font-heebo tracking-wider w-full my-auto max-h-full text-3xl text-white text-stroke">
                     {{ destination.name }}
                 </h1>
             </div>
         </NuxtLink>
         <!-- Destination info -->
-        <div class="w-full text-green-900 p-2 text-center relative overflow-hidden h-1/2">
+        <div class="w-full text-green-900 p-2 text-center relative overflow-ellipsis h-1/2">
             <div class="mx-auto w-full font-droid">
                 <span v-if="destination.reviewCount > 0"
                 class="relative">
@@ -30,12 +30,19 @@
                 <p v-if="destination.reviewCount > 0">
                     Average rating: {{ destination.averageRating }} ({{ destination.reviewCount }} reviews)
                 </p>
-                <NuxtLink :to="'/destinations/' + destination?.id + '/journeys'">
+                <NuxtLink :to="'/destinations/' + destination?.id + '/journeys'"
+                v-if="destination.visitCount">
                     {{ destination.visitCount }} visits
+
+                    <button
+                        class="font-metrophobic text-sm bg-khaki text-white mx-2 p-2 rounded-full">
+                        See journeys to {{ destination.name }}
+                        <i class="fa fa-arrow-right pr-4 hover:scale-x-125 duration-75 origin-left" />
+                    </button>
                 </NuxtLink>
             </div>
-            <div class="flex w-full justify-evenly p-2">
-                <span>Category: {{ destination.featureClass }}</span>
+            <div class="flex w-full justify-evenly">
+<!--                <span>Category: {{ destination.featureClass }}</span>-->
                 <span>Class: {{ destination.featureCode }}</span>
                 <span class="flex h-min">
                     Location: {{ destination.country.countryName }}, {{ destination.country.continent }}

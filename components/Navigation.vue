@@ -76,11 +76,12 @@
             </Transition>
         </nav>
     </div>
-    <div :class="{
-            'translate-y-0': showNav,
-            '-translate-y-full': !showNav
-        }" class="my-5 select-none">
-        &nbsp;
+    <div
+    :class="{
+        'translate-y-0': showNav,
+        '-translate-y-full': !showNav
+    }"
+    class="he-20 select-none">
     </div>
 </template>
 <style scoped>
@@ -110,5 +111,9 @@
 
     .z-200 {
         z-index: 200;
+    }
+
+    .he-20 {
+        height: 5rem;
     }
 </style>
