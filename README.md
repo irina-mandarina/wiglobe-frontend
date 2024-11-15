@@ -1,42 +1,21 @@
-# Nuxt 3 Minimal Starter
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+---
 
-## Setup
+### WiGlobe - frontend
 
-Make sure to install the dependencies:
+This is the UI part of my thesis project for graduating Technological School "Electronic Systems" associated with the Technical university of Sofia. The repository contains the frontend for the Travel Sharing Platform, a RESTful API built with Spring Boot and Kotlin.
 
-```bash
-# yarn
-yarn install
+## Features
+- User-friendly interface for creating and managing journeys
+- Privacy and personalization settings for user profiles
+- Google login
+- Real-time recommendations for destinations and journeys
+- Integrated review and comment sections
+- Informative pages about different destinations
 
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Tech Stack
+- **Nuxt.js**: Server-side rendering framework
+- **Vue.js 3**: Reactive JavaScript framework
+- **Tailwind CSS**: Utility-first CSS framework
+- **Pinia**: State management library
+- **Axios**: HTTP client for API communication
